@@ -1,4 +1,6 @@
+from optparse import OptionParser
 from subprocess import Popen, PIPE
+
 def _execute_cmd(cmd):
     '''
     Execute a command.
@@ -12,16 +14,13 @@ def _execute_cmd(cmd):
     out = process.stdout.read().strip()
     err = process.stderr.read().strip()
     return sts, out, err
-
-for host in ["gns","gas"]:
-    cmd = "ssh %s sudo rm -fr $ACSDATA/tmp/*" % host
-    sts, out, err = _execute_cmd(cmd)
-    
-    print "sts ---------------------------------------------------------------"
-    print sts
-    print "err ---------------------------------------------------------------"
-    print err
-    print "out ---------------------------------------------------------------"
-    print out
-    print "-------------------------------------------------------------------"
-
+###################################################################
+if __name__ == "__main__":
+    parser = OptionParser()
+    parser.add_option('-p','--prefix',dest = 'camera',type='str',help ='',default="main")
+    (options,argv) = parser.parse_args()
+    cmd = "darcmagic labels --print=1 --prefix=%s" % options.camera
+    sts,out,err = _execute_cmd(cmd)
+    params = eval(out)
+    for param in params:
+        print param
