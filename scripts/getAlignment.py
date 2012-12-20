@@ -9,13 +9,13 @@ import controlCorba
 #darcmagic get -name=subapFlag --prefix=main
 c=controlCorba.controlClient("main")
 subapflag = c.Get("subapFlag")
-print subapflag
+#print subapflag
 count = 1 
-for i in range(0,len(subapflag)-1):
+for i in range(0,len(subapflag)):
     if count == 11:
         print subapflag[i],
         count = 1
-        print '\n'
+        print '\n',
     else:
         print subapflag[i],
         count = count + 1
@@ -29,9 +29,10 @@ bg = c.Get("bgImage")
 print "bg len %d " % len(bg)
 #data = bg.reshape(640,480)
 data = bg.reshape(480,640)
-plt.imshow(data)
-plt.gca().invert_yaxis()
-plt.show()
+#plt.imshow(data)
+#plt.gca().invert_yaxis()
+#plt.show()
+
 #subapLocation.shape=subapLocation.size/6,6
 #subflag=c.Get("subapFlag")
 #nsub=c.Get("nsub")
