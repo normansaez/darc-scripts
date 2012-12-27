@@ -1,12 +1,12 @@
+import FITS
 import numpy
-import darc
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import numpy as np
 import controlCorba
 
-#darcmagic get -name=subapLocation --prefix=main # Equivalente al codigo siguiente:
+#darcmagic get -name=subapLocation --prefix=main
 #darcmagic get -name=subapFlag --prefix=main
+#darcmagic get -name=bgImage --prefix=main
+
 c=controlCorba.controlClient("main")
 subapflag = c.Get("subapFlag")
 #print subapflag
@@ -19,20 +19,10 @@ for i in range(0,len(subapflag)):
     else:
         print subapflag[i],
         count = count + 1
-subapLocation=c.Get("subapLocation")
+sf = subapflag.reshape(11,11)
 print "\n#########################################"
-#for i in range(0,121)
-#    subapflag = 1
-#print len(subapLocation)
-#darcmagic get -name=bgImage --prefix=main
-bg = c.Get("bgImage")
-print "bg len %d " % len(bg)
-#data = bg.reshape(640,480)
-data = bg.reshape(480,640)
-#plt.imshow(data)
-#plt.gca().invert_yaxis()
-#plt.show()
-
+print sf
+#subapLocation=c.Get("subapLocation")
 #subapLocation.shape=subapLocation.size/6,6
 #subflag=c.Get("subapFlag")
 #nsub=c.Get("nsub")
@@ -41,4 +31,15 @@ data = bg.reshape(480,640)
 #print nsub
 #print npxly
 #print npxlx
+print "\n#########################################"
+bg = c.Get("bgImage")
+print "bg len %d  480*640 = %d" % (len(bg),480*640)
+#data = bg.reshape(640,480)
+FITS.Write(bg,'myfitsBG.fits')
+data = bg.reshape(480,640)
+print data
+#plt.imshow(data)
+#plt.gca().invert_yaxis()
+#plt.show()
+FITS.Write(data,'myfits.fits')
 
