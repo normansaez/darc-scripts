@@ -57,15 +57,15 @@ print raw_data.dtype
 ###########
 raw_data = raw_data.reshape(y,x)
 
-#processed = ndimage.sobel(raw_data, cval=0.9)
+processed = ndimage.sobel(raw_data, cval=1)
+plt.imshow(processed)
+plt.gca().invert_yaxis()
+plt.show()
+scipy.misc.imsave('sobel.jpg', processed)
+#processed = ndimage.laplace(raw_data, 0)
 #plt.imshow(processed)
 #plt.gca().invert_yaxis()
 #plt.show()
-#scipy.misc.imsave('sobel.jpg', processed)
-processed = ndimage.gaussian_laplace(raw_data, cval=0.1)
-#plt.imshow(processed)
-#plt.gca().invert_yaxis()
-#plt.show()
-scipy.misc.imsave('laplace.jpg', processed)
+#scipy.misc.imsave('laplace.jpg', processed)
 
 print "finish"
