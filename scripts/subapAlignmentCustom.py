@@ -16,14 +16,14 @@ class Align:
         self.win=gtk.Window()
         self.win.set_default_size(480,640)
         self.win.set_title("Subaperture alignment Custom %s on %s"%(prefix,os.environ.get("HOSTNAME","unknown host")))
-        self.win.set_icon_from_file(os.path.join(os.path.split(__file__)[0],"condorIcon.png"))
+        self.win.set_icon_from_file(os.path.join(os.path.split(__file__)[0],"logo2.png"))
         self.win.connect("delete-event",self.quit)
         self.unfillSubapLocation={}
         e=gtk.EventBox()
         e.connect("button-press-event",self.clickCanary)
         i=gtk.Image()
         e.add(i)
-        i.set_from_file(os.path.join(os.path.split(__file__)[0],"condorLogo.png"))
+        i.set_from_file(os.path.join(os.path.split(__file__)[0],"logo2.png"))
         vbox=gtk.VBox()
         self.win.add(vbox)
         hbox=gtk.HBox()
@@ -469,7 +469,7 @@ class Align:
         return subapLocation/2
 
 if __name__=="__main__":
-    prefix=""
+    prefix="main"
     if len(sys.argv)>1:
         prefix=sys.argv[1]
     numpy.set_printoptions(threshold=10000)
