@@ -6,10 +6,29 @@ import controlCorba
 #darcmagic get -name=subapLocation --prefix=main
 #darcmagic get -name=subapFlag --prefix=main
 #darcmagic get -name=bgImage --prefix=main
-
+initial = numpy.zeros((15,15), numpy.int32)
+print "################"
+print initial
+print "################"
+initial = initial.reshape(225)
+print initial
+print "################"
 c=controlCorba.controlClient("main")
 subapflag = c.Get("subapFlag")
-#print subapflag
+print subapflag
+print type(subapflag)
+print subapflag.dtype
+c.Set("subapFlag",initial,com="",swap=1,check=1,copy=1)
+print "########### despues del set ##"
+subapflag = c.Get("subapFlag")
+print "----------------"
+pxl = c.Get("pxlCnt")
+print pxl
+print type(pxl)
+print pxl.size
+print pxl.shape
+print pxl.reshape(11,11)
+print "----------------"
 count = 1 
 for i in range(0,len(subapflag)):
     if count == 11:

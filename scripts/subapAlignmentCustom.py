@@ -303,7 +303,7 @@ class Align:
                                          
         self.arr[:]=0xff
         red=(0xff,0,0)
-        green=(0,0xff,0)
+        green=(0,0,0xff)
         for i in range(subapLocation.shape[0]):
             if subflag[i]:
                 s=subapLocation[i]
