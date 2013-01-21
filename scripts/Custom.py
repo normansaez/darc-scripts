@@ -7,6 +7,7 @@ from skimage.morphology import label
 from skimage.measure import regionprops
 import matplotlib.pyplot as plt
 import pylab
+import math
 
 def im2bw(image, threshold):
     '''
@@ -45,29 +46,43 @@ raw_data = im2bw(raw_data, tr)
 label_img = label(raw_data)
 props = regionprops(label_img, ['Centroid'])
 plt.figure(num=1, figsize=(8, 6), dpi=150, facecolor='w', edgecolor='k')
+new_subap = np.array([], dtype = int)
 for i in props:
     x0 = i['Centroid'][0]
     y0 = i['Centroid'][1]
     
-    px = x0 + side
-    py = y0 + side
+    x_end = x0 + side
+    y_end = y0 + side
     
-    px = x0 + side
-    my = y0 - side
+    #x_end = x0 + side
+    #y_start = y0 - side
 
-    mx = x0 - side
-    py = y0 + side
+    #x_start = x0 - side
+    #y_end = y0 + side
 
-    mx = x0 - side
-    my = y0 - side
+    x_start = x0 - side
+    y_start = y0 - side
 
-    plt.plot(y0,x0,'xr',markersize=8)
+    new_subap = np.append(new_subap,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
+    #plt.plot(y0,x0,'xr',markersize=8)
 
-    plt.plot(py,px,'.y',markersize=2)
-    plt.plot(py,mx,'.y',markersize=2)
-    plt.plot(my,px,'.y',markersize=2)
-    plt.plot(my,mx,'.y',markersize=2)
-plt.imshow(raw_data, cmap=pylab.gray())
-plt.gca().invert_yaxis()
-plt.show()
-print len(props)
+    #plt.plot(y_end,x_end,'.y',markersize=2)
+    #plt.plot(y_end,x_start,'.y',markersize=2)
+    #plt.plot(y_start,x_end,'.y',markersize=2)
+    #plt.plot(y_start,x_start,'.y',markersize=2)
+#plt.imshow(raw_data, cmap=pylab.gray())
+#plt.gca().invert_yaxis()
+#plt.show()
+nsub = len(props)
+npxlx = 640
+npxly = 480
+
+new_subap = new_subap.reshape(new_subap.size/6,6)
+print new_subap
+fname="newSubAp.fits"
+#{'END': '', 'npxly': '[480]', 'EXTEND': 'T', 'SIMPLE': 'T', 'NAXIS2': '182', 'NAXIS': '2', 'NAXIS1': '6', 'BITPIX': '32', 'npxlx': '[640]', 'nsub': '[182]'}
+FITS.Write(new_subap,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
+#FITS.Write(self.subflag,fname,writeMode='a')
+#print new_ap.shape
+#print new_ap.size
+

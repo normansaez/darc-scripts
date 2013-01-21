@@ -2,7 +2,8 @@ import FITS
 import matplotlib.pyplot as plt
 import pylab
 
-data = FITS.Read('mainsubapLocationSCAO1_121121.fits')
+#data = FITS.Read('mainsubapLocationSCAO1_121121.fits')
+data = FITS.Read('newSubAp.fits')
 headers  = data[0]
 raw_data = data[1]
 
@@ -16,7 +17,7 @@ npxly = eval(headers['parsed']['npxly'])[0]
 
 print raw_data.size
 print raw_data.shape
-
+print raw_data.dtype
 print raw_data
 print "--------------"
 y_start = raw_data[:,0]
