@@ -2,7 +2,6 @@ darc-scripts
 ============
 
 Darc Scripts repo
-These scripts are made to be tested in UC, AO lab
+These scripts are little examples and practice to be tested at AO LAB UC
 
-They are not a full project itself.
-I don't want to lost the history track
+This not pretend to be a full project itself. I'm only trying to track the work done.
