@@ -6,15 +6,27 @@ import pylab
 data = FITS.Read('newSubAp.fits')
 headers  = data[0]
 raw_data = data[1]
+d2 = data[2]
+d3 = data[3]
+
 
 #parsed, raw data
 print headers['parsed']
 for key in headers['parsed']:
     print  "%s -> %s" % (key,headers['parsed'][key])
 
+print d2['parsed']
+for key in d2['parsed']:
+    print  "%s -> %s" % (key,d2['parsed'][key])
 npxlx = eval(headers['parsed']['npxlx'])[0]
 npxly = eval(headers['parsed']['npxly'])[0]
 
+print "############################"
+print d3.size
+print d3.shape
+print d3.dtype
+print d3
+print "##################################"
 print raw_data.size
 print raw_data.shape
 print raw_data.dtype

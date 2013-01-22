@@ -78,11 +78,13 @@ npxlx = 640
 npxly = 480
 
 new_subap = new_subap.reshape(new_subap.size/6,6)
+
 print new_subap
+subflag = np.ones((nsub,),dtype=int)
 fname="newSubAp.fits"
 #{'END': '', 'npxly': '[480]', 'EXTEND': 'T', 'SIMPLE': 'T', 'NAXIS2': '182', 'NAXIS': '2', 'NAXIS1': '6', 'BITPIX': '32', 'npxlx': '[640]', 'nsub': '[182]'}
 FITS.Write(new_subap,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
-#FITS.Write(self.subflag,fname,writeMode='a')
+FITS.Write(subflag,fname,writeMode='a')
 #print new_ap.shape
 #print new_ap.size
 
