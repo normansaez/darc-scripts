@@ -8,6 +8,10 @@ import gobject
 import FITS
 import controlCorba
 
+from matplotlib.backends.backend_gtk import FigureCanvasGTK as FigureCanvas
+#from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+
 class Align:
     def __init__(self,prefix=""):
         self.prefix=prefix
@@ -16,14 +20,14 @@ class Align:
         self.win=gtk.Window()
         self.win.set_default_size(480,640)
         self.win.set_title("Subaperture alignment Custom %s on %s"%(prefix,os.environ.get("HOSTNAME","unknown host")))
-        self.win.set_icon_from_file(os.path.join(os.path.split(__file__)[0],"logo2.png"))
+        self.win.set_icon_from_file(os.path.join(os.path.split(__file__)[0],"logouc.png"))
         self.win.connect("delete-event",self.quit)
         self.unfillSubapLocation={}
         e=gtk.EventBox()
         e.connect("button-press-event",self.clickCanary)
         i=gtk.Image()
         e.add(i)
-        i.set_from_file(os.path.join(os.path.split(__file__)[0],"logo2.png"))
+        i.set_from_file(os.path.join(os.path.split(__file__)[0],"logouc.png"))
         vbox=gtk.VBox()
         self.win.add(vbox)
         hbox=gtk.HBox()
@@ -31,6 +35,9 @@ class Align:
 
         vbox.pack_start(hbox,expand=False)
         hbox.pack_start(gtk.Label("Alignment:"),expand=False)
+        braw=gtk.Button("RawImg")
+        braw.connect("clicked",self.showRaw)
+        hbox.pack_start(braw)
         bget=gtk.Button("Get")
         bget.connect("clicked",self.getAlignment)
         hbox.pack_start(bget)
@@ -292,6 +299,8 @@ class Align:
         #soff=self.subflag[:self.nsub[:self.cam].sum()].sum()
         subapLocation=self.subapLocation[s:e]#off:soff+subflag.sum()]
         selected=self.selected[s:e]#off:soff+subflag.sum()]
+        print subflag
+
         return subflag,subapLocation,selected
 
     def draw(self):
@@ -303,7 +312,7 @@ class Align:
                                          
         self.arr[:]=0xff
         red=(0xff,0,0)
-        green=(0,0,0xff)
+        green=(0,0xff,0)
         for i in range(subapLocation.shape[0]):
             if subflag[i]:
                 s=subapLocation[i]
@@ -382,7 +391,9 @@ class Align:
     #     self.img.queue_draw()
     #     return True
     def getAlignment(self,w=None):
+        print type(w)
         if type(w)==type(""):
+            print "notype"
             data=FITS.Read(w)
             subapLocation=data[1]
             self.npxlx=numpy.array(eval(data[0]["parsed"]["npxlx"]))
@@ -390,6 +401,7 @@ class Align:
             self.nsub=numpy.array(eval(data[0]["parsed"]["nsub"]))
             self.subflag=data[3]
         else:
+            print "->type"
             c=controlCorba.controlClient(self.prefix)
             subapLocation=c.Get("subapLocation")
             subapLocation.shape=subapLocation.size/6,6
@@ -415,11 +427,23 @@ class Align:
 
     def setAlignment(self,w):
         c=controlCorba.controlClient(self.prefix)
-        s=self.makeSubapLocation(allcam=1)
-        pxlcnt=self.count(s)
-        c.set("subapLocation",s,swap=0)
-        c.set("subapFlag",self.subflag,swap=0)
-        c.set("pxlCnt",pxlcnt)
+#        s=self.makeSubapLocation(allcam=1)
+        fname="%ssubapLocation.fits"%self.prefix
+        data=FITS.Read(fname)
+        subapLocation=data[1]
+        subflag=data[3]
+        pxlcnt=self.count(data[1])
+        print "set"
+        print "subapLocation"
+        print subapLocation
+        print "subapFlag"
+        print subflag
+        print "pxlCnt"
+        print pxlcnt
+        c.set("subapLocation",subapLocation,swap=1,check=1,copy=1)
+        c.set("subapFlag",subflag,swap=1,check=1,copy=1)
+        c.set("pxlCnt",pxlcnt,swap=1,check=1,copy=1)
+
     def saveAlignment(self,w):
         s=self.makeSubapLocation(allcam=1)
         print numpy.alltrue(s==self.orig)
@@ -429,13 +453,30 @@ class Align:
         self.coordsLabel.set_text("Written to %s"%fname)
     def loadAlignment(self,w):
         fname="%ssubapLocation.fits"%self.prefix
+        print "getting fname: %s" %fname
         self.getAlignment(fname)
+
+    def showRaw(self,w):
+        w=gtk.Window()
+        c=controlCorba.controlClient(self.prefix)
+        #f = Figure(figsize=(5,4), dpi=72)
+        bg = c.Get("bgImage")
+        data = bg.reshape(480,640)
+        f = plt.figure(1)
+        plt.imshow(data)
+        plt.gca().invert_yaxis()
+        #plt.show()
+        canvas = FigureCanvas(f)
+        w.add(canvas)
+        w.show_all()
+
     def showAlignment(self,w):
         s=self.makeSubapLocation()
         w=gtk.Window()
         l=gtk.Label(str(s))
         w.add(l)
         w.show_all()
+
     def quit(self,w=None,a=None):
         gtk.main_quit()
 
@@ -462,6 +503,7 @@ class Align:
 
 
     def makeSubapLocation(self,allcam=0):
+        print "allcam %d" % allcam
         if allcam:
             subapLocation=self.subapLocation
         else:
