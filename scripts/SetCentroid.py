@@ -1,11 +1,10 @@
 import numpy
-import controlCorba
+import darc
 import FITS
 
 prefix = "main"
-c=controlCorba.controlClient(prefix)
+c=darc.Control(prefix)
 fname="%ssubapLocation.fits" % prefix
-
 ##########################################
 data=FITS.Read(fname)
 subapLocation=data[1]
@@ -18,6 +17,12 @@ print c.Get("subapFlag")
 nslopes=c.Get("subapFlag").sum()*2
 print nslopes
 raw_data=numpy.ones((nslopes,),numpy.float32)
+print c.Get("refCentroids")
+print "---"
 c.Set("refCentroids",raw_data)
-
+print "---"
+print c.Get("refCentroids")
+print c.Get("nsub")
+print c.Set("nsub",135)
+print c.Get("nsub")
 #print "darcmagic set refCentroids -file=refslopes.fits"
