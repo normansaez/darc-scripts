@@ -443,7 +443,6 @@ class Align:
         c.set("subapLocation",subapLocation,swap=1,check=1,copy=1)
         c.set("subapFlag",subflag,swap=1,check=1,copy=1)
         c.set("pxlCnt",pxlcnt,swap=1,check=1,copy=1)
-
     def saveAlignment(self,w):
         s=self.makeSubapLocation(allcam=1)
         print numpy.alltrue(s==self.orig)

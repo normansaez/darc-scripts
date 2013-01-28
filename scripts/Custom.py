@@ -57,9 +57,11 @@ label_img = label(raw_data)
 props = regionprops(label_img, ['Centroid'])
 plt.figure(num=1, figsize=(8, 6), dpi=150, facecolor='w', edgecolor='k')
 new_subap = np.array([], dtype = int)
+new_centroid = np.array([], dtype = np.float32)
 for i in props:
     x0 = i['Centroid'][0]
     y0 = i['Centroid'][1]
+    new_centroid = np.append(new_centroid,[[int(math.floor(x0)),int(math.floor(y0))]])
     
     x_end = x0 + side
     y_end = y0 + side
@@ -90,11 +92,13 @@ npxly = 480
 new_subap = new_subap.reshape(new_subap.size/6,6)
 
 print new_subap
+print nsub
 subflag = np.ones((nsub,),dtype=int)
 fname="newSubAp.fits"
 #{'END': '', 'npxly': '[480]', 'EXTEND': 'T', 'SIMPLE': 'T', 'NAXIS2': '182', 'NAXIS': '2', 'NAXIS1': '6', 'BITPIX': '32', 'npxlx': '[640]', 'nsub': '[182]'}
 FITS.Write(new_subap,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
 FITS.Write(subflag,fname,writeMode='a')
 #print new_ap.shape
+FITS.Write(new_centroid,'r_centroid.fits',extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
 #print new_ap.size
 
