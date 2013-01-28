@@ -8,6 +8,28 @@ from skimage.measure import regionprops
 import matplotlib.pyplot as plt
 import pylab
 import math
+from pylab import *
+
+class MouseMonitor:
+    event = None
+    xdatalist = []
+    ydatalist = []
+
+    def mycall(self, event):
+        self.event = event
+        self.xdatalist.append(event.xdata)
+        self.ydatalist.append(event.ydata)
+        
+        print 'x = %s and y = %s' % (event.xdata,event.ydata)
+        
+        ax = gca()  # get current axis
+        ax.hold(True) # overlay plots.
+        
+        # Plot a red circle where you clicked.
+        ax.plot([event.xdata],[event.ydata],'ro')
+        
+        draw()  # to refresh the plot.
+        return [event.xdata,event.ydata]
 
 def im2bw(image, threshold):
     '''
@@ -84,12 +106,17 @@ for i in props:
     plt.plot(y_start,x_start,'.y',markersize=2)
 plt.imshow(raw_data, cmap=pylab.gray())
 plt.gca().invert_yaxis()
+mouse = MouseMonitor()
+connect('button_press_event', mouse.mycall)
 plt.show()
 nsub = len(props)
 npxlx = 640
 npxly = 480
 
 new_subap = new_subap.reshape(new_subap.size/6,6)
+
+#plot([1,2,3])
+#show()
 
 print new_subap
 print nsub
