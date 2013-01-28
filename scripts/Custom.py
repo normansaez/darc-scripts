@@ -29,12 +29,22 @@ tr = 0.42
 side = 8 #pixels
 print tr
 print 
+
+############## DARC #######################
+import controlCorba
+c=controlCorba.controlClient("main")
+bg = c.Get("bgImage")
+data = bg.reshape(480,640)
+FITS.Write(data,'myfits.fits',writeMode='a')
 data = FITS.Read('myfits.fits')
+############## DARC #######################
+
 headers = data[0]
 raw_data = data[1]
 ###############################################
 print "Print FIT data"
-print headers["parsed"]
+print raw_data
+print "Print FIT data"
 #npxlx =np.array(eval(data[0]["parsed"]["npxlx"]))
 #npxly =np.array(eval(data[0]["parsed"]["npxly"]))
 #nsub  =np.array(eval(data[0]["parsed"]["nsub"]))
@@ -64,15 +74,15 @@ for i in props:
     y_start = y0 - side
 
     new_subap = np.append(new_subap,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
-    #plt.plot(y0,x0,'xr',markersize=8)
+    plt.plot(y0,x0,'xr',markersize=8)
 
-    #plt.plot(y_end,x_end,'.y',markersize=2)
-    #plt.plot(y_end,x_start,'.y',markersize=2)
-    #plt.plot(y_start,x_end,'.y',markersize=2)
-    #plt.plot(y_start,x_start,'.y',markersize=2)
-#plt.imshow(raw_data, cmap=pylab.gray())
-#plt.gca().invert_yaxis()
-#plt.show()
+    plt.plot(y_end,x_end,'.y',markersize=2)
+    plt.plot(y_end,x_start,'.y',markersize=2)
+    plt.plot(y_start,x_end,'.y',markersize=2)
+    plt.plot(y_start,x_start,'.y',markersize=2)
+plt.imshow(raw_data, cmap=pylab.gray())
+plt.gca().invert_yaxis()
+plt.show()
 nsub = len(props)
 npxlx = 640
 npxly = 480
