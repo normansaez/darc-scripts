@@ -2,29 +2,22 @@ import numpy
 import controlCorba
 import FITS
 
-d=controlCorba.controlClient("main")
+prefix = "main"
+c=controlCorba.controlClient(prefix)
+fname="%ssubapLocation.fits" % prefix
 
-slopes=d.Get("refCentroids")
-print slopes
-nslopes=d.Get("subapFlag").sum()*2
-print "---"
-print d.Get("subapFlag").sum()
-print "---"
-#xxx=numpy.zeros((nslopes,),numpy.float32)
-xxx=numpy.ones((nslopes,),numpy.float32)
-#print xxx.shape
-#print "lalalal"
-#
-#data = FITS.Read('r_centroid.fits')
-#headers = data[0]
-#xxx = data[1]
-#
-#print xxx
-#print xxx.shape
-#xxx = None
-d.Set("refCentroids",xxx)
-print "BEFORE SET ! "
-slopes=d.Get("refCentroids")
-print slopes
+##########################################
+data=FITS.Read(fname)
+subapLocation=data[1]
+subflag=data[3]
+c.Set("subapLocation",subapLocation,swap=1,check=1,copy=1)
+print subflag
+print subflag.shape
+c.Set("subapFlag",subflag,swap=1)
+print c.Get("subapFlag")
+nslopes=c.Get("subapFlag").sum()*2
+print nslopes
+raw_data=numpy.ones((nslopes,),numpy.float32)
+c.Set("refCentroids",raw_data)
 
-print "darcmagic set refCentroids -file=refslopes.fits"
+#print "darcmagic set refCentroids -file=refslopes.fits"
