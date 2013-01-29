@@ -46,15 +46,14 @@ def im2bw(image, threshold):
                 img[i][j] = 0
     return img
 
-
-tr = 0.42
+############## START HERE ############################
+tr = 0.42 #threshold
 side = 8 #pixels
 print tr
-print 
 
 ############## DARC #######################
-import controlCorba
-c=controlCorba.controlClient("main")
+import darc
+c=darc.Control("main")
 bg = c.Get("bgImage")
 data = bg.reshape(480,640)
 FITS.Write(data,'myfits.fits',writeMode='a')
@@ -78,7 +77,7 @@ raw_data = im2bw(raw_data, tr)
 label_img = label(raw_data)
 props = regionprops(label_img, ['Centroid'])
 plt.figure(num=1, figsize=(8, 6), dpi=150, facecolor='w', edgecolor='k')
-new_subap = np.array([], dtype = int)
+new_subap = np.array([], "i")
 new_centroid = np.array([], dtype = np.float32)
 for i in props:
     x0 = i['Centroid'][0]
