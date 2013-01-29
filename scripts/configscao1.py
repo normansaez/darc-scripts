@@ -26,10 +26,10 @@ npxly[:]=480
 npxlx=npxly.copy()
 npxlx[:]=640
 nsuby=npxly.copy()
-nsuby[:]=14
+nsuby[:]=15
 #nsuby[4:]=16
 nsubx=nsuby.copy()
-nsubx[:]=13
+nsubx[:]=15
 nsub=nsubx*nsuby
 nsubaps=(nsuby*nsubx).sum()
 subapFlag=numpy.ones((nsubaps,),"i")
@@ -64,7 +64,7 @@ xstart=261
 for i in range(nsubaps):
     subapLocation[i]=((i//nsubx[0])*yspace+ystart,(i//nsubx[0]+1)*yspace+ystart,1,(i%nsubx[0])*xspace+xstart,(i%nsubx[0]+1)*xspace+xstart,1)
 
-subapLocation=FITS.Read("/home/dani/git/condor/mainsubapLocationSCAO1_121121.fits")[1]
+subapLocation=FITS.Read("/home/dani/git/condor/mainsubapLocation.fits")[1]
 #guid for red camera is 2892819690320999
 #guid for fire-i camera is 582164335728668360
 try:
