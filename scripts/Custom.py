@@ -139,11 +139,11 @@ side = 8 #pixels
 print tr
 
 ############## DARC #######################
-import darc
-c=darc.Control("main")
-bg = c.Get("bgImage")
-data = bg.reshape(480,640)
-FITS.Write(data,'myfits.fits',writeMode='a')
+#import darc
+#c=darc.Control("main")
+#bg = c.Get("bgImage")
+#data = bg.reshape(480,640)
+#FITS.Write(data,'myfits.fits',writeMode='a')
 data = FITS.Read('myfits.fits')
 ############## DARC #######################
 
@@ -176,13 +176,13 @@ for i in props:
     plt.plot(y_end,x_start,'.y',markersize=2)
     plt.plot(y_start,x_end,'.y',markersize=2)
     plt.plot(y_start,x_start,'.y',markersize=2)
-#plt.imshow(raw_data, cmap=pylab.gray())
-#plt.gca().invert_yaxis()
+plt.imshow(raw_data, cmap=pylab.gray())
+plt.gca().invert_yaxis()
 
 #get first point in subap centroid maps.
 #mouse = MouseMonitor()
 #connect('button_press_event', mouse.mycall)
-#plt.show()
+plt.show()
 
 #x0 = int(mouse.event.xdata)
 #y0 = int(mouse.event.ydata)
