@@ -15,6 +15,8 @@
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #A configuration file for use with the uEye USB camera.
+#Use with --prefix=sci.
+#doesn't open a reconstructor or slope library
 import FITS
 import tel
 import numpy
@@ -26,10 +28,9 @@ npxly[:]=480
 npxlx=npxly.copy()
 npxlx[:]=640
 nsuby=npxly.copy()
-nsuby[:]=14
+nsuby[:]=1#this is science, so only one subap required... 
 #nsuby[4:]=16
 nsubx=nsuby.copy()
-nsubx[:]=13
 nsub=nsubx*nsuby
 nsubaps=(nsuby*nsubx).sum()
 subapFlag=numpy.ones((nsubaps,),"i")
@@ -57,14 +58,13 @@ ncentsCum=numpy.zeros((ncam+1,),numpy.int32)
 for i in range(ncam):
     nsubapsCum[i+1]=nsubapsCum[i]+nsubaps[i]
     ncentsCum[i+1]=ncentsCum[i]+subapFlag[nsubapsCum[i]:nsubapsCum[i+1]].sum()*2
-yspace=12
-xspace=12
-ystart=160
-xstart=261
+xoff=0
+yoff=0
+nx=(npxlx[0]-2*xoff)/nsubx[0]
+ny=(npxly[0]-2*yoff)/nsuby[0]
 for i in range(nsubaps):
-    subapLocation[i]=((i//nsubx[0])*yspace+ystart,(i//nsubx[0]+1)*yspace+ystart,1,(i%nsubx[0])*xspace+xstart,(i%nsubx[0]+1)*xspace+xstart,1)
-
-subapLocation=FITS.Read("/home/dani/git/condor/mainsubapLocationSCAO1_121121.fits")[1]
+    subapLocation[i]=((i//nsubx[0])*ny+yoff,(i//nsubx[0]+1)*ny+yoff,1,(i%nsubx[0])*nx+xoff,(i%nsubx[0]+1)*nx+xoff,1)
+#print subapLocation
 #guid for red camera is 2892819690320999
 #guid for fire-i camera is 582164335728668360
 try:
@@ -103,33 +103,19 @@ for k in range(ncam):
         n=(subapLocation[indx,1]-1)*npxlx[k]+subapLocation[indx,4]
         pxlCnt[indx]=n
 
-#Now describe the DM - this is for the GUI only, not the RTC.
-#The format is: ndms, N for each DM, actuator numbers...
-#Where ndms is the number of DMs, N is the number of linear actuators for each, and the actuator numbers are then an array of size NxN with entries -1 for unused actuators, or the actuator number that will set this actuator in the DMC array.
-dmDescription=numpy.zeros((12*12+1+1,),numpy.int16)
-dmDescription[0]=1#1 DM
-dmDescription[1]=12#1st DM has nacts linear actuators
-tmp=dmDescription[2:]
-tmp[:]=-1
-tmp.shape=12,12
-dmflag=tel.Pupil(12,7.5,0).fn.ravel()
-numpy.put(tmp,dmflag.nonzero()[0],numpy.arange(140))
-
-
 control={
     "switchRequested":0,#this is the only item in a currently active buffer that can be changed...
     "pause":0,
     "go":1,
     #"DMgain":0.25,
     #"staticTerm":None,
-    "maxClipped":10,
-    "openLoopIfClip":1,
+    "maxClipped":nacts,
     "refCentroids":None,
      "centroidMode":"CoG",#whether data is from cameras or from WPU.
      "windowMode":"basic",
      "thresholdAlgo":0,
     #"acquireMode":"frame",#frame, pixel or subaps, depending on what we should wait for...
-    "reconstructMode":"truth",#simple (matrix vector only), truth or open
+    "reconstructMode":"simple",#simple (matrix vector only), truth or open
     "centroidWeight":None,
     "v0":numpy.zeros((nacts,),"f"),#v0 from the tomograhpcic algorithm in openloop (see spec)
     #"gainE":None,#numpy.random.random((nacts,nacts)).astype("f"),#E from the tomo algo in openloop (see spec) with each row i multiplied by 1-gain[i]
@@ -176,7 +162,7 @@ control={
     "nsubapsTogether":1,
     "nsteps":0,
     "addActuators":0,
-    "actuators":numpy.ones((nacts,),numpy.float32)*6000,#None,#(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
+    "actuators":numpy.ones((nacts,),numpy.float32)*32768,#None,#(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
     "actSequence":None,#numpy.ones((3,),"i")*1000,
     "recordCents":0,
     "pxlWeight":None,
@@ -195,7 +181,8 @@ control={
     "useBrightest":0,
     "figureGain":1,
     "decayFactor":None,#used in libreconmvm.so
-    "reconlibOpen":1,
+    "slopeOpen":0,
+    "reconlibOpen":0,
     "maxAdapOffset":0,
 #    "mirrorStep":0,
 #    "mirrorSteps":numpy.zeros((nacts,),numpy.int32),
@@ -209,5 +196,4 @@ control={
     "actOffset":None,
     "actScale":None,
     "actSource":None,
-    "dmDescription":dmDescription,
     }
