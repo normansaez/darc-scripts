@@ -31,6 +31,93 @@ class MouseMonitor:
         draw()  # to refresh the plot.
         return [event.xdata,event.ydata]
 
+def get_subflag(nsubx, nsuby, x0, y0, centroids):
+    nsub = nsubx * nsuby
+    subFlag = np.ones((nsub,),"i")
+    subFlag = subFlag.reshape(nsubx,nsuby)
+    #########Q1##########
+    subFlag[0,0] = 0  
+    subFlag[0,1] = 0  
+    subFlag[0,2] = 0  
+    subFlag[0,3] = 0  
+    subFlag[0,4] = 0
+    #------------------
+    subFlag[0,11] = 0  
+    subFlag[0,12] = 0  
+    subFlag[0,13] = 0  
+    subFlag[0,14] = 0  
+
+    ######################
+    subFlag[1,0] = 0  
+    subFlag[1,1] = 0  
+    #------------------
+    subFlag[1,12] = 0  
+    subFlag[1,13] = 0  
+    subFlag[1,14] = 0  
+    ######################
+    subFlag[2,0] = 0  
+    #------------------
+    subFlag[2,13] = 0  
+    subFlag[2,14] = 0  
+    ######################
+    subFlag[3,0] = 0  
+    #
+    subFlag[:,14] = 0
+
+##########################################
+    subFlag[14,0] = 0  
+    subFlag[14,1] = 0  
+    subFlag[14,2] = 0  
+    subFlag[14,3] = 0  
+    #-------14----------
+    subFlag[14,10] = 0  
+    subFlag[14,11] = 0  
+    subFlag[14,12] = 0  
+    subFlag[14,13] = 0  
+    subFlag[14,14] = 0 
+    #
+    subFlag[13,0] = 0  
+    subFlag[13,1] = 0  
+    subFlag[13,2] = 0  
+    #-------13----------
+    subFlag[13,12] = 0  
+    subFlag[13,13] = 0  
+    subFlag[13,14] = 0  
+    #
+    subFlag[12,0] = 0  
+    subFlag[12,1] = 0  
+    #-------12----------
+    subFlag[12,13] = 0  
+    subFlag[12,14] = 0  
+    #
+    subFlag[11,0] = 0  
+    #-------11----------
+    subFlag[11,14] = 0  
+
+    return subFlag
+def _get_subflag(nsubx, nsuby, x0, y0, centroids):
+    '''
+    '''
+    print "get_subflag debug"
+    pxl_to_search = 40
+    nsub = nsubx * nsuby
+    subFlag = np.zeros((nsub,),"i")
+    for i in range(0,len(centroids),2):
+        x = centroids[i]
+        y = centroids[i+1]
+        x0 = x0 + pxl_to_search
+        for count in range(nsub):
+            print "looking %d - %d = %d? %d"%(x0,x,abs(x0-x),2*pxl_to_search)
+            if abs(x0 - x) <= pxl_to_search*2:
+                print "--->in<---"
+                subFlag[count] = 1
+                break
+            else:
+                print "--->out<---"
+        x0 = x0 + pxl_to_search
+#        raw_input("")            
+    return subFlag
+
 def im2bw(image, threshold):
     '''
     Convert a numpy.array float image to binary image, given a threshold
@@ -89,16 +176,16 @@ for i in props:
     plt.plot(y_end,x_start,'.y',markersize=2)
     plt.plot(y_start,x_end,'.y',markersize=2)
     plt.plot(y_start,x_start,'.y',markersize=2)
-plt.imshow(raw_data, cmap=pylab.gray())
-plt.gca().invert_yaxis()
+#plt.imshow(raw_data, cmap=pylab.gray())
+#plt.gca().invert_yaxis()
 
 #get first point in subap centroid maps.
-mouse = MouseMonitor()
-connect('button_press_event', mouse.mycall)
-plt.show()
+#mouse = MouseMonitor()
+#connect('button_press_event', mouse.mycall)
+#plt.show()
 
-print int(mouse.event.xdata)
-print int(mouse.event.ydata)
+#x0 = int(mouse.event.xdata)
+#y0 = int(mouse.event.ydata)
 
 #TODO this should be get from some other place !
 npxlx = 640
@@ -111,9 +198,10 @@ nsub = nsubx * nsuby
 
 #Writing fit for fot coordinate:
 fname="newSubApLocation.fits"
-subFlag = np.ones((nsub,),dtype=int)
+subFlag = get_subflag(nsubx, nsuby, x0, y0, new_centroid)
+print subFlag.reshape(nsubx,nsuby)
+
 new_subapLocation = new_subapLocation.reshape(new_subapLocation.size/6,6)
-# Only 
 FITS.Write(new_subapLocation,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
 FITS.Write(subFlag,fname,writeMode='a')
 
