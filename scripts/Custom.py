@@ -99,21 +99,23 @@ plt.show()
 
 print int(mouse.event.xdata)
 print int(mouse.event.ydata)
+
 #TODO this should be get from some other place !
-nsub = len(props)
 npxlx = 640
 npxly = 480
 
-new_subapLocation = new_subapLocation.reshape(new_subapLocation.size/6,6)
+nsubx = 15
+nsuby = 15
 
-print new_subapLocation
-print nsub
-subflag = np.ones((nsub,),dtype=int)
+nsub = nsubx * nsuby
+
+#Writing fit for fot coordinate:
 fname="newSubApLocation.fits"
-#{'END': '', 'npxly': '[480]', 'EXTEND': 'T', 'SIMPLE': 'T', 'NAXIS2': '182', 'NAXIS': '2', 'NAXIS1': '6', 'BITPIX': '32', 'npxlx': '[640]', 'nsub': '[182]'}
+subFlag = np.ones((nsub,),dtype=int)
+new_subapLocation = new_subapLocation.reshape(new_subapLocation.size/6,6)
+# Only 
 FITS.Write(new_subapLocation,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
-FITS.Write(subflag,fname,writeMode='a')
-#print new_ap.shape
-FITS.Write(new_centroid,'r_centroid.fits',extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
-#print new_ap.size
+FITS.Write(subFlag,fname,writeMode='a')
 
+# Only centroid coordinates
+FITS.Write(new_centroid,'centroid_coordinatesXY.fits',extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsub    = '[%s]'"%str(nsub)])
