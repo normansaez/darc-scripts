@@ -225,6 +225,7 @@ for i in range(nsubaps):
     if dummyx > new_centroid.max():
         dummyx = xstart
     print dummyx
+    plt.plot(i,dummyx,'xr',markersize=1)
     if is_valid == 0:
         continue
     x_start = x_init
@@ -233,8 +234,23 @@ for i in range(nsubaps):
     for j in range(0,len(new_centroid),2):
         xc = new_centroid[j]
         yc = new_centroid[j+1]
+        plt.plot(i,xc,'og',markersize=2)
         if abs(xc - x_start) < 70:
             print "%d - %d = %d | %d" % (xc,x_start,abs(xc - x_start),70)
+#        plt.plot(y0,x0,'xr',markersize=8)
+#    plt.plot(y_init,x_init,'xg',markersize=2)
+#
+#    plt.plot(y_end,x_end,'.y',markersize=2)
+#    plt.plot(y_end,x_start,'.y',markersize=2)
+#    plt.plot(y_start,x_end,'.y',markersize=2)
+#    plt.plot(y_start,x_start,'.y',markersize=2)
+#plt.imshow(raw_data, cmap=pylab.gray())
+#plt.gca().invert_yaxis()
+#
+##get first point in subap centroid maps.
+#mouse = MouseMonitor()
+#connect('button_press_event', mouse.mycall)
+plt.show()
 valid_subapLocation = valid_subapLocation.reshape(valid_subapLocation.size/6,6)
 print "valid subapLocation %s" % str(str(valid_subapLocation.shape))
 print "subapLocation %s" % str(str(subapLocation.shape))
