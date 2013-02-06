@@ -136,7 +136,11 @@ def im2bw(image, threshold):
 ############## START HERE ############################
 tr = 0.42 #threshold
 side = 8 #pixels
-print tr
+nsubx = 15
+nsuby = 15
+nsubs = nsubx*nsuby
+
+print "Threshole: %.3f\nSide: %d\nnsubx * nsuby = nsubs <-> %dx%d=%d"  % (tr,side,nsubx,nsuby,nsubs)
 
 ############## DARC #######################
 #import darc
@@ -146,41 +150,55 @@ print tr
 #FITS.Write(data,'myfits.fits',writeMode='a')
 data = FITS.Read('myfits.fits')
 ############## DARC #######################
-
+# get headers and raw_data 
 headers = data[0]
 raw_data = data[1]
 ###############################################
+#Get centroid of each point.
 raw_data = im2bw(raw_data, tr)
 label_img = label(raw_data)
 props = regionprops(label_img, ['Centroid'])
+############### ############## ####################
 plt.figure(num=1, figsize=(8, 6), dpi=150, facecolor='w', edgecolor='k')
+
+# Init variables
 valid_subapLocation = np.array([], "i")
 new_subapFlag = np.array([], "i")
-new_centroid = np.array([], "i")
-x_init = 182
-y_init = 394
+centroid_x = np.array([], "i")
+centroid_y = np.array([], "i")
+
+# Fill new centroid.
 for i in props:
     x0 = i['Centroid'][0]
     y0 = i['Centroid'][1]
-    new_centroid = np.append(new_centroid,[[int(math.floor(x0)),int(math.floor(y0))]])
-    
-    x_end = x0 + side
-    y_end = y0 + side
-    
-    x_start = x0 - side
-    y_start = y0 - side
+    centroid_x = np.append(centroid_x,[[int(math.floor(x0))]])
+    centroid_y = np.append(centroid_y,[[int(math.floor(y0))]])
 
-    valid_subapLocation = np.append(valid_subapLocation,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
-#    plt.plot(y0,x0,'xr',markersize=8)
-#    plt.plot(y_init,x_init,'xg',markersize=2)
-#
-#    plt.plot(y_end,x_end,'.y',markersize=2)
-#    plt.plot(y_end,x_start,'.y',markersize=2)
-#    plt.plot(y_start,x_end,'.y',markersize=2)
-#    plt.plot(y_start,x_start,'.y',markersize=2)
-#plt.imshow(raw_data, cmap=pylab.gray())
+x0 = centroid_x.max() + side  
+y0 = centroid_y.max() + side
+
+x1 = centroid_x.min() + side
+y1 = centroid_y.min() + side
+
+x2 = centroid_x.max() + side
+y2 = centroid_y.min() + side
+
+x3 = centroid_x.min() + side
+y3 = centroid_y.max() + side
+
+#plt.plot(y0,x0,'xy',markersize=2)
+#plt.plot(y1,x1,'xg',markersize=2)
+#plt.plot(y2,x2,'xr',markersize=2)
+#plt.plot(y3,x3,'xb',markersize=2)
 #plt.gca().invert_yaxis()
-#
+#plt.show()
+
+for sidex in range(nsubx):
+    for sidey in range(nsuby):
+        print "(%2d,%2d)" %(sidex,sidey),
+    print
+
+#    valid_subapLocation = np.append(valid_subapLocation,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
 ##get first point in subap centroid maps.
 #mouse = MouseMonitor()
 #connect('button_press_event', mouse.mycall)
@@ -189,73 +207,10 @@ for i in props:
 #x0 = int(mouse.event.xdata)
 #y0 = int(mouse.event.ydata)
 
-#TODO this should be get from some other place !
-npxlx = 640
-npxly = 480
-
-nsubx = 15
-nsuby = 15
-
-nsubaps = nsubx * nsuby
-
-#Writing fit for fot coordinate:
-fname="newSubApLocation.fits"
-subFlag = get_subflag(nsubx, nsuby, x_init, y_init, new_centroid)
-#print "shape subFlag %s" % (str(subFlag.shape))
-#print subFlag.reshape(nsubx,nsuby)
-yspace = 12
-xspace = 12
-ystart = y_init
-xstart = x_init
-subapLocation=np.zeros((nsubaps,6),"i")
-for i in range(nsubaps):
-    subapLocation[i]=((i//nsubx)*yspace+ystart,(i//nsubx+1)*yspace+ystart,1,(i%nsubx)*xspace+xstart,(i%nsubx+1)*xspace+xstart,1)
-
-# subFlag:
-subFlag = subFlag.reshape((nsubaps,))
-
-print "--->%d<---" % (nsubaps)
-print "--->%s" % (str(subFlag.shape))
-dummyx = xstart
-for i in range(nsubaps):
-    print "subap %d" % i
-    print "is sub valid? %s " % str(subFlag[i])
-    is_valid = subFlag[i]
-    dummyx = i*xspace + dummyx
-    if dummyx > new_centroid.max():
-        dummyx = xstart
-    print dummyx
-    plt.plot(i,dummyx,'xr',markersize=1)
-    if is_valid == 0:
-        continue
-    x_start = x_init
-    y_start = y_init
-    print "x_start,y_start : (%d,%d)" % (x_start, y_start)
-    for j in range(0,len(new_centroid),2):
-        xc = new_centroid[j]
-        yc = new_centroid[j+1]
-        plt.plot(i,xc,'og',markersize=2)
-        if abs(xc - x_start) < 70:
-            print "%d - %d = %d | %d" % (xc,x_start,abs(xc - x_start),70)
-#        plt.plot(y0,x0,'xr',markersize=8)
-#    plt.plot(y_init,x_init,'xg',markersize=2)
-#
-#    plt.plot(y_end,x_end,'.y',markersize=2)
-#    plt.plot(y_end,x_start,'.y',markersize=2)
-#    plt.plot(y_start,x_end,'.y',markersize=2)
-#    plt.plot(y_start,x_start,'.y',markersize=2)
-#plt.imshow(raw_data, cmap=pylab.gray())
-#plt.gca().invert_yaxis()
-#
-##get first point in subap centroid maps.
-#mouse = MouseMonitor()
-#connect('button_press_event', mouse.mycall)
-plt.show()
-valid_subapLocation = valid_subapLocation.reshape(valid_subapLocation.size/6,6)
-print "valid subapLocation %s" % str(str(valid_subapLocation.shape))
-print "subapLocation %s" % str(str(subapLocation.shape))
-FITS.Write(valid_subapLocation,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])
-FITS.Write(subFlag,fname,writeMode='a')
+#fname="newSubApLocation.fits"
+#subFlag = get_subflag(nsubx, nsuby, x_init, y_init, centroid_x)
+#FITS.Write(valid_subapLocation,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])
+#FITS.Write(subFlag,fname,writeMode='a')
 
 # Only centroid coordinates
-#FITS.Write(new_centroid,'centroid_coordinatesXY.fits',extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])
+#FITS.Write(centroid_x,'centroid_coordinatesXY.fits',extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])

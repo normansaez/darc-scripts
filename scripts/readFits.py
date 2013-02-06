@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pylab
 
 #data = FITS.Read('mainsubapLocationSCAO1_121121.fits')
-data = FITS.Read('newSubAp.fits')
+#data = FITS.Read('newSubAp.fits')
 headers  = data[0]
 raw_data = data[1]
 d2 = data[2]
