@@ -174,17 +174,17 @@ for i in props:
     centroid_x = np.append(centroid_x,[[int(math.floor(x0))]])
     centroid_y = np.append(centroid_y,[[int(math.floor(y0))]])
 
-x0 = centroid_x.max() + side  
-y0 = centroid_y.max() + side
+x0 = centroid_x.max() + side/2.0  
+y0 = centroid_y.max() + side/2.0
 
-x1 = centroid_x.min() + side
-y1 = centroid_y.min() + side
+x1 = centroid_x.min() + side/2.0
+y1 = centroid_y.min() + side/2.0
 
-x2 = centroid_x.max() + side
-y2 = centroid_y.min() + side
+x2 = centroid_x.max() + side/2.0
+y2 = centroid_y.min() + side/2.0
 
-x3 = centroid_x.min() + side
-y3 = centroid_y.max() + side
+x3 = centroid_x.min() + side/2.0
+y3 = centroid_y.max() + side/2.0
 
 #plt.plot(y0,x0,'xy',markersize=2)
 #plt.plot(y1,x1,'xg',markersize=2)
