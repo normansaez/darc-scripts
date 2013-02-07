@@ -134,160 +134,102 @@ def im2bw(image, threshold):
                 img[i][j] = 0
     return img
 
+def get_image_from_darc():
+    ############## DARC #######################
+    import darc
+    c=darc.Control("main")
+    bg = c.Get("bgImage")
+    data = bg.reshape(480,640)
+    #FITS.Write(data,'myfits.fits',writeMode='a')
+    headers = data[0]
+    raw_data = data[1]
+    return headers, raw_data
+    
+def get_image():
+    data = FITS.Read('myfits.fits')
+    headers = data[0]
+    raw_data = data[1]
+    return headers, raw_data
+
+def get_props(raw_data,tr):
+    raw_data = im2bw(raw_data, tr)
+    label_img = label(raw_data)
+    props = regionprops(label_img, ['Centroid'])
+    return props
+
+
+def get_centroids(props):
+    centroid_x = np.array([], "i")
+    centroid_y = np.array([], "i")
+    for i in props:
+        x0 = i['Centroid'][0]
+        y0 = i['Centroid'][1]
+        centroid_x = np.append(centroid_x,[[int(math.floor(x0))]])
+        centroid_y = np.append(centroid_y,[[int(math.floor(y0))]])
+    return centroid_x, centroid_y
+
 ############## START HERE ############################
 tr = 0.42 #threshold
-side = 8 #pixels
 nsubx = 15
 nsuby = 15
 nsubs = nsubx*nsuby
-
-print "Threshole: %.3f\nSide: %d\nnsubx * nsuby = nsubs <-> %dx%d=%d"  % (tr,side,nsubx,nsuby,nsubs)
-
-############## DARC #######################
-#import darc
-#c=darc.Control("main")
-#bg = c.Get("bgImage")
-#data = bg.reshape(480,640)
-#FITS.Write(data,'myfits.fits',writeMode='a')
-data = FITS.Read('myfits.fits')
-############## DARC #######################
-# get headers and raw_data 
-headers = data[0]
-raw_data = data[1]
-###############################################
-#Get centroid of each point.
-raw_data = im2bw(raw_data, tr)
-label_img = label(raw_data)
-props = regionprops(label_img, ['Centroid'])
-############### ############## ####################
-plt.figure(num=1, figsize=(8, 6), dpi=150, facecolor='w', edgecolor='k')
-
-# Init variables
 valid_subapLocation = np.array([], "i")
 new_subapFlag = np.array([], "i")
-centroid_x = np.array([], "i")
-centroid_y = np.array([], "i")
+print "Threshole: %.3f\nnsubx * nsuby = nsubs <-> %dx%d=%d"  % (tr,nsubx,nsuby,nsubs)
 
-# Fill new centroid.
-for i in props:
-    x0 = i['Centroid'][0]
-    y0 = i['Centroid'][1]
-    centroid_x = np.append(centroid_x,[[int(math.floor(x0))]])
-    centroid_y = np.append(centroid_y,[[int(math.floor(y0))]])
+###############################################
+#Get centroid of each point.
+headers, raw_data = get_image()
+props = get_props(raw_data,tr)
+centroid_x, centroid_y = get_centroids(props)
 
-x0 = centroid_x.max() + side/2.0  
-y0 = centroid_y.max() + side/2.0
+#make mask
+x_max = centroid_x.max()  
+y_max = centroid_y.max() 
+x_min = centroid_x.min() 
+y_min = centroid_y.min() 
 
-x1 = centroid_x.min() + side/2.0
-y1 = centroid_y.min() + side/2.0
-
-x2 = centroid_x.max() + side/2.0
-y2 = centroid_y.min() + side/2.0
-
-x3 = centroid_x.min() + side/2.0
-y3 = centroid_y.max() + side/2.0
-
-#plt.plot(y0,x0,'ok',markersize=12) #this one
-#plt.plot(y1,x1,'og',markersize=12) #this one
-#plt.plot(y2,x2,'or',markersize=12)
-#plt.plot(y3,x3,'ob',markersize=12)
-#plt.gca().invert_yaxis()
-#plt.show()
-
-cxmax = centroid_x.max() + 100
-cymax = centroid_y.max() + 100
-
-print "pxl en total x: %d" % ((centroid_x.max() - centroid_x.min()))
-print "pxl en total y: %d" % ((centroid_y.max() - centroid_y.min()))
-npxlx =  math.floor((centroid_x.max() - centroid_x.min())/nsubx)
-npxly =  math.floor((centroid_y.max() - centroid_y.min())/nsuby)
+xspace = 0.01
+yspace = 0.01
+npxlx =  math.floor(x_max-x_min)
+npxly =  math.floor(y_max-y_min)
+npxlx_pf = npxlx/nsubx
+npxly_pf = npxly/nsuby
 print "pxl x:%d" % npxlx
 print "pxl y:%d" % npxly
-
-x0 = x0/cxmax
-y0 = y0/cymax
-
-x1 = x1/cxmax
-y1 = y1/cymax
-
-x2 = x2/cxmax
-y2 = y2/cymax
-
-x3 = x3/cxmax
-y3 = y3/cymax
+print "pxl x:%.3f p/f" % npxlx_pf 
+print "pxl y:%.3f p/f" % npxly_pf
 
 
-print x0
-print y0
-print "---" 
-print x1
-print y1
-print "---"
-print x2
-print y2
-print "---"
-print x3
-print y3
-
-
-width, height = 0.05, 0.05
-
-xy = y0, x0,
-p = mpatches.Rectangle(xy, width, height, facecolor="black", edgecolor="black")
-plt.gca().add_patch(p)
-xy = y1, x1,
-p = mpatches.Rectangle(xy, width, height, facecolor="green", edgecolor="green")
-plt.gca().add_patch(p)
-xy = y2, x2,
-p = mpatches.Rectangle(xy, width, height, facecolor="red", edgecolor="red")
-plt.gca().add_patch(p)
-xy = y3, x3,
-p = mpatches.Rectangle(xy, width, height, facecolor="blue", edgecolor="blue")
-plt.gca().add_patch(p)
-
-
-xd = (x0 - x1)/(nsubx)
-yd = (y0 - y1)/(nsuby)
-print "----------------------------------"
-print xd
-print yd
-print "----------------------------------"
-yspace = 0.01
-xspace = 0.01
-color = {0:'black',1:'green',2:'red',3:'blue',4:'gray'}
-
-for sidex in range(nsubx):
-    for sidey in range(nsuby):
-#        print "(%2d,%2d)" %(sidex,sidey),
-        print "(%.3f,%.3f)" %(y1,x1),
-        xy = y1, x1,
-        try:
-            p = mpatches.Rectangle(xy, width, height, facecolor=color[sidey], edgecolor=color[sidey])
-        except:
-            p = mpatches.Rectangle(xy, width, height, facecolor='purple', edgecolor='purple') 
+color = {0:'black',1:'green',2:'red',3:'blue',4:'gray',5:'purple'}
+for i in range(nsubx):
+    for j in range(nsuby):
+        c = divmod(j,5)[1]
+        width, height = npxlx_pf/x_max, npxly_pf/y_max
+        xy = (x_min/x_max)+i*(npxlx_pf/x_max + xspace), y_min/y_max + j*(npxly_pf/y_max + yspace),
+        p = mpatches.Rectangle(xy, width, height, facecolor=color[c], edgecolor=color[c])
         plt.gca().add_patch(p)
-        y1 = y1 + yd
-#        x1 = x1 + xd
-    print
-    x1 = x1 + xd
+
+
 plt.draw()
-plt.gca().invert_yaxis()
+#plt.gca().invert_yaxis()
 plt.show()
 
-
-#    valid_subapLocation = np.append(valid_subapLocation,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
-##get first point in subap centroid maps.
-#mouse = MouseMonitor()
-#connect('button_press_event', mouse.mycall)
-#plt.show()
+##Image properties
+#plt.figure(num=1, figsize=(8, 6), dpi=150, facecolor='w', edgecolor='k')
+##    valid_subapLocation = np.append(valid_subapLocation,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
+###get first point in subap centroid maps.
+##mouse = MouseMonitor()
+##connect('button_press_event', mouse.mycall)
+##plt.show()
+##
+##x0 = int(mouse.event.xdata)
+##y0 = int(mouse.event.ydata)
 #
-#x0 = int(mouse.event.xdata)
-#y0 = int(mouse.event.ydata)
-
-#fname="newSubApLocation.fits"
-#subFlag = get_subflag(nsubx, nsuby, x_init, y_init, centroid_x)
-#FITS.Write(valid_subapLocation,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])
-#FITS.Write(subFlag,fname,writeMode='a')
-
-# Only centroid coordinates
-#FITS.Write(centroid_x,'centroid_coordinatesXY.fits',extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])
+##fname="newSubApLocation.fits"
+##subFlag = get_subflag(nsubx, nsuby, x_init, y_init, centroid_x)
+##FITS.Write(valid_subapLocation,fname,extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])
+##FITS.Write(subFlag,fname,writeMode='a')
+#
+## Only centroid coordinates
+##FITS.Write(centroid_x,'centroid_coordinatesXY.fits',extraHeader=["npxlx   = '[%s]'"%str(npxlx),"npxly   = '[%s]'"%str(npxly),"nsubaps    = '[%s]'"%str(nsubaps)])
