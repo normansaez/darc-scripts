@@ -6,6 +6,7 @@ import numpy as np
 from skimage.morphology import label
 from skimage.measure import regionprops
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import pylab
 import math
 from pylab import *
@@ -186,17 +187,93 @@ y2 = centroid_y.min() + side/2.0
 x3 = centroid_x.min() + side/2.0
 y3 = centroid_y.max() + side/2.0
 
-#plt.plot(y0,x0,'xy',markersize=2)
-#plt.plot(y1,x1,'xg',markersize=2)
-#plt.plot(y2,x2,'xr',markersize=2)
-#plt.plot(y3,x3,'xb',markersize=2)
+#plt.plot(y0,x0,'ok',markersize=12) #this one
+#plt.plot(y1,x1,'og',markersize=12) #this one
+#plt.plot(y2,x2,'or',markersize=12)
+#plt.plot(y3,x3,'ob',markersize=12)
 #plt.gca().invert_yaxis()
 #plt.show()
 
+cxmax = centroid_x.max() + 100
+cymax = centroid_y.max() + 100
+
+print "pxl en total x: %d" % ((centroid_x.max() - centroid_x.min()))
+print "pxl en total y: %d" % ((centroid_y.max() - centroid_y.min()))
+npxlx =  math.floor((centroid_x.max() - centroid_x.min())/nsubx)
+npxly =  math.floor((centroid_y.max() - centroid_y.min())/nsuby)
+print "pxl x:%d" % npxlx
+print "pxl y:%d" % npxly
+
+x0 = x0/cxmax
+y0 = y0/cymax
+
+x1 = x1/cxmax
+y1 = y1/cymax
+
+x2 = x2/cxmax
+y2 = y2/cymax
+
+x3 = x3/cxmax
+y3 = y3/cymax
+
+
+print x0
+print y0
+print "---" 
+print x1
+print y1
+print "---"
+print x2
+print y2
+print "---"
+print x3
+print y3
+
+
+width, height = 0.05, 0.05
+
+xy = y0, x0,
+p = mpatches.Rectangle(xy, width, height, facecolor="black", edgecolor="black")
+plt.gca().add_patch(p)
+xy = y1, x1,
+p = mpatches.Rectangle(xy, width, height, facecolor="green", edgecolor="green")
+plt.gca().add_patch(p)
+xy = y2, x2,
+p = mpatches.Rectangle(xy, width, height, facecolor="red", edgecolor="red")
+plt.gca().add_patch(p)
+xy = y3, x3,
+p = mpatches.Rectangle(xy, width, height, facecolor="blue", edgecolor="blue")
+plt.gca().add_patch(p)
+
+
+xd = (x0 - x1)/(nsubx)
+yd = (y0 - y1)/(nsuby)
+print "----------------------------------"
+print xd
+print yd
+print "----------------------------------"
+yspace = 0.01
+xspace = 0.01
+color = {0:'black',1:'green',2:'red',3:'blue',4:'gray'}
+
 for sidex in range(nsubx):
     for sidey in range(nsuby):
-        print "(%2d,%2d)" %(sidex,sidey),
+#        print "(%2d,%2d)" %(sidex,sidey),
+        print "(%.3f,%.3f)" %(y1,x1),
+        xy = y1, x1,
+        try:
+            p = mpatches.Rectangle(xy, width, height, facecolor=color[sidey], edgecolor=color[sidey])
+        except:
+            p = mpatches.Rectangle(xy, width, height, facecolor='purple', edgecolor='purple') 
+        plt.gca().add_patch(p)
+        y1 = y1 + yd
+#        x1 = x1 + xd
     print
+    x1 = x1 + xd
+plt.draw()
+plt.gca().invert_yaxis()
+plt.show()
+
 
 #    valid_subapLocation = np.append(valid_subapLocation,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
 ##get first point in subap centroid maps.
