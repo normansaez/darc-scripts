@@ -86,7 +86,7 @@ def is_centroid_in_subap(c_x, c_y, startx, starty, width, height):
 
 
 ############## START HERE ############################
-threshold = 0.42 #threshold
+threshold = 0.42 
 nsubx = 15
 nsuby = 15
 xspace = 0.01
@@ -100,21 +100,21 @@ subapFlag = np.array([], "i")
 print "Threshole: %.3f\nnsubx * nsuby = nsubs <-> %dx%d=%d"  % (threshold, nsubx, nsuby, nsubs)
 
 ###############################################
-#Get centroid of each point.
+#Get image and centroid per spot
 headers, raw_data = get_image()
 props = get_props(raw_data, threshold)
 centroid_x, centroid_y = get_centroids(props)
 
-#make mask
+#Calculate subLocation borders
 x_max = centroid_x.max()  
 y_max = centroid_y.max() 
 x_min = centroid_x.min() 
 y_min = centroid_y.min() 
 
-npxlx =  math.floor(x_max-x_min)
-npxly =  math.floor(y_max-y_min)
-npxlx_pf = npxlx/nsubx
-npxly_pf = npxly/nsuby
+npxlx =  math.floor(x_max-x_min) #Total pixels x
+npxly =  math.floor(y_max-y_min) #Total pixels y
+npxlx_pf = npxlx/nsubx           #x: plx/subap
+npxly_pf = npxly/nsuby           #y: plx/subapy
 print "pxl x:%d" % npxlx
 print "pxl y:%d" % npxly
 print "pxl x:%.3f p/f" % npxlx_pf 
@@ -136,11 +136,10 @@ for i in range(nsubx):
                 pass
                 
         subapFlag = np.append(subapFlag, [[is_valid]])
-plt.draw()
+#plt.draw()
 #plt.gca().invert_yaxis()
-plt.show()
+#plt.show()
 
-print subapFlag.reshape(15, 15)
 #fname="newSubApLocation.fits"
-#FITS.Write(valid_subapLocation, fname, extraHeader=["npxlx   = '[%s]'"%str(npxlx), "npxly   = '[%s]'"%str(npxly), "nsubaps    = '[%s]'"%str(nsubaps)])
+#FITS.Write(subapLocation, fname, extraHeader=["npxlx   = '[%s]'"%str(npxlx), "npxly   = '[%s]'"%str(npxly), "nsubaps    = '[%s]'"%str(nsubaps)])
 #FITS.Write(subFlag, fname, writeMode='a')
