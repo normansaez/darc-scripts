@@ -168,13 +168,23 @@ def get_centroids(props):
         centroid_y = np.append(centroid_y,[[int(math.floor(y0))]])
     return centroid_x, centroid_y
 
+def check_in_subapp(cx,cy,startx,starty,width,height):
+    x_in = 0
+    y_in = 0
+    if abs(startx - cx) < width:
+        x_in = 1
+    if abs(starty - cy) < height:
+        y_in = 1
+    return x_in * y_in
+
 ############## START HERE ############################
 tr = 0.42 #threshold
 nsubx = 15
 nsuby = 15
 nsubs = nsubx*nsuby
-valid_subapLocation = np.array([], "i")
-new_subapFlag = np.array([], "i")
+
+subapLocation = np.array([], "i")
+subapFlag = np.array([], "i")
 print "Threshole: %.3f\nnsubx * nsuby = nsubs <-> %dx%d=%d"  % (tr,nsubx,nsuby,nsubs)
 
 ###############################################
@@ -209,12 +219,19 @@ for i in range(nsubx):
         xy = (x_min/x_max)+i*(npxlx_pf/x_max + xspace), y_min/y_max + j*(npxly_pf/y_max + yspace),
         p = mpatches.Rectangle(xy, width, height, facecolor=color[c], edgecolor=color[c])
         plt.gca().add_patch(p)
-
-
+        for ii in range(len(centroid_x)):
+            valid = check_in_subapp(centroid_x[ii],centroid_y[ii], (x_min)+i*(npxlx_pf + xspace), y_min + j*(npxly_pf + yspace),width*x_max, height*y_max)
+            if valid:
+                break
+            else:
+                pass
+                
+        subapFlag = np.append(subapFlag,[[valid]])
 plt.draw()
 #plt.gca().invert_yaxis()
 plt.show()
 
+print subapFlag.reshape(15,15)
 ##Image properties
 #plt.figure(num=1, figsize=(8, 6), dpi=150, facecolor='w', edgecolor='k')
 ##    valid_subapLocation = np.append(valid_subapLocation,[[int(math.floor(y_start)),int(math.floor(y_end)),1,int(math.floor(x_start)),int(math.floor(x_end)),1]])
