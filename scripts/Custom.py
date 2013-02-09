@@ -157,9 +157,9 @@ for i in range(nsubx):
             y_start = y_pxl = h_pxl
             x_end   = x_pxl + w_pxl
             y_end   = y_pxl = w_pxl
-            subapLocation = np.append(subapLocation, [[y_start, y_end, 1, x_start, x_end, 1]])
-            
-print subFlag.reshape(15,15)
+            subapLocation = np.append(subapLocation, [[y_start, y_end, 1, x_start, x_end, 1]])            
+#print subapLocation
+#print subFlag.reshape(15,15)
 plt.draw()
 plt.gca().invert_yaxis()
 plt.show()
@@ -167,3 +167,14 @@ plt.show()
 fname="newSubApLocation.fits"
 FITS.Write(subapLocation, fname, extraHeader=["npxlx   = '[%s]'"%str(nsubx), "npxly   = '[%s]'"%str(nsuby), "nsubaps    = '[%s]'"%str(nsubs)])
 FITS.Write(subFlag, fname, writeMode='a')
+
+#check !
+for i in range(len(centroid_x)):
+    plt.plot(centroid_x[i],centroid_y[i],'xr')
+print subapLocation
+print subapLocation.shape
+print subapLocation.size
+print "###########"
+print subFlag.size
+print subFlag.shape
+plt.show()
