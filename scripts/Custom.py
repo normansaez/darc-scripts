@@ -91,7 +91,7 @@ nsubx = 15
 nsuby = 15
 xspace = 0.01
 yspace = 0.01
-color = {0:'black', 1:'green', 2:'red', 3:'blue', 4:'gray', 5:'purple'}
+color_dict = {0:'black', 1:'green', 2:'red', 3:'blue', 4:'gray', 5:'purple',6:'white'}
 
 nsubs = nsubx*nsuby
 subapLocation = np.array([], "i")
@@ -120,14 +120,15 @@ print "pxl y:%d" % npxly
 print "pxl x:%.3f p/f" % npxlx_pf 
 print "pxl y:%.3f p/f" % npxly_pf
 
-
+#This does all the job !
 for i in range(nsubx):
     for j in range(nsuby):
-        c = divmod(j, 5)[1]
-        width, height = npxlx_pf/x_max, npxly_pf/y_max
-        xy = (x_min/x_max)+i*(npxlx_pf/x_max + xspace), y_min/y_max + j*(npxly_pf/y_max + yspace),
-        p = mpatches.Rectangle(xy, width, height, facecolor=color[c], edgecolor=color[c])
-        plt.gca().add_patch(p)
+        color  = divmod(j, 5)[1]
+        width  = npxlx_pf/x_max
+        height = npxly_pf/y_max
+        x_ = x_min/x_max + i*(npxlx_pf/x_max + xspace)
+        y_ = y_min/y_max + j*(npxly_pf/y_max + yspace)
+        xy = x_, y_,
         for ii in range(len(centroid_x)):
             is_valid = is_centroid_in_subap(centroid_x[ii], centroid_y[ii], (x_min)+i*(npxlx_pf + xspace), y_min + j*(npxly_pf + yspace), width*x_max, height*y_max)
             if is_valid:
@@ -136,9 +137,21 @@ for i in range(nsubx):
                 pass
                 
         subapFlag = np.append(subapFlag, [[is_valid]])
-#plt.draw()
-#plt.gca().invert_yaxis()
-#plt.show()
+        if is_valid:
+            p = mpatches.Rectangle(xy, width, height, facecolor=color_dict[1], edgecolor=color_dict[0])
+            plt.gca().add_patch(p)
+            #subapLocation = np.append(subapLocation, [[1 1 1 1 1 1]])
+            pass
+        else:
+            p = mpatches.Rectangle(xy, width, height, facecolor=color_dict[6], edgecolor=color_dict[0])
+            plt.gca().add_patch(p)
+            #subapLocation = np.append(subapLocation, [[0 0 0 0 0 0]])
+            pass
+            
+print subapFlag.reshape(15,15)
+plt.draw()
+plt.gca().invert_yaxis()
+plt.show()
 
 #fname="newSubApLocation.fits"
 #FITS.Write(subapLocation, fname, extraHeader=["npxlx   = '[%s]'"%str(npxlx), "npxly   = '[%s]'"%str(npxly), "nsubaps    = '[%s]'"%str(nsubaps)])
