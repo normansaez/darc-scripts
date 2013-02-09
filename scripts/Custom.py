@@ -95,7 +95,7 @@ color_dict = {0:'black', 1:'green', 2:'red', 3:'blue', 4:'gray', 5:'purple',6:'w
 
 nsubs = nsubx*nsuby
 subapLocation = np.array([], "i")
-subapFlag = np.array([], "i")
+subFlag = np.array([], "i")
 
 print "Threshole: %.3f\nnsubx * nsuby = nsubs <-> %dx%d=%d"  % (threshold, nsubx, nsuby, nsubs)
 
@@ -123,36 +123,47 @@ print "pxl y:%.3f p/f" % npxly_pf
 #This does all the job !
 for i in range(nsubx):
     for j in range(nsuby):
-        color  = divmod(j, 5)[1]
-        width  = npxlx_pf/x_max
-        height = npxly_pf/y_max
-        x_ = x_min/x_max + i*(npxlx_pf/x_max + xspace)
-        y_ = y_min/y_max + j*(npxly_pf/y_max + yspace)
-        xy = x_, y_,
-        for ii in range(len(centroid_x)):
-            is_valid = is_centroid_in_subap(centroid_x[ii], centroid_y[ii], (x_min)+i*(npxlx_pf + xspace), y_min + j*(npxly_pf + yspace), width*x_max, height*y_max)
+        #normalized
+        norm_width  = npxlx_pf/x_max
+        norm_height = npxly_pf/y_max
+        norm_x = x_min/x_max + i*(npxlx_pf/x_max + xspace)
+        norm_y = y_min/y_max + j*(npxly_pf/y_max + yspace)
+        norm_xy = norm_x, norm_y,
+        for index in range(len(centroid_x)):
+            #remove normalization
+            x_pxl = x_min + i*(npxlx_pf + xspace)
+            y_pxl = y_min + j*(npxly_pf + yspace)
+            w_pxl = norm_width*x_max
+            h_pxl = norm_height*y_max
+            is_valid = is_centroid_in_subap(centroid_x[index], centroid_y[index],x_pxl, y_pxl, w_pxl, h_pxl)
             if is_valid:
                 break
             else:
                 pass
                 
-        subapFlag = np.append(subapFlag, [[is_valid]])
+        subFlag = np.append(subFlag, [[is_valid]])
         if is_valid:
-            p = mpatches.Rectangle(xy, width, height, facecolor=color_dict[1], edgecolor=color_dict[0])
+            p = mpatches.Rectangle(norm_xy, norm_width, norm_height, facecolor=color_dict[1], edgecolor=color_dict[0])
             plt.gca().add_patch(p)
-            #subapLocation = np.append(subapLocation, [[1 1 1 1 1 1]])
-            pass
+            x_start = centroid_x[index] - npxlx_pf/2.0
+            y_start = centroid_y[index] + npxly_pf/2.0
+            x_end   = centroid_x[index] + npxlx_pf/2.0
+            y_end   = centroid_y[index] - npxly_pf/2.0
+            subapLocation = np.append(subapLocation, [[y_start, y_end, 1, x_start, x_end, 1]])
         else:
-            p = mpatches.Rectangle(xy, width, height, facecolor=color_dict[6], edgecolor=color_dict[0])
+            p = mpatches.Rectangle(norm_xy, norm_width, norm_height, facecolor=color_dict[6], edgecolor=color_dict[0])
             plt.gca().add_patch(p)
-            #subapLocation = np.append(subapLocation, [[0 0 0 0 0 0]])
-            pass
+            x_start = x_pxl + h_pxl
+            y_start = y_pxl = h_pxl
+            x_end   = x_pxl + w_pxl
+            y_end   = y_pxl = w_pxl
+            subapLocation = np.append(subapLocation, [[y_start, y_end, 1, x_start, x_end, 1]])
             
-print subapFlag.reshape(15,15)
+print subFlag.reshape(15,15)
 plt.draw()
 plt.gca().invert_yaxis()
 plt.show()
 
-#fname="newSubApLocation.fits"
-#FITS.Write(subapLocation, fname, extraHeader=["npxlx   = '[%s]'"%str(npxlx), "npxly   = '[%s]'"%str(npxly), "nsubaps    = '[%s]'"%str(nsubaps)])
-#FITS.Write(subFlag, fname, writeMode='a')
+fname="newSubApLocation.fits"
+FITS.Write(subapLocation, fname, extraHeader=["npxlx   = '[%s]'"%str(nsubx), "npxly   = '[%s]'"%str(nsuby), "nsubaps    = '[%s]'"%str(nsubs)])
+FITS.Write(subFlag, fname, writeMode='a')
