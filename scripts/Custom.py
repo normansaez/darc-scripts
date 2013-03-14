@@ -177,11 +177,12 @@ if __name__ == '__main__':
         y_end   = subapLocation[i][1]
         x_start = subapLocation[i][3]
         x_end   = subapLocation[i][4]
-        print "(%.3f,%.3f) ? %d" % (x_start,y_start, subFlag[i])
+        #print "(%.3f,%.3f) ? %d" % (x_start,y_start, subFlag[i])
         if subFlag[i] == 1:
             plt.plot(x_start,y_start,'og')
-            plt.plot(x_end,y_end,'og')
+    #        plt.plot(x_end,y_end,'og')
         else:
+            pass
             plt.plot(x_start,y_start,'ob')
-            plt.plot(x_end,y_end,'ob')
+     #       plt.plot(x_end,y_end,'ob')
     plt.show()
