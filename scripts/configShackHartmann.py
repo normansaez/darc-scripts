@@ -24,9 +24,11 @@ nacts=140#97#54#+256
 ncam=1
 ncamThreads=numpy.ones((ncam,),numpy.int32)*1
 npxly=numpy.zeros((ncam,),numpy.int32)
-npxly[:]=480
+#npxly[:]=480
+npxly[:]=1080
 npxlx=npxly.copy()
-npxlx[:]=640
+#npxlx[:]=640
+npxlx[:]=1920
 nsuby=npxly.copy()
 nsuby[:]=1#this is science, so only one subap required... 
 #nsuby[4:]=16
@@ -86,7 +88,7 @@ elif prefix=="sci":
     lval[0]=2892819690320999#to select red camera
 else:
     lval[0]=2892819656758559#to select pike (new camera)
-
+           #2892819656758559
 rmx=numpy.zeros((nacts,ncents),"f")
 
 #devname="/dev/ttyUSB4\0"
