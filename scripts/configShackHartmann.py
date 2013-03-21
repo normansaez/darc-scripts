@@ -78,9 +78,25 @@ if prefix=="main":
     vmode=69#for the unibrain fire-i
     fr=36#30Hz
 else:
-    vmode=70#for the red camera
+    guid=2892819656758559#to select pike (new camera)
+    vmode=88#for the red camera
     fr=35#15Hz
-cameraParams=numpy.array([0,0,1,vmode,-1,0,0,0,0,fr,2]).astype(numpy.int32)#guid,guid,print,vidmode(-1 or 69(8bit)/70(16bit) probably),color mode when vidmode==-1 (8=352, 16=357 or -1), width(640), height(480), offx (0), offy (0), framerate (36==30Hz, 35, -1==15Hz), [ISO speed (-1==don't set, 0=100, 1=200,2=400 (probably want -1 or 2), 3=800,4=1600,5=3200.)]
+    color = -1 #357
+    width = 1920
+    height = 1080
+cameraParams=numpy.array([guid,guid,1,vmode,color,width,height,0,0,fr,2]).astype(numpy.int32)
+#[0] guid,
+#[1] guid,
+#[2] print,
+#[3] vidmode(-1 or 69(8bit)/70(16bit) probably),
+#[4] color mode when vidmode==-1 (8=352, 16=357 or -1), 
+#[5] width(640), 
+#[6] height(480), 
+#[7] offx (0), o
+#[8] ffy (0), 
+#[9] framerate (36==30Hz, 35, -1==15Hz), 
+#[10] [ISO speed (-1==don't set, 0=100, 1=200,2=400 (probably want -1 or 2), 3=800,4=1600,5=3200.)]
+
 lval=cameraParams[:2].view(numpy.uint64)
 if prefix=="main":
     lval[0]=582164335728668360#to select fire-i camera
@@ -88,7 +104,6 @@ elif prefix=="sci":
     lval[0]=2892819690320999#to select red camera
 else:
     lval[0]=2892819656758559#to select pike (new camera)
-           #2892819656758559
 rmx=numpy.zeros((nacts,ncents),"f")
 
 #devname="/dev/ttyUSB4\0"
