@@ -70,17 +70,32 @@ nx = (npxlx[0]-2*xoff)/nsubx[0]
 ny = (npxly[0]-2*yoff)/nsuby[0]
 for i in range(nsubaps):
     subapLocation[i] = ((i//nsubx[0])*ny+yoff, (i//nsubx[0]+1)*ny+yoff, 1, (i%nsubx[0])*nx+xoff, (i%nsubx[0]+1)*nx+xoff, 1)
-#print subapLocation
-#guid for red camera is 2892819690320999
-#guid for fire-i camera is 582164335728668360
+
+#setting prefix
 try:
     a = prefix
 except:
     prefix = "main"
 
+#guid for red camera gruppy is 2892819690320999
+#guid for fire-i camera is 582164335728668360
+#guid for red camera pike is 2892819656758559
 if prefix == "main":
-    vmode = 69#for the unibrain fire-i
-    fr = 36#30Hz
+    #to select fire-i camera (unibrain fire-i)
+    guid = 582164335728668360
+    vmode = 69
+    fr = 36 #30Hz
+    color = -1 #357
+    width = 640
+    height = 480
+elif prefix == "sci":
+    #to select red camera (gruppy)
+    guid = 2892819690320999
+    vmode = 70
+    fr = 35#15Hz
+    color = -1 #357
+    width = 640
+    height = 480
 else:
     guid = 2892819656758559#to select pike (new camera)
     vmode = 88#for the red camera
@@ -104,12 +119,8 @@ cameraParams = numpy.array([guid, guid, 1, vmode, color, width, height, 0, 0, fr
 
 #Overwrite guid, because they are uint64
 lval = cameraParams[:2].view(numpy.uint64)
-if prefix == "main":
-    lval[0] = 582164335728668360#to select fire-i camera
-elif prefix == "sci":
-    lval[0] = 2892819690320999#to select red camera
-else:
-    lval[0] = 2892819656758559#to select pike (new camera)
+lval[0] = guid
+
 rmx = numpy.zeros((nacts, ncents), "f")#The reconstructor matrix, shape nacts, ncents. Used only when the matrix- vector reconstruction interface is used.
 
 #devname="/dev/ttyUSB4\0"
