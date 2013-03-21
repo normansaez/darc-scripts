@@ -9,6 +9,7 @@ def _execute_cmd(cmd):
     returns codestatus, stdout, stderr
     return int, str, str
     '''
+    print cmd
     process = Popen(cmd , stdout=PIPE , stderr=PIPE , shell=True)
     sts = process.wait()
     out = process.stdout.read().strip()
@@ -24,3 +25,10 @@ if __name__ == "__main__":
     params = eval(out)
     for param in params:
         print param
+        if param == 'E' or param == 'gainE':
+            pass
+        else:
+            cmd = "darcmagic get %s --prefix=%s" % (param, options.camera)
+            sts,out,err = _execute_cmd(cmd)
+            print out
+            print
