@@ -17,7 +17,6 @@
 #A configuration file for use with the uEye USB camera.
 '''
 Use with --prefix=ShackHartmann
-doesn't open a reconstructor or slope library
 '''
 #import FITS
 #import tel
@@ -27,14 +26,11 @@ nacts = 140 #The total number of actuators for the system.
 ncam = 1    #This is the number of camera objects in the system
 ncamThreads = numpy.ones((ncam,), numpy.int32)*1#An array of length ncam, with a value for each frame grabber specifying the number of threads for each
 npxly = numpy.zeros((ncam,), numpy.int32)#An array of length ncam, specifying the number of pixels in a vertical direction with an entry for each frame grabber.
-#npxly[:] = 480
 npxly[:] = 1080#An array of length ncam, specifying the number of pixels in a vertical direction with an entry for each frame grabber.
 npxlx = npxly.copy()#An array of length ncam, specifying the number of pixels in a horizontal direction with an entry for each frame grabber.
-#npxlx[:] = 640
 npxlx[:] = 1920#An array of length ncam, specifying the number of pixels in a horizontal direction with an entry for each frame grabber.
 nsuby = npxly.copy()
 nsuby[:] = 1#this is science, so only one subap required... 
-#nsuby[4:] = 16
 nsubx = nsuby.copy()
 nsub = nsubx*nsuby #An array with ncam entries, specifying the number of sub-apertures for each frame grabber.
 nsubaps = (nsuby*nsubx).sum() #nsubaps is the total number of sub-apertures
@@ -42,7 +38,6 @@ subapFlag = numpy.ones((nsubaps,), "i") #An array of size equal to the total num
 
 #subapFlag = tel.Pupil(11,11/2.,1,11).subflag.astype("i").ravel()#numpy.ones((nsubaps,),"i")
 
-#ncents = nsubaps*2
 ncents = subapFlag.sum()*2 #Number of centroids, each centroid 2 elements = (x,y). That's because subapFlag*2
 npxls = (npxly*npxlx).sum()#Number of pixels
 
@@ -123,9 +118,7 @@ lval[0] = guid
 
 rmx = numpy.zeros((nacts, ncents), "f")#The reconstructor matrix, shape nacts, ncents. Used only when the matrix- vector reconstruction interface is used.
 
-#devname="/dev/ttyUSB4\0"
 mirrorParams = numpy.zeros((3,), "i")#The parameters supplied to the mirror library, an array of 32 bit integers, con- tents depending on the mirror library
-#mirrorParams.view("c")[:len(devname)]=devname
 mirrorParams[0] = 1
 mirrorParams[1] = 1
 mirrorParams[2] = -1
@@ -147,9 +140,9 @@ control = {
     #"staticTerm":None,
     "maxClipped":nacts,#The maximum number of actuators allowed to be clipped before an error is raised.
     "refCentroids":None,#An array of size equal to twice the total number of valid sub-apertures. Specify the reference slope measurements (or None) which are subtracted from slope measurements.
-     "centroidMode":"CoG",#whether data is from cameras or from WPU.
-     "windowMode":"basic",#“basic”, “adaptive” or “global”
-     "thresholdAlgo":0,#The thresholding algorithm to be used. If equal to 1, values less than the threshold are set to zero. If equal to 2, the threshold is subtracted from all values, and negative values are set to zero. Other values mean no thresholding. Used only by the calibration interface module.
+    "centroidMode":"CoG",#whether data is from cameras or from WPU.
+    "windowMode":"basic",#“basic”, “adaptive” or “global”
+    "thresholdAlgo":0,#The thresholding algorithm to be used. If equal to 1, values less than the threshold are set to zero. If equal to 2, the threshold is subtracted from all values, and negative values are set to zero. Other values mean no thresholding. Used only by the calibration interface module.
     #"acquireMode":"frame",#frame, pixel or subaps, depending on what we should wait for...
     "reconstructMode":"simple",#simple (matrix vector only), truth or open.A string with value equal to one of “simple”, “truth”, “open” or “offset”.
     "centroidWeight":None,
