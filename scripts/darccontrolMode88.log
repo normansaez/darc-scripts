@@ -1,0 +1,452 @@
+unlink failed: No such file or directory
+Setting buf to zero 0x7f80dceb1000 size 67108864
+Set to zero
+Opened /ShackHartmannrtcParam1
+unlink failed: No such file or directory
+Setting buf to zero 0x7f80d8eb1000 size 67108864
+Set to zero
+Opened /ShackHartmannrtcParam2
+Waiting for valid buffer contents in /ShackHartmannrtcParam1 shared memory (globalStruct 2400)
+WaitBufferValid curbuf=0
+Reading buffer...
+gotncam: 0, gotncamthreads 0
+err=1
+Switching buffers
+WaitBufferValid curbuf=1
+Reading buffer...
+gotncam: 1, gotncamthreads 1
+err=0
+Got valid buffer contents, ncam=1 curBuf=1
+Creating rtcErrorBuf
+openCircBuf /ShackHartmannrtcErrorBuf 1 128 b 100
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80e1db0000 now calling memset(buf,0,16160)
+done memset of mmap buffer
+circReshape: Got nstore 100 (datasize 128)
+Starting thread 0 0
+Main thread waiting for RTC to finish
+figure thread starting
+Thread starting prepareActuators loop...
+openCircBuf /ShackHartmannrtcPxlBuf 1 2073600 H 100
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80b747d000 now calling memset(buf,0,414723360)
+done memset of mmap buffer
+circReshape: Got nstore 100 (datasize 4147200)
+openCircBuf /ShackHartmannrtcCalPxlBuf 1 2073600 f 100
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f8085d78000 now calling memset(buf,0,829443360)
+done memset of mmap buffer
+circReshape: Got nstore 100 (datasize 8294400)
+openCircBuf /ShackHartmannrtcCentBuf 1 2 f 100
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80e1dae000 now calling memset(buf,0,4160)
+done memset of mmap buffer
+circReshape: Got nstore 100 (datasize 8)
+openCircBuf /ShackHartmannrtcMirrorBuf 1 140 f 1000
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80e1d0a000 now calling memset(buf,0,592160)
+done memset of mmap buffer
+circReshape: Got nstore 1000 (datasize 560)
+openCircBuf /ShackHartmannrtcActuatorBuf 1 140 f 1000
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80e1c79000 now calling memset(buf,0,592160)
+done memset of mmap buffer
+circReshape: Got nstore 1000 (datasize 560)
+openCircBuf /ShackHartmannrtcStatusBuf 1 320 b 1000
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80e1c23000 now calling memset(buf,0,352160)
+done memset of mmap buffer
+circReshape: Got nstore 1000 (datasize 320)
+openCircBuf /ShackHartmannrtcTimeBuf 1 1 d 10000
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80e1bc1000 now calling memset(buf,0,400160)
+done memset of mmap buffer
+circReshape: Got nstore 10000 (datasize 8)
+openCircBuf /ShackHartmannrtcSubLocBuf 1 6 i 100
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80e1bbf000 now calling memset(buf,0,5760)
+done memset of mmap buffer
+circReshape: Got nstore 100 (datasize 24)
+openCircBuf /ShackHartmannrtcGenericBuf 1 2073600 f 4
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80d4f1f000 now calling memset(buf,0,33177888)
+done memset of mmap buffer
+circReshape: Got nstore 4 (datasize 8294400)
+openCircBuf /ShackHartmannrtcFluxBuf 1 1 f 100
+unlink failed: No such file or directory
+Doing mmap
+mmap done buf=0x7f80d4f1d000 now calling memset(buf,0,4160)
+done memset of mmap buffer
+circReshape: Got nstore 100 (datasize 4)
+Opening libcamfirewire.so
+dlsym failed for camNewFrame (non-fatal)
+dlsym failed for camStartFrame (non-fatal)
+dlsym failed for camEndFrame (non-fatal)
+dlsym failed for camWaitPixels
+dlsym failed for camComputePixels
+dlsym failed for camFrameFinished (non-fatal)
+dlsym failed for camFrameFinishedSync (non-fatal)
+dlsym failed for camOpenLoop (non-fatal)
+dlsym failed for camComplete (non-fatal)
+Initialising camera libcamfirewire.so
+Camera with guid 2892819690320999 found
+Camera with guid 2892819656758559 found
+Opening camera with guid 2892819656758559
+Camera opened
+Mode 94
+Max 960x538
+Color coding 352
+Color coding 357
+Current color coding 352 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 2092 bytes
+camera reports actual packet size = 2092 bytes
+Recommended packet size 2092
+Bits per pixel: 8
+Frame interval: 0
+Pixels per frame: 516480
+camera reports total bytes per frame = 516480 bytes
+Mode 93
+Max 1920x538
+Color coding 352
+Color coding 357
+Current color coding 352 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 4096 bytes
+camera reports actual packet size = 4096 bytes
+Recommended packet size 4096
+Bits per pixel: 8
+Frame interval: 0
+Pixels per frame: 1032960
+camera reports total bytes per frame = 1032960 bytes
+Mode 92
+Max 960x1080
+Color coding 352
+Color coding 357
+Current color coding 352 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 4096 bytes
+camera reports actual packet size = 4096 bytes
+Recommended packet size 4096
+Bits per pixel: 8
+Frame interval: 0
+Pixels per frame: 1036800
+camera reports total bytes per frame = 1036800 bytes
+Mode 91
+Max 960x538
+Color coding 352
+Color coding 357
+Current color coding 352 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 3376 bytes
+camera reports actual packet size = 3376 bytes
+Recommended packet size 3376
+Bits per pixel: 8
+Frame interval: 0
+Pixels per frame: 516480
+camera reports total bytes per frame = 516480 bytes
+Mode 90
+Max 1920x538
+Color coding 352
+Color coding 357
+Current color coding 352 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 4096 bytes
+camera reports actual packet size = 4096 bytes
+Recommended packet size 4096
+Bits per pixel: 8
+Frame interval: 0
+Pixels per frame: 1032960
+camera reports total bytes per frame = 1032960 bytes
+Mode 89
+Max 960x1080
+Color coding 352
+Color coding 357
+Current color coding 352 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 4096 bytes
+camera reports actual packet size = 4096 bytes
+Recommended packet size 4096
+Bits per pixel: 8
+Frame interval: 0
+Pixels per frame: 1036800
+camera reports total bytes per frame = 1036800 bytes
+Mode 88
+Max 1920x1080
+Color coding 352
+Color coding 357
+Current color coding 357 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 4096 bytes
+camera reports actual packet size = 4096 bytes
+Recommended packet size 4096
+Bits per pixel: 14
+Frame interval: 0
+Pixels per frame: 2073600
+camera reports total bytes per frame = 4147200 bytes
+Mode 85
+Allowed framerate: 32
+Allowed framerate: 33
+Allowed framerate: 34
+Allowed framerate: 35
+Mode 81
+Allowed framerate: 32
+Allowed framerate: 33
+Allowed framerate: 34
+Allowed framerate: 35
+Allowed framerate: 36
+Mode 78
+Allowed framerate: 32
+Allowed framerate: 33
+Allowed framerate: 34
+Allowed framerate: 35
+Allowed framerate: 36
+Mode 77
+Allowed framerate: 33
+Allowed framerate: 34
+Allowed framerate: 35
+Allowed framerate: 36
+Mode 76
+Allowed framerate: 32
+Allowed framerate: 33
+Allowed framerate: 34
+Allowed framerate: 35
+Allowed framerate: 36
+Mode 73
+Allowed framerate: 34
+Allowed framerate: 35
+Allowed framerate: 36
+Mode 70
+Allowed framerate: 32
+Allowed framerate: 33
+Allowed framerate: 34
+Allowed framerate: 35
+Allowed framerate: 36
+Mode 69
+Allowed framerate: 32
+Allowed framerate: 33
+Allowed framerate: 34
+Allowed framerate: 35
+Allowed framerate: 36
+Setting ISO speed mode
+Setting video mode to 88, color mode to 357, offset 0,0 w,h 1920 1080
+Trigger mode 384 (384?=internal)
+Shutter: 2000 (1 to 4095 valid)
+Brightness: 16 (0 to 255 valid)
+Exposure: 125 (50 to 205 valid)
+Gain: 0 (0 to 630 valid)
+Trigger: 0 (0 to 0 valid)
+Trigger_Delay: 0 (0 to 4095 valid)
+------ Features report ------
+OP   - one push capable
+RC   - readout capable
+O/OC - on/off capable
+AC   - auto capable
+MC   - manual capable
+ABS  - absolute capable
+-----------------------------
+Brightness:
+	RC  MC  (active is: MAN)  
+	min: 0 max 255
+	current value is: 16
+Exposure:
+	RC  MC  (active is: MAN)  
+	min: 50 max 205
+	current value is: 125
+Sharpness:
+	NOT AVAILABLE
+White Balance:
+	NOT AVAILABLE
+Hue:
+	NOT AVAILABLE
+Saturation:
+	NOT AVAILABLE
+Gamma:
+	RC  O/OC  MC  (active is: MAN)  
+	Feature: OFF  min: 0 max 2
+	current value is: 0
+Shutter:
+	RC  MC  (active is: MAN)  AC  (active is: MAN)  
+	min: 1 max 4095
+	current value is: 2000
+Gain:
+	RC  MC  (active is: MAN)  AC  (active is: MAN)  ABS  
+	min: 0 max 630
+	current value is: 0
+	absolute settings:
+	 value: 0.000000
+	 min: 0.000000
+	 max: 22.049999
+Iris:
+	NOT AVAILABLE
+Focus:
+	NOT AVAILABLE
+Temperature:
+	NOT AVAILABLE
+Trigger:
+	RC  O/OC  
+	Feature: OFF  
+	AvailableTriggerModes: 384 385 391 
+	AvailableTriggerSources: none
+	Polarity Change Capable: True
+	Current Polarity: NEG
+	current mode: 384
+Trigger Delay:
+	RC  O/OC  MC  (active is: MAN)  ABS  
+	Feature: OFF  min: 0 max 4095
+	current value is: 0
+	absolute settings:
+	 value: 0.000000
+	 min: 0.000001
+	 max: 2.097152
+White Shading:
+	NOT AVAILABLE
+Frame Rate:
+	NOT AVAILABLE
+Zoom:
+	NOT AVAILABLE
+Pan:
+	NOT AVAILABLE
+Tilt:
+	NOT AVAILABLE
+Optical Filter:
+	NOT AVAILABLE
+Capture Size:
+	NOT AVAILABLE
+Capture Quality:
+	NOT AVAILABLE
+Max size: 1920x1080
+Color coding 352
+Color coding 357
+Current color coding 357 (352==8bit, 357==16bit)
+camera reports allowed packet size from 4 - 4096 bytes
+camera reports actual packet size = 4096 bytes
+Recommended packet size 4096
+Bits per pixel: 14
+Frame interval: 0
+Pixels per frame: 2073600
+camera reports total bytes per frame = 4147200 bytes
+fwBrightness not found - ignoring
+fwExposure not found - ignoring
+fwFrameRate not found - ignoring
+fwGain not found - ignoring
+fwPacketSize not found - ignoring
+fwShutter not found - ignoring
+fwPrint not found - ignoring
+dlsym failed for calibrateNewFrame (non-fatal)
+dlsym failed for calibrateNewFrameSync (non-fatal)
+dlsym failed for calibrateStartFrame (non-fatal)
+dlsym failed for calibrateEndFrame (non-fatal)
+dlsym failed for calibrateFrameFinished (non-fatal)
+dlsym failed for calibrateFrameFinishedSync (non-fatal)
+dlsym failed for calibrateOpenLoop (non-fatal)
+dlsym failed for calibrateComplete (non-fatal)
+Opening rtccalibrate
+useBrightThrAv not found - continuing
+imgGain not found - continuing
+Closing camera
+Joining thread
+Camera closed
+Closing rtccalibrate library
+Thread 0 leaving loop
+processFrame ending - done thread 0
+mean time 0.126643us (438 iters), stdev 0.000246676us, max 0us (iter 161)
+Waiting for figureThread
+figureThread ending
+Done core for -1 iters, time 58.6766s, -58.6766s per iter, -0.0170426Hz
+removing mutexes
+Removed mutexes
+Unable to unlink /dev/shm/ShackHartmannrtcParam1
+Unable to unlink /dev/shm/ShackHartmannrtcParam2
+Unable to load CustomCheck module - continuing
+None None None None
+RtcControl context already exists
+Control binding already existed -- rebound
+Using config file /home/dani/git/condor/configShackHartmann.py
+prefix ShackHartmann
+Starting RTC
+Waiting for RTC buffers
+Opening buffer of size 67108864 bytes
+Got buffer header size of 112
+Got max number of entries (nhdr) 128
+Opening buffer of size 67108864 bytes
+Got buffer header size of 112
+Got max number of entries (nhdr) 128
+RTCSTarted 1 1
+Inactive buffer 1
+[] 0
+Loading rtc config
+Initialising buffer 1 (config file=/home/dani/git/condor/configShackHartmann.py)
+Executing config file /home/dani/git/condor/configShackHartmann.py...
+Making default value for subapLocType equal to 0
+Making default value for corrThreshType equal to 0
+Making default value for corrThresh equal to 0
+Making default value for corrFFTPattern equal to None
+Making default value for slopeParams equal to None
+Making default value for slopeName equal to librtcslope.so
+Making default value for version equal to                                                                                                                         
+Making default value for currentErrors equal to 0
+Making default value for actsToSend equal to None
+Making default value for reconParams equal to None
+Making default value for adaptiveGroup equal to None
+Making default value for calibrateName equal to librtccalibrate.so
+Making default value for calibrateParams equal to None
+Making default value for calibrateOpen equal to 1
+Making default value for iterSource equal to 0
+Making default value for bufferName equal to librtcbuffer.so
+Making default value for bufferParams equal to None
+Making default value for bufferOpen equal to 0
+Making default value for bufferUseSeq equal to 0
+Making default value for noPrePostThread equal to 0
+Making default value for subapAllocation equal to None
+Making default value for openLoopIfClip equal to 0
+Making default value for adapWinShiftCnt equal to None
+Making default value for slopeSumMatrix equal to None
+Making default value for slopeSumGroup equal to None
+Making default value for centIndexArray equal to None
+Making default value for threadAffElSize equal to 1
+Making default value for adapResetCount equal to 0
+Making default value for bleedGroups equal to None
+Unchecked parameter actSource
+Unchecked parameter adapResetCount
+Switch completed - copying buffer
+Got stream: ShackHartmannrtcFluxBuf
+Got stream: ShackHartmannrtcGenericBuf
+Got stream: ShackHartmannrtcSubLocBuf
+Got stream: ShackHartmannrtcTimeBuf
+Got stream: ShackHartmannrtcStatusBuf
+Got stream: ShackHartmannrtcActuatorBuf
+Got stream: ShackHartmannrtcMirrorBuf
+Got stream: ShackHartmannrtcCentBuf
+Got stream: ShackHartmannrtcCalPxlBuf
+Got stream: ShackHartmannrtcPxlBuf
+Got stream: ShackHartmannrtcErrorBuf
+Bound to port 4242 on dani-RTC
+Got circular buffer ShackHartmannrtcErrorBuf
+Got decimation 1 for ShackHartmannrtcErrorBuf
+Tag 1 Watching ['subapLocation', 'npxlx', 'npxly', 'nsub', 'subapFlag']
+Creating subscribeObject
+Setting decimate ShackHartmannrtcPxlBuf to 25
+Halting...
+Removing SHM
+Waiting for darcmain to finish...
+Removed ShackHartmannrtcPxlBuf
+Removed ShackHartmannrtcCalPxlBuf
+Removed ShackHartmannrtcCentBuf
+Removed ShackHartmannrtcMirrorBuf
+Removed ShackHartmannrtcActuatorBuf
+Removed ShackHartmannrtcStatusBuf
+Removed ShackHartmannrtcTimeBuf
+Removed ShackHartmannrtcErrorBuf
+Removed ShackHartmannrtcSubLocBuf
+Removed ShackHartmannrtcGenericBuf
+Removed ShackHartmannrtcFluxBuf
+{}
+Connection reset by peer.
+Closing socket
+Closed  10
+Loop ended in SockConn.py
+Ending
