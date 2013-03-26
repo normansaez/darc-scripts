@@ -30,7 +30,7 @@ set in darc, and set corr.
 
 
 def getImg(nfr):
-    d=darc.Control("main")
+    d=darc.Control("ShackHartmann")
     img=d.SumData("rtcCalPxlBuf",nfr)[0]/nfr
     return img
 
@@ -44,15 +44,15 @@ def plotImg(img):
 def setCorr(val=1):
     cm=numpy.zeros((49*5),"i")
     cm[-49:]=val
-    d=darc.Control("main")
+    d=darc.Control("ShackHartmann")
     d.Set("centroidMode",cm)
 
 def makefft(img,pad=0):
-    d=darc.Control("main")
+    d=darc.Control("ShackHartmann")
     return correlation.transformPSF(img,3,[256,256,128],[128]*3,[98,98,49],d.Get("subapLocation"),d.Get("subapFlag"),pad)
 
 def makeIdent(npxlx=None,npxly=None,sl=None):
-    d=darc.Control("main")
+    d=darc.Control("ShackHartmann")
     nsub=[98,98,49]
     sf=d.Get("subapFlag")
     if npxlx==None:
@@ -65,7 +65,7 @@ def makeIdent(npxlx=None,npxly=None,sl=None):
     return ident
 
 def getCurrentImg():
-    d=darc.Control("main")
+    d=darc.Control("ShackHartmann")
     fft=d.Get("corrFFTPattern")
     if fft==None:
         img=correlation.generateIdentityCorr(d.Get("npxlx"),d.Get("npxly"),d.Get("nsub"),d.Get("subapFlag"),d.Get("subapLocation"))
@@ -97,7 +97,7 @@ def getCurrentImg():
 
 def getSlopes(img,pad=0,retcorr=0):
     """Computes slopes if img is used as a correlation image"""
-    d=darc.Control("main")
+    d=darc.Control("ShackHartmann")
     cm=d.Get("centroidMode")
     if type(cm)==numpy.ndarray and numpy.any(cm[-49:]):#in correlation mode.
         cur=getCurrentImg()
@@ -120,11 +120,11 @@ def getSlopes(img,pad=0,retcorr=0):
 
 class Correl:
     def __init__(self,w=None):
-        self.prefix="main"
+        self.prefix="ShackHartmann"
         if w==None:
             self.win=gtk.Window()
-            self.win.set_title("LGS correlation tool for CANARY on %s"%socket.gethostname())
-            self.win.set_icon_from_file(os.path.join(os.path.split(__file__)[0],"canaryIcon.png"))
+            self.win.set_title("LGS correlation tool for AO-LAB on %s"%socket.gethostname())
+            self.win.set_icon_from_file(os.path.join(os.path.split(__file__)[0],"logouc.png"))
             self.win.connect("delete-event",self.quit)
         else:
             self.win=w
@@ -137,7 +137,7 @@ class Correl:
         h=gtk.HBox()
         vbox.pack_start(h,False)
         i=gtk.Image()
-        i.set_from_file(os.path.join(os.path.split(__file__)[0],"canaryLogo.png"))
+        i.set_from_file(os.path.join(os.path.split(__file__)[0],"logouc.png"))
         h.pack_start(i,False)
         b=gtk.Button("Grab")
         b.set_tooltip_text("Grab calibrated images")
@@ -449,7 +449,7 @@ doesn't occur in the RTD image"""),False)
         except:
             npxly=d.Get("npxly")
         off=(npxlx*npxly)[:-1].sum()
-        os.system("""darcplot --prefix=main rtcCorrBuf 25 "-mdata=data[%d:];data.shape=%d,%d" &"""%(off,npxly[-1],npxlx[-1])) 
+        os.system("""darcplot --prefix=ShackHartmann rtcCorrBuf 25 "-mdata=data[%d:];data.shape=%d,%d" &"""%(off,npxly[-1],npxlx[-1])) 
         
 
 if __name__=="__main__":
