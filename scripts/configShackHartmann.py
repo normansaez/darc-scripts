@@ -1,3 +1,4 @@
+# coding: utf-8
 #darc, the Durham Adaptive optics Real-time Controller.
 #Copyright (C) 2010 Alastair Basden.
 
@@ -30,7 +31,7 @@ npxly[:] = 1080#An array of length ncam, specifying the number of pixels in a ve
 npxlx = npxly.copy()#An array of length ncam, specifying the number of pixels in a horizontal direction with an entry for each frame grabber.
 npxlx[:] = 1920#An array of length ncam, specifying the number of pixels in a horizontal direction with an entry for each frame grabber.
 nsuby = npxly.copy()
-nsuby[:] = 1#this is science, so only one subap required... 
+nsuby[:] = 15#this is science, so only one subap required... 
 nsubx = nsuby.copy()
 nsub = nsubx*nsuby #An array with ncam entries, specifying the number of sub-apertures for each frame grabber.
 nsubaps = (nsuby*nsubx).sum() #nsubaps is the total number of sub-apertures
