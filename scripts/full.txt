@@ -1,0 +1,1001 @@
+    1  2013-03-18T11:21:46 ll
+    2  2013-03-18T11:21:47 cd condor/
+    3  2013-03-18T11:21:47 ll
+    4  2013-03-18T11:21:49 ls -ltr
+    5  2013-03-18T11:21:51 vim tools.py
+    6  2013-03-18T18:06:29 coriander
+    7  2013-03-18T18:07:29 darcmagic status --prefix=main
+    8  2013-03-18T18:07:39 darcmagic status --prefix=sci
+    9  2013-03-18T18:08:08 cd /home/dani/git/condor/
+   10  2013-03-18T18:14:47 psg acs
+   11  2013-03-18T18:14:51 ls -ltr
+   12  2013-03-18T18:14:55 su -
+   13  2013-03-18T18:08:14 python tools.py
+   14  2013-03-18T18:19:39 darcmagic stop --prefix=sci
+   15  2013-03-18T18:19:41 darcmagic stop --prefix=main
+   16  2013-03-18T18:06:52 sudo su -
+   17  2013-03-18T18:06:06 sudo su -
+   18  2013-03-18T18:28:30 darcplot --prefix=ShackHartmann
+   19  2013-03-18T18:15:24 sudo su -
+   20  2013-03-18T18:38:46 uptime
+   21  2013-03-18T18:38:57 sudo su -
+   22  2013-03-18T18:47:36 coriander 
+   23  2013-03-18T18:42:45 sudo su -
+   24  2013-03-18T18:53:10 history |grep darcplot
+   25  2013-03-18T18:53:15 darcplot --prefix=ShackHartmann
+   26  2013-03-18T19:01:22 coriander 
+   27  2013-03-18T18:48:27 coriander
+   28  2013-03-18T19:11:06 cd
+   29  2013-03-18T19:11:16 cd /home/dani/git/condor/
+   30  2013-03-18T19:11:23 python tools.py
+   31  2013-03-18T19:13:01 ls
+   32  2013-03-18T19:13:12 python configShackHartmann.py 
+   33  2013-03-18T19:25:48 ls -ltr
+   34  2013-03-18T19:28:20 darcplot --prefix=ShackHartmann
+   35  2013-03-18T19:29:16 coriander 
+   36  2013-03-18T19:29:48 kill %%
+   37  2013-03-18T19:10:39 sudo su -
+   38  2013-03-18T19:29:47 coriander
+   39  2013-03-18T19:00:24 sudo su -
+   40  2013-03-18T18:48:45 sudo su -
+   41  2013-03-18T19:32:20 ps aux
+   42  2013-03-18T19:33:45 darcplot --prefix=ShackHartmann
+   43  2013-03-18T19:34:41 coriander 
+   44  2013-03-18T19:33:49 darcplot --prefix=ShackHartmann
+   45  2013-03-18T19:38:22 coriander
+   46  2013-03-18T19:35:23 sudo su -
+   47  2013-03-18T19:40:41 uptime
+   48  2013-03-18T19:41:24 coriander 
+   49  2013-03-18T19:42:18 ls -ltr
+   50  2013-03-18T19:42:49 coriander 
+   51  2013-03-18T19:42:23 coriander
+   52  2013-03-18T19:45:30 darcplot --prefix=ShackHartmann
+   53  2013-03-18T19:40:54 less /var/log/syslog
+   54  2013-03-19T15:07:59 cd git/
+   55  2013-03-19T15:08:00 ll
+   56  2013-03-19T15:08:01 cd condor/
+   57  2013-03-19T15:08:01 ll
+   58  2013-03-19T15:08:04 ls -ltr
+   59  2013-03-19T15:08:09 vim configShackHartmann.py 
+   60  2013-03-19T15:09:06 git lg
+   61  2013-03-19T15:09:29 git lg configShackHartmann.py
+   62  2013-03-19T15:09:35 git status configShackHartmann.py
+   63  2013-03-19T15:09:47 cp /home/dani/git/condor/configShackHartmann.py nsaez/scripts/
+   64  2013-03-19T15:09:59 cp /home/dani/git/condor/configShackHartmann.py ~/nsaez/scripts/
+   65  2013-03-19T15:10:03 cd ~/nsaez/scripts/
+   66  2013-03-19T15:10:04 ll
+   67  2013-03-19T15:10:10 git status configShackHartmann.py
+   68  2013-03-19T15:10:15 git commit
+   69  2013-03-19T15:10:23 git commit configShackHartmann.py
+   70  2013-03-19T15:10:57 git push https://github.com/normansaez/darc-scripts.git
+   71  2013-03-19T15:16:25 cd -
+   72  2013-03-19T15:16:26 ll
+   73  2013-03-19T15:16:29 ls -ltr
+   74  2013-03-19T15:16:39 ps aux |grep Sh
+   75  2013-03-19T15:20:47 darcplot --prefix=ShackHartmann
+   76  2013-03-19T15:30:47 ps aux |grep darc
+   77  2013-03-19T15:32:04 darcplot --prefix=ShackHartmann
+   78  2013-03-19T15:36:31 coriander 
+   79  2013-03-18T19:45:02 sudo su -
+   80  2013-03-19T15:30:53 sudo su -
+   81  2013-03-19T15:21:14 sudo su -
+   82  2013-03-19T15:53:36 coriander 
+   83  2013-03-19T15:54:28 darcplot --prefix=ShackHartmann
+   84  2013-03-19T16:52:20 cd git/
+   85  2013-03-19T16:52:20 ll
+   86  2013-03-19T16:52:22 cd condor/
+   87  2013-03-19T16:52:22 ll
+   88  2013-03-19T16:52:29 vim configShackHartmann.py 
+   89  2013-03-19T16:53:18 cd
+   90  2013-03-19T16:53:25 darcplot --prefix=ShackHartmann
+   91  2013-03-19T17:34:43 cd git/condor/
+   92  2013-03-19T17:34:43 ll
+   93  2013-03-19T17:35:03 vim configShackHartmann.py 
+   94  2013-03-19T17:35:59 darcplot --prefix=ShackHartmann
+   95  2013-03-19T17:38:20 coriander
+   96  2013-03-19T17:40:16 vim configShackHartmann.py 
+   97  2013-03-19T18:11:02 ls
+   98  2013-03-19T18:11:28 history 
+   99  2013-03-19T18:12:09 cd /home/dani/git/condor/
+  100  2013-03-19T18:19:36 l
+  101  2013-03-19T18:19:38 cd git/
+  102  2013-03-19T18:19:39 cd condor/
+  103  2013-03-19T18:19:39 ll
+  104  2013-03-19T18:22:38 darcplot --prefix=ShackHartmann
+  105  2013-03-19T18:19:46 vim configShackHartmann.py 
+  106  2013-03-19T18:26:34 cd
+  107  2013-03-19T18:12:31 emacs configShackHartmann.py
+  108  2013-03-19T18:26:36 sudo su -
+  109  2013-03-19T18:22:11 sudo su -
+  110  2013-03-19T18:28:25 python tools.py
+  111  2013-03-19T18:33:24 logout
+  112  2013-03-19T19:41:08 ls -tlr
+  113  2013-03-19T19:41:11 cat modulos 
+  114  2013-03-19T19:41:13 ls
+  115  2013-03-19T19:41:21 cd git/
+  116  2013-03-19T19:41:22 ll
+  117  2013-03-19T19:41:56 grep slope . -rn 
+  118  2013-03-19T19:42:23 vim ./condor/subapAlignmentCustom.py +446
+  119  2013-03-19T19:42:48 grep slope . -rl 
+  120  2013-03-19T19:42:53 grep slope . -rl |less
+  121  2013-03-19T19:45:48 vim ./darc/README
+  122  2013-03-19T19:46:39 ll
+  123  2013-03-19T19:46:48 vim ./condor/poke.py
+  124  2013-03-19T19:47:02 grep slope . -rl |less
+  125  2013-03-19T19:48:34 vim ./darc/lib/python/canaryCalibrate.py
+  126  2013-03-19T16:52:50 sudo su -
+  127  2013-03-20T02:40:44 cd git/
+  128  2013-03-20T02:40:45 ll
+  129  2013-03-20T02:40:46 cd condor/
+  130  2013-03-20T02:40:46 ll
+  131  2013-03-20T02:40:54 grep lval *
+  132  2013-03-20T02:41:13 cd .git/info/
+  133  2013-03-20T02:41:14 ll
+  134  2013-03-20T02:41:17 cat exclude 
+  135  2013-03-20T02:41:19 cd ..
+  136  2013-03-20T02:41:19 ll
+  137  2013-03-20T02:41:27 cd refs/
+  138  2013-03-20T02:41:28 ll
+  139  2013-03-20T02:41:30 cd remotes/
+  140  2013-03-20T02:41:31 ll
+  141  2013-03-20T02:41:33 cd origin/
+  142  2013-03-20T02:41:33 ll
+  143  2013-03-20T02:41:36 cat master 
+  144  2013-03-20T02:41:37 cd ..
+  145  2013-03-20T02:41:38 ll
+  146  2013-03-20T02:41:39 cd ..
+  147  2013-03-20T02:41:40 ll
+  148  2013-03-20T02:41:44 cat *
+  149  2013-03-20T02:41:47 cat /*
+  150  2013-03-20T02:42:13 cd git
+  151  2013-03-20T02:42:14 ll
+  152  2013-03-20T02:42:19 cd condor/
+  153  2013-03-20T02:42:19 ll
+  154  2013-03-20T02:42:21 ls
+  155  2013-03-20T02:42:25 git lg
+  156  2013-03-20T02:42:46 ls
+  157  2013-03-20T03:01:46 vim configShackHartmann.py 
+  158  2013-03-20T03:04:04 cat configShackHartmann.py |grep .so
+  159  2013-03-20T03:11:06 git add configShackHartmann.py
+  160  2013-03-20T03:11:13 git commit configShackHartmann.py
+  161  2013-03-20T03:11:39 git push
+  162  2013-03-20T08:13:46 ps aux
+  163  2013-03-20T08:13:50 ps aux |grep darc
+  164  2013-03-20T08:16:49 cd git/
+  165  2013-03-20T08:16:50 cd condor/
+  166  2013-03-20T08:16:50 ll
+  167  2013-03-20T08:17:06 vim configShackHartmann.py 
+  168  2013-03-20T08:20:32 cd git/condor/
+  169  2013-03-20T08:20:39 vim configShackHartmann.py 
+  170  2013-03-20T08:22:59 cd
+  171  2013-03-20T08:23:42 mv /root/darccontrol1920x1080.log nsaez/scripts/
+  172  2013-03-20T08:23:46 cp /root/darccontrol1920x1080.log nsaez/scripts/
+  173  2013-03-20T08:24:07 cp /tmp/darccontrol1920x1080.log nsaez/scripts/
+  174  2013-03-20T08:24:18 cp /tmp/darccontrol640x480.log nsaez/scripts/
+  175  2013-03-20T08:24:21 cd nsaez/scripts/
+  176  2013-03-20T08:24:28 git add  darccontrol*
+  177  2013-03-20T08:24:31 git commit
+  178  2013-03-20T08:24:50 git push
+  179  2013-03-20T08:24:58 git push https://github.com/normansaez/darc-scripts.git
+  180  2013-03-20T09:58:42 cd git/
+  181  2013-03-20T09:58:43 ll
+  182  2013-03-20T09:58:44 cd condor/
+  183  2013-03-20T09:58:45 ll
+  184  2013-03-20T09:58:49 vim configShackHartmann.py 
+  185  2013-03-20T10:04:10 ps aux |grep darc
+  186  2013-03-20T10:05:27 darcplot --prefix=ShackHartmann
+  187  2013-03-20T10:04:14 sudo su -
+  188  2013-03-20T10:10:01 cd -
+  189  2013-03-20T10:10:04 cd git/
+  190  2013-03-20T10:10:05 cd condor/
+  191  2013-03-20T10:10:05 ll
+  192  2013-03-20T10:10:08 vim configShackHartmann.py 
+  193  2013-03-20T08:19:34 sudo su -
+  194  2013-03-20T08:13:54 sudo su -
+  195  2013-03-20T11:56:41 ls
+  196  2013-03-20T11:56:57 cd Desktop/
+  197  2013-03-20T11:56:58 ls
+  198  2013-03-20T11:57:07 emacs start.txt &
+  199  2013-03-20T12:05:28 gedit start.txt &
+  200  2013-03-20T12:06:32 xterm &
+  201  2013-03-20T12:08:38 darcplot --prefix=ShackHartmann
+  202  2013-03-20T12:12:33 coriander
+  203  2013-03-20T12:14:31 xkill
+  204  2013-03-20T12:06:53 sudo su -
+  205  2013-03-20T14:53:51 w
+  206  2013-03-20T14:56:51 ll
+  207  2013-03-19T17:24:34 sudo su -
+  208  2013-03-19T17:51:23 sudo su -
+  209  2013-03-19T17:51:21 sudo su -
+  210  2013-03-20T19:28:20 gedit Desktop/start.txt &
+  211  2013-03-20T19:28:55 xterm &
+  212  2013-03-20T19:29:52 coriander
+  213  2013-03-20T19:32:15 darcmagic stop --prefix=ShackHartmann
+  214  2013-03-20T19:29:19 sudo su -
+  215  2013-03-20T19:33:15 exit
+  216  2013-03-21T01:26:04 ls -ltr
+  217  2013-03-21T01:26:09 cd git
+  218  2013-03-21T01:26:10 ll
+  219  2013-03-21T01:26:14 cd condor/
+  220  2013-03-21T01:26:15 l
+  221  2013-03-21T01:26:20 vim configShackHartmann.py 
+  222  2013-03-21T01:30:45 ps aux |grep
+  223  2013-03-21T01:30:48 ps aux |grep darc
+  224  2013-03-21T01:31:17 cd git/
+  225  2013-03-21T01:31:21 cd condor/
+  226  2013-03-21T01:31:21 ll
+  227  2013-03-21T01:31:29 vim configShackHartmann.py 
+  228  2013-03-21T01:36:18 darcplot --prefix=ShackHartmann
+  229  2013-03-21T01:41:31 cd git/
+  230  2013-03-21T01:41:32 ll
+  231  2013-03-21T01:41:39 grep 357 . -rl
+  232  2013-03-21T01:40:22 vim configShackHartmann.py 
+  233  2013-03-21T01:41:47 vim ./darc/src/camfirewire.c
+  234  2013-03-21T01:43:24 find . -name 'format7.c'
+  235  2013-03-21T01:43:27 find . -name 'format7'
+  236  2013-03-21T01:43:40 grep 357 . -rl |grep .c
+  237  2013-03-21T01:43:54 grep 357 . -rl |grep ".c"
+  238  2013-03-21T01:44:11 grep 357 . -rl |grep "\.c"
+  239  2013-03-21T01:42:32 vim configsci.py
+  240  2013-03-21T01:45:56 darcplot --prefix=ShackHartmann
+  241  2013-03-21T01:45:15 vim configShackHartmann.py 
+  242  2013-03-21T01:59:12 cd
+  243  2013-03-21T01:59:20 mv /tmp/darccontrolMode88.log nsaez/scripts/
+  244  2013-03-21T01:59:43 ll /tmp/darccontrolMode88.log
+  245  2013-03-21T01:59:52 cp /tmp/darccontrolMode88.log nsaez/scripts/
+  246  2013-03-21T01:59:56 cd nsaez/scripts/
+  247  2013-03-21T02:00:04 git add darccontrolMode88.log
+  248  2013-03-21T02:00:12 git commit darccontrolMode88.log
+  249  2013-03-21T02:00:33 git push https://github.com/normansaez/darc-scripts.git
+  250  2013-03-21T02:14:56 git lg
+  251  2013-03-21T02:15:07 git commit 
+  252  2013-03-21T02:15:28 git commit configShackHartmann.py
+  253  2013-03-21T02:16:19 git lg
+  254  2013-03-21T02:16:46 cp configShackHartmann.py ~/nsaez/scripts/
+  255  2013-03-21T02:17:00 cd ~/nsaez/scripts/
+  256  2013-03-21T02:17:06 git commit 
+  257  2013-03-21T02:17:12 git commit -a
+  258  2013-03-21T01:30:55 sudo su -
+  259  2013-03-21T01:39:00 sudo su -
+  260  2013-03-21T02:18:26 cd nsaez/
+  261  2013-03-21T02:18:26 ll
+  262  2013-03-21T02:18:27 cd scripts/
+  263  2013-03-21T02:18:28 ll
+  264  2013-03-21T02:18:33 git push https://github.com/normansaez/darc-scripts.git
+  265  2013-03-21T02:47:11 cd git/
+  266  2013-03-21T02:47:11 ll
+  267  2013-03-21T02:47:12 cd condor/
+  268  2013-03-21T02:47:13 cd ..
+  269  2013-03-21T02:47:26 find . -name 'libcamfirewire.so'
+  270  2013-03-21T02:47:31 cd darc/
+  271  2013-03-21T02:47:32 cd src/
+  272  2013-03-21T02:47:33 ll
+  273  2013-03-21T02:47:42 find . -name 'libcamfirewire*'
+  274  2013-03-21T02:47:48 find . -name '*camfirewire*'
+  275  2013-03-21T02:47:56 vim ./camfirewire.c
+  276  2013-03-21T02:51:10 ll
+  277  2013-03-21T02:51:13 ll *.c
+  278  2013-03-21T02:51:19 ll *.c|less
+  279  2013-03-21T02:51:42 ls
+  280  2013-03-21T02:51:56 cd ..
+  281  2013-03-21T02:51:56 ll
+  282  2013-03-21T02:52:07 find . -nake '*.py'
+  283  2013-03-21T02:52:11 find . -name '*.py'
+  284  2013-03-21T02:52:18 find . -name '*.py'|less
+  285  2013-03-21T02:52:42 ll
+  286  2013-03-21T02:53:46 ps aux |grep darc
+  287  2013-03-21T02:54:13 ls -ltr
+  288  2013-03-21T02:54:33 darcmagic status
+  289  2013-03-21T02:54:45 darcmagic status --prefix=ShackHartmann
+  290  2013-03-21T02:52:48 vim README
+  291  2013-03-21T02:58:31 ds9 mainsubapLocation.fits
+  292  2013-03-21T03:02:48 cd bin/
+  293  2013-03-21T03:02:48 ll
+  294  2013-03-21T03:02:53 cd ..
+  295  2013-03-21T03:02:54 ll
+  296  2013-03-21T03:02:56 cd conf/
+  297  2013-03-21T03:02:56 ll
+  298  2013-03-21T03:02:58 ls
+  299  2013-03-21T03:03:15 vim configSHM.py 
+  300  2013-03-21T03:03:56 cd ..
+  301  2013-03-21T03:03:57 ll
+  302  2013-03-21T03:03:59 cd data/
+  303  2013-03-21T03:03:59 ll
+  304  2013-03-21T03:04:05 cd ..
+  305  2013-03-21T03:04:05 ll
+  306  2013-03-21T03:04:07 cd doc/
+  307  2013-03-21T03:04:08 ll
+  308  2013-03-21T03:04:10 cd ..
+  309  2013-03-21T03:04:11 ll
+  310  2013-03-21T03:04:14 cd etc/
+  311  2013-03-21T03:04:14 ll
+  312  2013-03-21T03:04:17 cd ..
+  313  2013-03-21T03:04:17 ll
+  314  2013-03-21T03:04:20 cd idl/
+  315  2013-03-21T03:04:21 ll
+  316  2013-03-21T03:04:24 vim control.idl 
+  317  2013-03-21T03:04:51 ll
+  318  2013-03-21T03:04:56 vim control_idl.py 
+  319  2013-03-21T03:05:12 tree .
+  320  2013-03-21T03:05:19 sudo apt-get install tree
+  321  2013-03-21T03:05:48 tree .
+  322  2013-03-21T03:05:50 cd ..
+  323  2013-03-21T03:05:51 ll
+  324  2013-03-21T03:05:55 cd include/
+  325  2013-03-21T03:05:55 ll
+  326  2013-03-21T03:06:02 vim buffer.h 
+  327  2013-03-21T03:06:16 cd ..
+  328  2013-03-21T03:06:17 ll
+  329  2013-03-21T03:06:21 cd lib/
+  330  2013-03-21T03:06:22 ll
+  331  2013-03-21T03:06:24 tree .
+  332  2013-03-21T03:06:32 cd python/
+  333  2013-03-21T03:06:32 ll
+  334  2013-03-21T03:06:35 vim calibrate.py 
+  335  2013-03-21T03:07:18 cd ..
+  336  2013-03-21T03:07:18 ll
+  337  2013-03-21T03:07:19 cd ..
+  338  2013-03-21T03:07:19 ll
+  339  2013-03-21T03:07:24 cd ..
+  340  2013-03-21T03:07:24 ll
+  341  2013-03-21T03:07:25 cd condor/
+  342  2013-03-21T03:07:25 ll
+  343  2013-03-21T03:07:31 grep makeslopes -rin
+  344  2013-03-21T03:07:35 grep makeslopes . -rin
+  345  2013-03-21T03:07:45 cd ..
+  346  2013-03-21T03:07:46 ll
+  347  2013-03-21T03:07:48 cd darc/
+  348  2013-03-21T03:07:48 ll
+  349  2013-03-21T03:07:50 cd lib/
+  350  2013-03-21T03:07:51 ll
+  351  2013-03-21T03:07:52 cd python/
+  352  2013-03-21T03:07:52 ll
+  353  2013-03-21T03:07:57 cat calibrate.py 
+  354  2013-03-21T03:08:02 cat calibrate.py  |grep Slopes
+  355  2013-03-21T03:08:10 cd ../../
+  356  2013-03-21T03:08:10 ll
+  357  2013-03-21T03:08:11 cd ..
+  358  2013-03-21T03:08:12 ll
+  359  2013-03-21T03:08:13 cd condor/
+  360  2013-03-21T03:08:14 ll
+  361  2013-03-21T03:08:20 grep makeSlopes . -rn
+  362  2013-03-21T03:08:27 vim tools.py
+  363  2013-03-21T03:09:14 ls
+  364  2013-03-21T03:09:16 ll
+  365  2013-03-21T03:09:24 ll |grep -v fits
+  366  2013-03-21T03:09:33 ll |grep -v fits |grep -v ~
+  367  2013-03-21T03:09:42 ll |grep -v fits |grep -v "~"
+  368  2013-03-21T03:10:00 ll |grep -v fits |grep -v "~" |grep -v config*
+  369  2013-03-21T03:10:04 ll |grep -v fits |grep -v "~" |grep -v config
+  370  2013-03-21T03:10:13 ll |grep -v fits |grep -v "~" |grep -v config|grep -v "*"
+  371  2013-03-21T03:10:26 ll |grep -v fits |grep -v "~" |grep -v config|grep -v "*" |grep -v png
+  372  2013-03-21T03:10:36 vim poke.py
+  373  2013-03-21T03:10:47 vim readFits.py 
+  374  2013-03-21T03:11:00 vim cam.c
+  375  2013-03-21T03:11:13 vim cam2.c
+  376  2013-03-21T03:11:18 vim dataSaver.py
+  377  2013-03-21T03:11:37 cd ..
+  378  2013-03-21T03:11:38 ll
+  379  2013-03-21T03:11:42 cd canaryLaserCommissioning/
+  380  2013-03-21T03:11:42 ll
+  381  2013-03-21T03:11:50 vim calib.py 
+  382  2013-03-21T03:12:09 cd ..
+  383  2013-03-21T03:12:09 ll
+  384  2013-03-21T03:12:15 grep slope . -rin
+  385  2013-03-21T03:12:32 grep slope canaryLaserCommissioning/  -rin
+  386  2013-03-21T03:12:54 vim canaryLaserCommissioning/correl.py
+  387  2013-03-21T03:16:34 grep slope canaryLaserCommissioning/  -ril
+  388  2013-03-21T03:16:53 vim canaryLaserCommissioning/sloperms.py
+  389  2013-03-21T03:17:12 vim canaryLaserCommissioning/configLLS.py
+  390  2013-03-21T03:29:44 grep slope canaryLaserCommissioning/  -ril |grep -v config
+  391  2013-03-21T03:29:54 vim canaryLaserCommissioning/sloperms.py
+  392  2013-03-21T03:30:12 vim canaryLaserCommissioning/AutoGuiderAli
+  393  2013-03-21T03:30:32 vim canaryLaserCommissioning/correlationTool.py
+  394  2013-03-21T03:32:16 vim canaryLaserCommissioning/correl.py
+  395  2013-03-21T03:40:40 pwd
+  396  2013-03-21T03:43:52 darcmagic 
+  397  2013-03-21T03:43:56 darcmagic |less
+  398  2013-03-21T03:45:40 darcmagic set fwBrightness 10
+  399  2013-03-21T03:45:55 darcmagic set fwBrightness 10 --prefix=SharkHartmann
+  400  2013-03-21T03:46:06 darcmagic set fwBrightness 10 --prefix=ShackHartmann
+  401  2013-03-21T03:46:13 darcmagic status --prefix=ShackHartmann
+  402  2013-03-21T03:46:55 darcmagic set fwExposure 10 --prefix=ShackHartmann
+  403  2013-03-21T03:47:33 darcmagic set fwFrameRate 10 --prefix=ShackHartmann
+  404  2013-03-21T03:47:52 darcmagic set fwGain 10 --prefix=ShackHartmann
+  405  2013-03-21T03:53:51 darcplot --prefix=ShackHartmann
+  406  2013-03-21T03:54:15 darcmagic labels
+  407  2013-03-21T03:54:24 darcmagic labels --prefix=ShackHartmann
+  408  2013-03-21T03:54:43 darcmagic get npxlx
+  409  2013-03-21T03:54:52 darcmagic get npxlx --prefix=ShackHartmann
+  410  2013-03-21T03:54:58 darcmagic get npxly --prefix=ShackHartmann
+  411  2013-03-21T03:55:14 cd nsaez/
+  412  2013-03-21T03:55:14 ll
+  413  2013-03-21T03:55:15 cd scripts/
+  414  2013-03-21T03:55:16 ll
+  415  2013-03-21T03:55:18 ls
+  416  2013-03-21T03:55:27 vim CentParameters.bash 
+  417  2013-03-21T03:55:51 vim getAvailableParameters.py 
+  418  2013-03-21T03:56:18 python getAvailableParameters.py 
+  419  2013-03-21T03:56:27 vim getAvailableParameters.py  +24
+  420  2013-03-21T03:56:49 python getAvailableParameters.py -p ShackHartmann
+  421  2013-03-21T03:57:09 vim getAvailableParameters.py  +24
+  422  2013-03-21T03:58:09 python getAvailableParameters.py -p ShackHartmann
+  423  2013-03-21T03:58:13 vim getAvailableParameters.py  +24
+  424  2013-03-21T03:58:36 python getAvailableParameters.py -p ShackHartmann
+  425  2013-03-21T03:58:38 vim getAvailableParameters.py  +24
+  426  2013-03-21T03:58:46 python getAvailableParameters.py -p ShackHartmann
+  427  2013-03-21T03:59:09 vim getAvailableParameters.py  +24
+  428  2013-03-21T04:00:24 python getAvailableParameters.py -p ShackHartmann
+  429  2013-03-21T04:00:33 vim getAvailableParameters.py  +24
+  430  2013-03-21T04:00:49 python getAvailableParameters.py -p ShackHartmann
+  431  2013-03-21T04:01:07 vim getAvailableParameters.py  +24
+  432  2013-03-21T04:01:33 python getAvailableParameters.py -p ShackHartmann
+  433  2013-03-21T04:01:56 vim getAvailableParameters.py  +24
+  434  2013-03-21T04:02:12 python getAvailableParameters.py -p ShackHartmann
+  435  2013-03-21T04:02:18 python getAvailableParameters.py -p ShackHartmann|less
+  436  2013-03-21T04:02:28 vim getAvailableParameters.py  +24
+  437  2013-03-21T04:03:03 python getAvailableParameters.py -p ShackHartmann|less
+  438  2013-03-21T04:03:10 python getAvailableParameters.py -p ShackHartmann
+  439  2013-03-21T04:03:48 python getAvailableParameters.py -p ShackHartmann &> shackHartmann.current.conf
+  440  2013-03-21T04:04:11 vim shackHartmann.current.conf 
+  441  2013-03-21T04:08:45 git add shackHartmann.current.conf
+  442  2013-03-21T04:08:48 git commit -a
+  443  2013-03-21T04:09:29 cd
+  444  2013-03-21T04:09:30 cd git/
+  445  2013-03-21T04:09:31 ll
+  446  2013-03-21T04:09:37 find . 'librtcslope.so'
+  447  2013-03-21T04:09:45 find . -name 'librtcslope.so'
+  448  2013-03-21T04:09:51 cd darc/src/
+  449  2013-03-21T02:53:52 sudo su -
+  450  2013-03-21T04:09:55 vim rtcslope.c 
+  451  2013-03-21T09:20:47 cd git/
+  452  2013-03-21T09:20:48 ll
+  453  2013-03-21T09:20:49 cd condor/
+  454  2013-03-21T09:20:49 ll
+  455  2013-03-21T09:20:55 vim configShackHartmann.py 
+  456  2013-03-21T09:26:12 ll
+  457  2013-03-21T09:26:15 git lg
+  458  2013-03-21T09:26:17 cd ..
+  459  2013-03-21T09:26:20 ll
+  460  2013-03-21T09:26:22 cd nsaez/
+  461  2013-03-21T09:26:23 ll
+  462  2013-03-21T09:26:24 cd scripts/
+  463  2013-03-21T09:26:25 ll
+  464  2013-03-21T09:26:28 git lg
+  465  2013-03-21T09:26:51 cd nsaez/
+  466  2013-03-21T09:26:53 cd gi
+  467  2013-03-21T09:26:56 cd scripts/
+  468  2013-03-21T09:26:56 ll
+  469  2013-03-21T09:27:11 ls -ltr
+  470  2013-03-21T09:26:36 git push https://github.com/normansaez/darc-scripts.git
+  471  2013-03-21T10:31:39 ls -ltr
+  472  2013-03-21T10:32:08 cd git/
+  473  2013-03-21T10:32:09 ll
+  474  2013-03-21T10:32:14 cd darc/
+  475  2013-03-21T10:32:32 ls -ltr
+  476  2013-03-21T10:32:36 ls
+  477  2013-03-21T10:32:40 cd git/
+  478  2013-03-21T10:32:41 ll
+  479  2013-03-21T10:32:43 cd darc/
+  480  2013-03-21T10:32:44 ll
+  481  2013-03-21T10:32:48 cd src/
+  482  2013-03-21T10:32:49 ll
+  483  2013-03-21T10:32:51 *.c
+  484  2013-03-21T10:32:54 ll *.c
+  485  2013-03-21T10:33:05 vim centroider.c
+  486  2013-03-21T10:33:18 vim camfirewire.c
+  487  2013-03-21T10:33:47 cd
+  488  2013-03-21T10:33:54 ps aux |grep darc
+  489  2013-03-21T10:34:56 w
+  490  2013-03-21T10:35:03 sudo su -
+  491  2013-03-21T10:35:59 darcplot --prefix=ShackHartmann
+  492  2013-03-21T10:41:44 cd nsaez/
+  493  2013-03-21T10:41:44 ll
+  494  2013-03-21T10:41:46 cd scripts/
+  495  2013-03-21T10:41:47 ll
+  496  2013-03-21T10:41:50 ls
+  497  2013-03-21T10:42:14 vim Custom.py 
+  498  2013-03-21T10:42:24 vim getPlotData.py 
+  499  2013-03-21T10:42:38 vim SetCentroid.py 
+  500  2013-03-21T10:43:23 cd
+  501  2013-03-21T10:43:24 cd git/
+  502  2013-03-21T10:43:25 ll
+  503  2013-03-21T10:43:29 cd canaryLaserCommissioning/
+  504  2013-03-21T10:43:30 ll
+  505  2013-03-21T10:43:37 vim correl.py 
+  506  2013-03-21T10:44:08 cd
+  507  2013-03-21T10:44:10 cd nsaez/
+  508  2013-03-21T10:44:21 cd scripts/
+  509  2013-03-21T10:44:23 vim configShackHartmann.py 
+  510  2013-03-21T10:33:58 sudo su -
+  511  2013-03-21T10:48:31 sudo su -
+  512  2013-03-21T09:27:17 vim shackHartmann.current.conf 
+  513  2013-03-21T11:35:19 coriander
+  514  2013-03-21T11:47:49 xterm &
+  515  2013-03-21T11:57:21 ps aux |grep darc
+  516  2013-03-21T11:57:29 python /rtc/bin/darcplot --prefix=ShackHartmann
+  517  2013-03-21T11:48:41 darcplot --prefix=ShackHartmann
+  518  2013-03-21T11:48:02 sudo su -
+  519  2013-03-21T14:33:58 beep
+  520  2013-03-22T01:13:44 cd nsaez/
+  521  2013-03-22T01:13:46 cd scripts/
+  522  2013-03-22T01:13:46 ll
+  523  2013-03-22T01:13:57 git pull https://github.com/normansaez/darc-scripts.git
+  524  2013-03-22T01:14:18 ls -ltr
+  525  2013-03-22T01:14:35 diff getAvailableParameters.py printCurrentConfigParameters.py 
+  526  2013-03-22T01:14:52 python printCurrentConfigParameters.py 
+  527  2013-03-22T01:15:19 python printCurrentConfigParameters.py -p=ShackHartmann
+  528  2013-03-22T01:15:23 vim printCurrentConfigParameters.py 
+  529  2013-03-22T16:22:21 ls
+  530  2013-03-22T16:22:30 cd nsaez/
+  531  2013-03-22T16:22:30 ll
+  532  2013-03-22T16:22:32 cd scripts/
+  533  2013-03-22T16:22:32 ll
+  534  2013-03-22T16:22:38 display logouc.png 
+  535  2013-03-22T16:23:37 ls -ltr
+  536  2013-03-22T16:23:42 display stinkbug.png 
+  537  2013-03-25T13:03:52 ls -ltr
+  538  2013-03-25T13:03:55 cd git/
+  539  2013-03-25T13:03:57 ls -ltr
+  540  2013-03-25T13:04:01 cd darc/
+  541  2013-03-25T13:04:01 ll
+  542  2013-03-25T13:06:45 ls -ltr
+  543  2013-03-25T13:28:35 cd
+  544  2013-03-25T13:29:19 pytho
+  545  2013-03-25T13:29:21 python
+  546  2013-03-25T13:28:38 vim /home/dani/git/canaryLaserCommissioning/correl.py
+  547  2013-03-25T13:30:45 python
+  548  2013-03-26T16:10:11 ls
+  549  2013-03-26T16:26:02 ls -ltr
+  550  2013-03-26T16:26:05 cd nsaez/
+  551  2013-03-26T16:26:05 ll
+  552  2013-03-26T16:26:07 cd scripts/
+  553  2013-03-26T16:26:07 ll
+  554  2013-03-26T16:26:09 python
+  555  2013-03-26T16:26:15 l
+  556  2013-03-26T16:26:17 ll
+  557  2013-03-26T16:26:19 cd
+  558  2013-03-26T16:26:19 ll
+  559  2013-03-26T16:26:26 cd git/
+  560  2013-03-26T16:26:27 ll
+  561  2013-03-26T16:26:29 cd condor/
+  562  2013-03-26T16:26:30 ll
+  563  2013-03-26T16:26:32 vim tools.py
+  564  2013-03-26T16:26:51 vim /home/dani/git/canaryLaserCommissioning/correl.py
+  565  2013-03-26T16:28:09 cp /home/dani/git/canaryLaserCommissioning/correl.py ~/nsaez/scripts/
+  566  2013-03-26T16:28:14 cd ~/nsaez/scripts/
+  567  2013-03-26T16:28:15 ll
+  568  2013-03-26T16:28:16 ls -ltr
+  569  2013-03-26T16:28:20 git add correl.py
+  570  2013-03-26T16:28:23 git commit 
+  571  2013-03-26T16:29:03 ll
+  572  2013-03-26T16:29:08 vim correl.py 
+  573  2013-03-26T16:29:40 python correl.py 
+  574  2013-03-26T16:29:54 vim correl.py 
+  575  2013-03-26T16:30:45 vim correl.py +127
+  576  2013-03-26T16:30:55 python correl.py 
+  577  2013-03-26T16:31:22 vim correl.py +127
+  578  2013-03-26T16:32:18 python correl.py 
+  579  2013-03-26T16:39:29 vim correl.py 
+  580  2013-03-26T16:40:18 python correl.py 
+  581  2013-03-26T16:40:41 kil %%
+  582  2013-03-26T16:40:43 kill %%
+  583  2013-03-26T16:43:19 python printCurrentConfigParameters.py -p=ShackHartmann
+  584  2013-03-26T16:43:23 cd nsaez/scripts/
+  585  2013-03-26T16:43:24 python printCurrentConfigParameters.py -p=ShackHartmann
+  586  2013-03-26T16:43:34 python printCurrentConfigParameters.py -p ShackHartmann
+  587  2013-03-26T16:43:59 python printCurrentConfigParameters.py -p ShackHartmann 
+  588  2013-03-26T16:44:05 python printCurrentConfigParameters.py -p ShackHartmann >> lalala
+  589  2013-03-26T16:45:13 vim lalala
+  590  2013-03-26T16:47:28 darcmagic time 100 --prefix=ShackHartmann
+  591  2013-03-26T16:47:51 darcmagic time 1000 --prefix=ShackHartmann
+  592  2013-03-26T16:53:11 which darcmagic
+  593  2013-03-26T16:53:15 vim /rtc/bin/darcmagic
+  594  2013-03-26T16:53:44 darcmagic 
+  595  2013-03-26T16:53:55 darcmagic |less
+  596  2013-03-26T16:55:22 vim /rtc/bin/darcmagic
+  597  2013-03-26T16:55:40 darcmagic time 1000 -s --prefix=ShackHartmann
+  598  2013-03-26T16:58:48 cd
+  599  2013-03-26T16:58:51 cd git/condor/
+  600  2013-03-26T16:58:58 vim configShackHartmann.py 
+  601  2013-03-26T17:00:34 darcmagic time 100 -s --prefix=ShackHartmann
+  602  2013-03-26T17:01:32 vim configShackHartmann.py 
+  603  2013-03-26T17:01:57 git commit -a configShackHartmann.py
+  604  2013-03-26T17:02:01 git commit configShackHartmann.py
+  605  2013-03-26T17:06:42 cd nsaez/
+  606  2013-03-26T17:06:43 ll
+  607  2013-03-26T17:06:45 cd scripts/
+  608  2013-03-26T17:06:45 ll
+  609  2013-03-26T17:06:47 git lg
+  610  2013-03-26T17:12:48 history 
+  611  2013-03-26T17:13:03 darcplot --prefix=ShackHartmann
+  612  2013-03-26T17:17:59 cd
+  613  2013-03-26T17:18:00 cd nsaez/
+  614  2013-03-26T17:18:01 ll
+  615  2013-03-26T17:18:02 cd scripts/
+  616  2013-03-26T17:18:03 ll
+  617  2013-03-26T17:18:06 python correl.py 
+  618  2013-03-26T17:24:27 git status
+  619  2013-03-26T17:24:37 git commit 
+  620  2013-03-26T17:24:39 git commit -a
+  621  2013-03-26T17:24:59 git push https://github.com/normansaez/darc-scripts.git
+  622  2013-03-26T17:25:22 ll
+  623  2013-03-26T17:25:30 git lg
+  624  2013-03-26T17:25:47 git format-patch -1 83f7ee6
+  625  2013-03-26T17:25:57 vim 0001-Remove-useless-comments.patch 
+  626  2013-03-26T17:27:32 mv 0001-Remove-useless-comments.patch ../../git/condor/
+  627  2013-03-26T17:27:37 cd ../../git/condor/
+  628  2013-03-26T17:27:38 ll
+  629  2013-03-26T17:27:56 git apply --stat 0001-Remove-useless-comments.patch
+  630  2013-03-26T17:28:13 git apply --check 0001-Remove-useless-comments.patch
+  631  2013-03-26T17:28:43 vim 0001-Remove-useless-comments.patch 
+  632  2013-03-26T17:29:04 mv 0001-Remove-useless-comments.patch ../
+  633  2013-03-26T17:29:05 cd ..
+  634  2013-03-26T17:29:09 git apply --check 0001-Remove-useless-comments.patch
+  635  2013-03-26T17:29:16 vim 0001-Remove-useless-comments.patch 
+  636  2013-03-26T17:29:33 git apply --check 0001-Remove-useless-comments.patch
+  637  2013-03-26T17:29:45 vim 0001-Remove-useless-comments.patch 
+  638  2013-03-26T17:30:00 rm 0001-Remove-useless-comments.patch 
+  639  2013-03-26T17:30:01 ll
+  640  2013-03-26T17:30:02 cd
+  641  2013-03-26T17:30:05 cd nsaez/
+  642  2013-03-26T17:30:05 ll
+  643  2013-03-26T17:30:06 cd scripts/
+  644  2013-03-26T17:30:07 ll
+  645  2013-03-26T17:30:18 history 
+  646  2013-03-26T17:30:27 git format-patch -1 83f7ee6
+  647  2013-03-26T17:30:32 vim 0001-Remove-useless-comments.patch 
+  648  2013-03-26T17:31:41 gitk .
+  649  2013-03-26T16:42:34 sudo su -
+  650  2013-03-26T16:40:45 sudo su -
+  651  2013-03-27T12:29:08 ssh ali@129.234.187.18
+  652  2013-03-27T12:29:23 history
+  653  2013-03-27T14:05:44 ls -ltr
+  654  2013-03-27T14:05:47 cd git/
+  655  2013-03-27T14:05:47 ll
+  656  2013-03-27T14:05:49 cd condor/
+  657  2013-03-27T14:05:49 ll
+  658  2013-03-27T14:06:44 cd
+  659  2013-03-27T14:06:45 cd nsaez/
+  660  2013-03-27T14:06:46 ll
+  661  2013-03-27T14:06:47 cd scripts/
+  662  2013-03-27T14:06:47 ll
+  663  2013-03-27T14:06:49 ls -ltr
+  664  2013-03-27T14:06:54 python correl.py 
+  665  2013-03-27T14:27:59 ls -ltr
+  666  2013-03-27T14:28:46 cd nsaez/
+  667  2013-03-27T14:28:48 cd scripts/
+  668  2013-03-27T14:28:48 ll
+  669  2013-03-27T14:29:06 python
+  670  2013-03-27T14:30:43 sudo apt-cache search gist
+  671  2013-03-27T14:30:52 sudo apt-cache search gist |grep python
+  672  2013-03-27T14:31:13 python
+  673  2013-03-27T14:33:49 sudo apt-cache search gist |grep python-gist
+  674  2013-03-27T14:33:53 sudo apt-cache search gist |grep python
+  675  2013-03-27T14:35:12 cd nsaez/
+  676  2013-03-27T14:35:13 ll
+  677  2013-03-27T14:35:15 cd scripts/
+  678  2013-03-27T14:35:15 ll
+  679  2013-03-27T14:35:18 vim readFits.py 
+  680  2013-03-27T14:35:30 grep plot . -rn
+  681  2013-03-27T14:42:27 python
+  682  2013-03-27T14:43:25 d
+  683  2013-03-27T14:43:26 cd
+  684  2013-03-27T14:43:27 cd nsaez/
+  685  2013-03-27T14:43:28 ll
+  686  2013-03-27T14:43:29 cd scripts/
+  687  2013-03-27T14:43:29 ll
+  688  2013-03-27T14:43:32 vim Custom.py 
+  689  2013-03-27T14:44:21 cd nsaez/
+  690  2013-03-27T14:44:23 cd scripts/
+  691  2013-03-27T14:44:26 vim lala
+  692  2013-03-27T14:44:49 cat lala
+  693  2013-03-27T14:45:23 git reset --hard f5f445
+  694  2013-03-27T14:43:49 git lg
+  695  2013-03-27T14:46:42 vim Custom.py 
+  696  2013-03-27T14:46:58 ls
+  697  2013-03-27T14:47:13 vim getPlotData.py 
+  698  2013-03-27T14:47:32 vim bgImageWrite.py 
+  699  2013-03-27T14:51:03 grep plot . -rin
+  700  2013-03-27T14:48:04 python
+  701  2013-03-27T14:53:07 cd
+  702  2013-03-27T14:53:10 cd /root
+  703  2013-03-27T14:53:10 ll
+  704  2013-03-27T14:53:14 sudo su 
+  705  2013-03-27T14:54:12 ls -ltr
+  706  2013-03-27T14:54:15 cd tmp/
+  707  2013-03-27T14:54:15 ll
+  708  2013-03-27T14:54:17 cd python/
+  709  2013-03-27T14:54:17 ll
+  710  2013-03-27T14:54:18 ls -ltr
+  711  2013-03-27T14:54:20 ls
+  712  2013-03-27T14:54:21 ls -ltr
+  713  2013-03-27T14:54:25 vim seeImage.py 
+  714  2013-03-27T14:51:32 vim readFits.py 
+  715  2013-03-27T14:57:57 python
+  716  2013-03-27T15:09:13 vim PlotImageFromDarc.py
+  717  2013-03-27T15:15:01 git add PlotImageFromDarc.py
+  718  2013-03-27T15:15:04 git commit PlotImageFromDarc.py
+  719  2013-03-27T14:54:41 vim savebg.py
+  720  2013-03-27T15:33:37 vim PlotImageFromDarc.py 
+  721  2013-03-27T15:33:44 pylint PlotImageFromDarc.py 
+  722  2013-03-27T15:33:49 pylint PlotImageFromDarc.py -E
+  723  2013-03-27T15:33:54 pylint PlotImageFromDarc.py |less
+  724  2013-03-27T15:34:04 vim PlotImageFromDarc.py 
+  725  2013-03-27T15:34:33 pylint PlotImageFromDarc.py |less
+  726  2013-03-27T15:34:41 vim PlotImageFromDarc.py 
+  727  2013-03-27T15:34:56 pylint PlotImageFromDarc.py |less
+  728  2013-03-27T15:35:29 vim PlotImageFromDarc.py 
+  729  2013-03-27T15:35:42 pylint PlotImageFromDarc.py |less
+  730  2013-03-27T15:35:49 vim PlotImageFromDarc.py 
+  731  2013-03-27T15:36:03 pylint PlotImageFromDarc.py |less
+  732  2013-03-27T15:36:11 vim PlotImageFromDarc.py 
+  733  2013-03-27T15:36:27 pylint PlotImageFromDarc.py |less
+  734  2013-03-27T15:36:33 vim PlotImageFromDarc.py 
+  735  2013-03-27T15:36:39 pylint PlotImageFromDarc.py |less
+  736  2013-03-27T15:36:45 vim PlotImageFromDarc.py 
+  737  2013-03-27T15:37:21 git commit PlotImageFromDarc.py
+  738  2013-03-27T15:38:08 vim PlotImageFromDarc.py 
+  739  2013-03-27T15:39:37 python PlotImageFromDarc.py 
+  740  2013-03-27T15:39:54 vim PlotImageFromDarc.py 
+  741  2013-03-27T15:40:07 python PlotImageFromDarc.py 
+  742  2013-03-27T15:40:32 vim PlotImageFromDarc.py 
+  743  2013-03-27T15:40:50 python PlotImageFromDarc.py 
+  744  2013-03-27T15:41:25 python
+  745  2013-03-27T15:42:10 ipython
+  746  2013-03-27T15:42:52 vim /rtc/lib/python/correlation.py 
+  747  2013-03-27T15:43:49 vim PlotImageFromDarc.py 
+  748  2013-03-27T15:45:03 python PlotImageFromDarc.py 
+  749  2013-03-27T15:45:50 vim PlotImageFromDarc.py 
+  750  2013-03-27T15:46:32 python PlotImageFromDarc.py 
+  751  2013-03-27T15:47:06 vim PlotImageFromDarc.py 
+  752  2013-03-27T15:48:00 python PlotImageFromDarc.py 
+  753  2013-03-27T15:48:31 vim /rtc/lib/python/correlation.py +121
+  754  2013-03-27T15:51:12 vim PlotImageFromDarc.py configShackHartmann.py 
+  755  2013-03-27T15:51:18 vim -O PlotImageFromDarc.py configShackHartmann.py 
+  756  2013-03-27T15:53:05 python PlotImageFromDarc.py 
+  757  2013-03-27T15:53:37 vim -O PlotImageFromDarc.py correl.py 
+  758  2013-03-27T15:56:28 python PlotImageFromDarc.py 
+  759  2013-03-27T15:56:36 vim -O PlotImageFromDarc.py 
+  760  2013-03-27T15:56:45 python PlotImageFromDarc.py 
+  761  2013-03-27T15:57:32 vim -O PlotImageFromDarc.py 
+  762  2013-03-27T15:57:50 python PlotImageFromDarc.py 
+  763  2013-03-27T15:58:46 vim PlotImageFromDarc.py 
+  764  2013-03-27T15:59:04 vim -O PlotImageFromDarc.py correl.py 
+  765  2013-03-27T16:01:04 python PlotImageFromDarc.py 
+  766  2013-03-27T16:01:43 vim PlotImageFromDarc.py +48
+  767  2013-03-27T16:02:30 vim /rtc/lib/python/correlation.py
+  768  2013-03-27T16:02:56 vim PlotImageFromDarc.py 
+  769  2013-03-27T16:03:28 python PlotImageFromDarc.py 
+  770  2013-03-27T16:03:56 vim PlotImageFromDarc.py +51
+  771  2013-03-27T16:04:05 vim /rtc/lib/python/correlation.py 
+  772  2013-03-27T16:04:19 vim -O PlotImageFromDarc.py correl.py 
+  773  2013-03-27T16:04:46 vim /rtc/lib/python/calibrate.py
+  774  2013-03-27T16:05:07 ls -a .
+  775  2013-03-27T16:05:09 ls -a1 .
+  776  2013-03-27T16:05:12 ls -a1 . |grep swp
+  777  2013-03-27T16:05:17 rm .correl.py.swp 
+  778  2013-03-27T16:05:24 vim PlotImageFromDarc.py 
+  779  2013-03-27T16:05:54 python PlotImageFromDarc.py 
+  780  2013-03-27T16:06:38 vim PlotImageFromDarc.py 
+  781  2013-03-27T16:06:48 python PlotImageFromDarc.py 
+  782  2013-03-27T16:09:30 vim PlotImageFromDarc.py 
+  783  2013-03-27T16:09:42 git commit PlotImageFromDarc.py
+  784  2013-03-27T16:10:45 git push https://github.com/normansaez/darc-scripts.git
+  785  2013-03-27T14:28:15 sudo su -
+  786  2013-03-27T14:28:52 vim correl.py 
+  787  2013-03-27T14:28:09 sudo su -
+  788  2013-03-27T16:11:09 git lg
+  789  2013-03-29T09:49:35 cd nsaez/
+  790  2013-03-29T09:49:35 ll
+  791  2013-03-29T09:49:44 git pull https://github.com/normansaez/darc-scripts.git
+  792  2013-03-29T09:52:17 ll
+  793  2013-03-29T09:52:20 cd scripts/
+  794  2013-03-29T09:52:20 ll
+  795  2013-03-29T09:56:49 git status
+  796  2013-03-29T09:57:19 rm 0001-Remove-useless-comments.patch backgroundImage20130129.fits centroid_coordinatesXY.fits data.txt lala lalalalalalala.txt mainsubapLocation.fits newSubApLocation.fitstmp-params.fits
+  797  2013-03-29T09:57:21 git status
+  798  2013-03-29T09:57:46 rm lalala lalalala.txt newSubApLocation.fits tmp-params.fits 
+  799  2013-03-29T09:57:47 ls
+  800  2013-03-29T09:57:48 ll
+  801  2013-03-29T09:57:52 cd data/
+  802  2013-03-29T09:57:52 ll
+  803  2013-03-29T09:57:53 cd ..
+  804  2013-03-29T09:57:54 l
+  805  2013-03-29T09:57:59 rm data/
+  806  2013-03-29T09:58:01 rm data/ -fr
+  807  2013-03-29T09:58:02 ll
+  808  2013-03-29T09:58:22 vim PlotImageFromDarc.py 
+  809  2013-03-29T09:58:25 ll
+  810  2013-04-01T10:22:37 ls -ltr
+  811  2013-04-01T10:22:42 cd git/
+  812  2013-04-01T10:22:42 ll
+  813  2013-04-01T10:22:43 cd
+  814  2013-04-01T12:59:50 cd con
+  815  2013-04-01T12:59:51 ll
+  816  2013-04-01T12:59:57 cd nsaez/
+  817  2013-04-01T12:59:58 ll
+  818  2013-04-01T12:59:59 cd scripts/
+  819  2013-04-01T13:00:00 ll
+  820  2013-04-01T13:00:12 vim PlotImageFromDarc.py 
+  821  2013-04-05T15:42:20 ls -ltr
+  822  2013-04-05T15:42:22 ll
+  823  2013-04-05T15:54:21 cd
+  824  2013-04-05T15:54:21 ll
+  825  2013-04-05T15:54:23 cd git/
+  826  2013-04-05T15:54:23 ll
+  827  2013-04-05T15:54:25 cd condor/
+  828  2013-04-05T15:54:25 ll
+  829  2013-04-05T15:54:31 cd
+  830  2013-04-05T15:54:32 ll
+  831  2013-04-05T15:58:12 cd Notebooks/
+  832  2013-04-05T15:58:13 ll
+  833  2013-04-05T15:58:14 cd Notes/
+  834  2013-04-05T15:58:15 ll
+  835  2013-04-05T15:58:20 file notebook.zim 
+  836  2013-04-05T15:58:23 vim notebook.zim 
+  837  2013-04-05T15:58:27 cd ..
+  838  2013-04-05T15:58:28 ll
+  839  2013-04-05T15:58:29 cd ..
+  840  2013-04-05T15:58:30 ll
+  841  2013-04-05T15:58:48 cd nsaez/
+  842  2013-04-05T15:58:49 ls -l
+  843  2013-04-05T16:28:13 cd
+  844  2013-04-09T15:12:54 cd git/
+  845  2013-04-09T15:12:54 ll
+  846  2013-04-09T15:12:55 cd condor/
+  847  2013-04-09T15:12:55 ll
+  848  2013-04-10T16:01:32 ping www.google.com
+  849  2013-04-10T16:04:26 ls-ltr
+  850  2013-04-10T16:04:27 ls -ltr
+  851  2013-04-10T16:04:28 ll
+  852  2013-04-10T16:04:31 cd nsaez/
+  853  2013-04-10T16:04:32 ll
+  854  2013-04-10T16:04:33 cd scripts/
+  855  2013-04-10T16:04:34 ll
+  856  2013-04-10T16:04:38 vim configShackHartmann.py 
+  857  2013-04-10T16:05:24 cd
+  858  2013-04-10T16:09:05 cd nsaez/
+  859  2013-04-10T16:09:06 ll
+  860  2013-04-10T16:09:09 cd scripts/
+  861  2013-04-10T16:09:09 ll
+  862  2013-04-10T16:09:14 vim configShackHartmann.py 
+  863  2013-04-10T16:12:54 cd
+  864  2013-04-10T16:13:18 darcplot --prefix=ShackHartmann
+  865  2013-04-10T16:16:16 ll
+  866  2013-04-10T16:16:18 cd nsaez/
+  867  2013-04-10T16:16:18 ll
+  868  2013-04-10T16:16:21 cd scripts/
+  869  2013-04-10T16:16:21 ll
+  870  2013-04-10T16:16:27 vim configShackHartmann.py 
+  871  2013-04-10T16:20:46 cd con
+  872  2013-04-10T16:20:47 ll
+  873  2013-04-10T16:21:04 cd nsaez/
+  874  2013-04-10T16:21:05 ll
+  875  2013-04-10T16:21:06 cd scripts/
+  876  2013-04-10T16:21:07 ll
+  877  2013-04-10T16:21:11 git commit
+  878  2013-04-10T16:21:13 git commit -a
+  879  2013-04-10T16:21:51 diff  configShackHartmann.py ~/git/condor/
+  880  2013-04-10T16:22:22 cd  ~/git/condor/
+  881  2013-04-10T16:22:23 l
+  882  2013-04-10T16:22:32 git status configShackHartmann.py
+  883  2013-04-10T16:22:39 cd -
+  884  2013-04-10T16:23:01 cp configShackHartmann.py ~/git/condor/configShackHartmann.py 
+  885  2013-04-10T16:24:00 cd ~/git/condor/
+  886  2013-04-10T16:24:00 ll
+  887  2013-04-10T16:24:07 git status configShackHartmann.py
+  888  2013-04-10T16:05:31 sudo su -
+  889  2013-04-10T16:27:14 psg aux
+  890  2013-04-10T16:27:16 ps aux
+  891  2013-04-10T16:27:20 ps aux |grep darc
+  892  2013-04-10T16:25:58 sudo su
+  893  2013-04-11T06:18:26 history |grep darc
+  894  2013-04-11T06:18:43 darcplot --prefix=ShackHartmann
+  895  2013-04-11T06:19:28 cd nsaez/
+  896  2013-04-11T06:19:28 ll
+  897  2013-04-11T06:19:30 cd scripts/
+  898  2013-04-11T06:19:30 ll
+  899  2013-04-11T06:19:33 ls -ltyr
+  900  2013-04-11T06:19:34 ls -ltr
+  901  2013-04-11T06:19:39 vim PlotImageFromDarc.py 
+  902  2013-04-11T06:19:58 vim configShackHartmann.py 
+  903  2013-04-11T06:20:04 vim PlotImageFromDarc.py 
+  904  2013-04-11T06:20:24 python PlotImageFromDarc.py 
+  905  2013-04-11T06:21:36 vim  PlotImageFromDarc.py +87
+  906  2013-04-11T06:22:34 ls -ltr
+  907  2013-04-11T06:22:45 python printCurrentConfigParameters.py 
+  908  2013-04-11T06:23:20 python printCurrentConfigParameters.py --prefix=ShackHartmann
+  909  2013-04-11T06:24:36 vim configShackHartmann.py 
+  910  2013-04-11T06:27:41 history 
+  911  2013-04-11T06:28:06 python  PlotImageFromDarc.py
+  912  2013-04-11T06:28:36 ls -ltr
+  913  2013-04-11T06:28:43 cat parameters.txt 
+  914  2013-04-11T06:28:50 python  PlotImageFromDarc.py
+  915  2013-04-11T06:29:31 python
+  916  2013-04-11T06:30:39 ls -ltr
+  917  2013-04-11T06:30:54 python printCurrentConfigParameters.py |less
+  918  2013-04-11T06:31:30 python printCurrentConfigParameters.py --prefix=ShackHartmann|less
+  919  2013-04-11T06:33:22 python printCurrentConfigParameters.py --prefix=ShackHartmann >> log.txt
+  920  2013-04-11T06:33:29 bg
+  921  2013-04-11T06:33:41 less  log.txt 
+  922  2013-04-11T06:34:07 ps aux
+  923  2013-04-11T06:34:31 ps aux|grep darc
+  924  2013-04-11T06:35:20 kill 7439
+  925  2013-04-11T06:35:25 ls -ltr
+  926  2013-04-11T06:35:39 darcmagic get subaps --prefix=ShackHartmann
+  927  2013-04-11T06:35:53 cat parameters.txt |grep suba
+  928  2013-04-11T06:36:21 darcmagic get subapLocation --prefix=ShackHartmann
+  929  2013-04-11T06:36:59 darcmagic get subapFlag --prefix=ShackHartmann
+  930  2013-04-11T06:38:21 ls -ltr
+  931  2013-04-11T06:38:27 vim PlotImageFromDarc.py 
+  932  2013-04-11T06:40:05 python PlotImageFromDarc.py 
+  933  2013-04-11T06:40:49 vim PlotImageFromDarc.py 
+  934  2013-04-11T06:42:34 python PlotImageFromDarc.py 
+  935  2013-04-11T06:43:35 python -c 15*15
+  936  2013-04-11T06:43:49 python -c print 15*15
+  937  2013-04-11T06:44:01 python
+  938  2013-04-11T06:44:41 vim PlotImageFromDarc.py 
+  939  2013-04-11T06:45:44 python PlotImageFromDarc.py 
+  940  2013-04-11T06:46:11 vim /rtc/lib/python/correlation.py +110
+  941  2013-04-11T06:47:53 history 
+  942  2013-04-11T06:48:02 darcmagic get subapLocation --prefix=ShackHartmann
+  943  2013-04-11T06:48:12 vim PlotImageFromDarc.py 
+  944  2013-04-11T06:54:26 python PlotImageFromDarc.py 
+  945  2013-04-11T06:54:38 vim PlotImageFromDarc.py +82
+  946  2013-04-11T06:54:57 python PlotImageFromDarc.py 
+  947  2013-04-11T06:55:35 vim PlotImageFromDarc.py +82
+  948  2013-04-11T06:56:49 vim PlotImageFromDarc.py 
+  949  2013-04-11T06:57:40 python PlotImageFromDarc.py 
+  950  2013-04-11T06:58:30 vim /rtc/lib/python/correlation.py
+  951  2013-04-11T06:15:25 sudo su -
+  952  2013-04-11T10:23:28 cd nsaez/
+  953  2013-04-11T10:23:29 cd scripts/
+  954  2013-04-11T10:23:33 python PlotImageFromDarc.py 
+  955  2013-04-11T10:24:12 vim PlotImageFromDarc.py  
+  956  2013-04-11T10:25:54 python PlotImageFromDarc.py 
+  957  2013-04-11T10:26:49 python PlotImageFromDarc.py >> la1
+  958  2013-04-11T10:27:07 python PlotImageFromDarc.py >> la2
+  959  2013-04-11T10:27:26 diff la1 la2
+  960  2013-04-11T10:28:02 vim la
+  961  2013-04-11T10:28:12 vim la1
+  962  2013-04-11T10:40:03 vim PlotImageFromDarc.py 
+  963  2013-04-11T10:41:48 python PlotImageFromDarc.py 
+  964  2013-04-11T10:42:20 vim PlotImageFromDarc.py 
+  965  2013-04-11T10:45:21 python PlotImageFromDarc.py 
+  966  2013-04-11T10:41:19 sudo su -
+  967  2013-04-15T14:57:23 ll
+  968  2013-04-15T14:57:27 cd dar
+  969  2013-04-15T14:57:27 ll
+  970  2013-04-15T14:57:29 cd git/
+  971  2013-04-15T14:57:30 ll
+  972  2013-04-15T14:57:31 cd darc/
+  973  2013-04-15T14:57:32 ll
+  974  2013-04-15T14:57:36 grep r0 . -rn
+  975  2013-04-15T14:58:22 grep r0 . -I -rn
+  976  2013-04-15T14:58:49 ls -ltr
+  977  2013-04-15T14:58:53 cd ..
+  978  2013-04-15T14:58:58 grep r0 . -I -rn |less
+  979  2013-04-15T14:59:34 vim ./ccid18/py/lgsgui.py
+  980  2013-04-15T15:40:36 ll
+  981  2013-04-15T15:40:47 grep r0 . -I -irn |less
+  982  2013-04-15T16:26:17 cd
+  983  2013-04-16T04:56:54 ls
+  984  2013-04-16T04:56:56 cd git
+  985  2013-04-16T04:56:57 ls
+  986  2013-04-16T04:56:59 cd darc
+  987  2013-04-16T04:56:59 ls
+  988  2013-04-16T04:57:03 more .git/config
+  989  2013-04-16T04:57:11 git pull
+  990  2013-04-16T04:57:19 make
+  991  2013-04-16T04:58:01 sudo apt-get install gsl
+  992  2013-04-16T04:58:15 sudo apt-get install gsl-bin
+  993  2013-04-16T04:58:51 make
+  994  2013-04-16T04:59:32 sudo apt-get install libgsl0-dev
+  995  2013-04-16T04:59:57 make
+  996  2013-04-16T05:00:12 ps ax | grep darc
+  997  2013-04-16T05:00:14 sudo make install
+  998  2013-04-16T05:00:23 ls /rtc/lib/libreconneural.so 
+  999  2013-04-16T05:01:47 darccontrol conf/configcamfile.py -o
+ 1000  2013-04-16T05:01:54 darcmagic stop -c
+ 1001  2013-04-17T14:02:57 history >> full.txt
