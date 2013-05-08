@@ -18,8 +18,11 @@ DEP1 = send_receive_ex/$(NAME1).o
 NAME2 = term
 DEP2 = term_ex/$(NAME2).o term_ex/console_io.o
 
+#-- Example: send_receive
+NAME3 = send_receive_pic
+DEP3 = send_receive_ex_pic/$(NAME3).o 
 
-all: $(SERIAL) $(NAME1) $(NAME2)
+all: $(SERIAL) $(NAME1) $(NAME2) $(NAME3)
 
 
 #------------------------------
@@ -39,6 +42,15 @@ $(NAME1): $(DEP1) $(SERIAL)
   
 clean::
 	  rm -f $(NAME1) $(DEP1) *.bak *~
+
+#---------------------------
+#-- Example: send_receive
+#---------------------------
+$(NAME3): $(DEP3) $(SERIAL)
+	$(CC) -o $(NAME3) $(DEP3) $(SERIAL)
+  
+clean::
+	  rm -f $(NAME3) $(DEP3) *.bak *~
 
 #-------------------------------
 #-- Example: term
