@@ -1,3 +1,4 @@
+# coding: utf-8
 #import os
 #import sys
 #import socket
@@ -68,8 +69,6 @@ if __name__ == '__main__':
     #plt.imshow(data)
     #plt.gca().invert_yaxis()
     #plt.show()
-    print d.Get("subapLocation")
-    print d.Get("subapFlag")
     nacts = 140 #The total number of actuators for the system.
     ncam = 1    #This is the number of camera objects in the system
     npxly = numpy.zeros((ncam,), numpy.int32)#An array of length ncam, specifying the number of pixels in a vertical direction with an entry for each frame grabber.
@@ -77,14 +76,14 @@ if __name__ == '__main__':
     npxlx = npxly.copy()#An array of length ncam, specifying the number of pixels in a horizontal direction with an entry for each frame grabber.
     npxlx[:] = 1920#An array of length ncam, specifying the number of pixels in a horizontal direction with an entry for each frame grabber.
     nsuby = npxly.copy()
-    nsuby[:] = 1#this is science, so only one subap required... 
+    nsuby[:] = 15#this is science, so only one subap required... 
     nsubx = nsuby.copy()
     nsub = nsubx*nsuby #An array with ncam entries, specifying the number of sub-apertures for each frame grabber.
     nsubaps = (nsuby*nsubx).sum() #nsubaps is the total number of sub-apertures
     subapFlag = numpy.ones((nsubaps,), "i") #An array of size equal to the total number of sub-apertures, with a flag value for each, specifying whether this sub-aperture should be used.
     
-    
-    correlation.transformPSF(img,ncam,npxlx,npxly,nsub, d.Get("subapLocation"),d.Get("subapFlag"),pad)
+#    correlation.transformPSF(img,ncam,npxlx,npxly,nsub, subapLocation,d.Get("subapFlag"),pad)
+    correlation.transformPSF(img,ncam,npxlx,npxly,nsub, d.Get("subapLocation"),d.Get("subapFlag"),pad,savespace=1)
     #def transformPSF(psf,ncam,npxlx,npxly,nsub,subapLocation,subflag,pad=None,savespace=0):
     #    """Function to transform psf into a form that will be usable by the RTC.
     #    psf is eg the LGS spot elongation pattern.  ncam is number of cameras
@@ -95,4 +94,7 @@ if __name__ == '__main__':
     #    lots of other things required by darc.  If savespace is also set (as per
     #    default), the returned fft pattern subaperture locations will bear no
     #    resemblance to the wavefront sensors.
-    print getSlopes(img)
+    (slopes, usenow) = getSlopes(img)
+    print slopes
+    print usenow
+    print slopes.size

@@ -18,7 +18,7 @@ def _execute_cmd(cmd):
 ###################################################################
 if __name__ == "__main__":
     parser = OptionParser()
-    parser.add_option('-p','--prefix',dest = 'camera',type='str',help ='',default="main")
+    parser.add_option('-p','--prefix',dest = 'camera',type='str',help ='',default="ShackHartmann")
     (options,argv) = parser.parse_args()
     cmd = "darcmagic labels --print=1 --prefix=%s" % options.camera
     sts,out,err = _execute_cmd(cmd)

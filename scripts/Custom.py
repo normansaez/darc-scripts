@@ -55,6 +55,8 @@ def get_props(raw_data, threshold):
     Using raw data from fits, get properties such as Centroid
     '''
     raw_data = im2bw(raw_data, threshold)
+    plt.imshow(raw_data)
+    plt.show()
     label_img = label(raw_data)
     props = regionprops(label_img, ['Centroid'])
     return props
@@ -86,7 +88,8 @@ def is_centroid_in_subap(c_x, c_y, startx, starty, width, height):
 
 # End of function, run main
 if __name__ == '__main__':
-    threshold = 0.42 
+#    threshold = 0.42 
+    threshold = 0.2
     nsubx = 15
     nsuby = 15
     xspace = 0.01
@@ -103,6 +106,8 @@ if __name__ == '__main__':
     #Get image and centroid per spot
     headers, raw_data = get_image()
     props = get_props(raw_data, threshold)
+    import sys
+    sys.exit(-1)
     centroid_x, centroid_y = get_centroids(props)
     
     #Calculate subLocation borders
