@@ -11,7 +11,7 @@ from optparse import OptionParser
 from subprocess import Popen, PIPE
 from time import sleep
 #logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 class BoardDarcController:
     '''
     BoardDarcController:
@@ -165,6 +165,9 @@ class BoardDarcController:
 
     def set_loop(self, loop):
         logging.info("Setting loop instead pasos: %r" % loop)
+
+    def set_delay(self, delay):
+        logging.info("Setting delay entre instrucciones al pic: %f" % delay)
         
     def setup(self):
         '''
@@ -178,6 +181,7 @@ class BoardDarcController:
         self.set_velocidad(self.velocidad)
         self.set_pasos(self.pasos)
         self.set_loop(self.loop)
+        self.set_delay(self.delay)
 
     def loop_for_r0(self):
         '''
@@ -291,4 +295,4 @@ if __name__ == '__main__':
         BDC.loop_for_r0()
 
     if options.mesa is True:
-        BDC.mesa(40)
+        BDC.mesa(2)
