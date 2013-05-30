@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "serial.h"
 
@@ -89,12 +90,12 @@ int main (int argc, char* argv[])
     //-- The speed is configure at 9600 baud
     serial_fd=serial_open(argv[1],B9600);
 
-    ////-- Error checking
-    //if (serial_fd==-1) {
-    //    printf ("Error opening the serial device: %s\n",argv[1]);
-    //    perror("OPEN");
-    //    exit(0);
-    //}
+    //-- Error checking
+    if (serial_fd==-1) {
+        printf ("Error opening the serial device: %s\n",argv[1]);
+        perror("OPEN");
+        exit(0);
+    }
 
     int n;
     for (j = 1, str1 = argv[2]; ; j++, str1 = NULL) {
@@ -118,7 +119,7 @@ int main (int argc, char* argv[])
         else {
             printf ("Timeout!\n");
         }
-
+	usleep(100000);
     }
 
 
