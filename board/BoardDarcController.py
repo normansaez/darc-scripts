@@ -8,8 +8,8 @@ import sys
 import logging
 import os
 
-import FITS
-import darc
+#import FITS
+#import darc
 import time
 import numpy
 
@@ -275,6 +275,9 @@ class BoardDarcController:
         Loop for r0
         '''
         self.setup()
+        #numero muy muy grande de pasos
+        self.set_pasos(2147483600) 
+        self.move_motor_forever()
 
     def table(self,num_image):
         '''
@@ -326,10 +329,10 @@ if __name__ == '__main__':
                 '''
     parser = OptionParser(usage)
     parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Star loop to obtain r0 (infinite loop)")
-    parser.add_option("-m", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
-    parser.add_option("-v", "--verbose", dest="verbose", metavar="verbose", default=False, action="store_true", help = "debug mode, prints all messages")
+    parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
+    parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
     (options , args) = parser.parse_args()
-    if options.verbose is False:
+    if options.debug is False:
         logging.getLogger().setLevel(logging.INFO)
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
     else:
