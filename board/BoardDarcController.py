@@ -60,58 +60,58 @@ class BoardDarcController:
         '''
         Turn led on , it is mandatory set a led first
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 1"
+        cmd = "send_receive_pic /dev/ttyUSB0 1 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Led %d ON" % self.led)
 
     def set_led_off(self):
         '''
         Turn led off.
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 2"
+        cmd = "send_receive_pic /dev/ttyUSB0 2 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Led %d OFF" % self.led)
 
     def set_motor_move(self):
         '''
         The motor moves given steps and direction
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 3"
+        cmd = "send_receive_pic /dev/ttyUSB0 3 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Motor %d pasos: %d, direccion %d" % (self.motor, self.pasos, self.direccion))
 
     def set_led_on_off(self):
         '''
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 4"
+        cmd = "send_receive_pic /dev/ttyUSB0 4 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Led %d exposicion %d" % (self.led, self.exposicion))
 
     def move_motor_with_vel(self):
         '''
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 5"
+        cmd = "send_receive_pic /dev/ttyUSB0 5 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
 
     def move_motor_forever(self):
@@ -119,141 +119,107 @@ class BoardDarcController:
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         logging.info("Forever")
-        cmd = "send_receive_pic /dev/ttyUSB0 5"
+        cmd = "send_receive_pic /dev/ttyUSB0 6 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
 
     def set_led(self, led):
         '''
         Set led to be used in PIC
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 l"
+        self.led = led
+        cmd = "send_receive_pic /dev/ttyUSB0 l:%d\r :" % led
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
-        cmd = "send_receive_pic /dev/ttyUSB0 %d\n" % led
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Setting led %d done" % led)
     
     def set_exposicion(self, exposicion):
         '''
         Set exposition time to be used on a specific led on PIC
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 e"
+        self.exposicion = exposicion
+        cmd = "send_receive_pic /dev/ttyUSB0 e:%d\r :" % exposicion
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
-        cmd = "send_receive_pic /dev/ttyUSB0 %d\n" % exposicion
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Setting exposicion %d done" % exposicion)
 
     def set_brillo(self, brillo):
         '''
         Sets PWV function from 0 - 100 to simulate brigthness in PIC
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 b"
+        self.brillo = brillo
+        cmd = "send_receive_pic /dev/ttyUSB0 b:%d\r :" % brillo
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
-        cmd = "send_receive_pic /dev/ttyUSB0 %d\n" % brillo
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Setting brillo %d done" % brillo)
 
     def set_motor(self,motor):
         '''
         Set motor to be used in PIC
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 m"
+        self.motor = motor
+        cmd = "send_receive_pic /dev/ttyUSB0 m:%d\r :" % motor
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
-        cmd = "send_receive_pic /dev/ttyUSB0 %d\n" % motor
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Setting motor %d done" % motor)
 
     def set_direccion(self, direccion):
         '''
         Set motor direction to be used in PIC
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 d"
+        self.direccion = direccion
+        cmd = "send_receive_pic /dev/ttyUSB0 d:%d\r :" % direccion
         sts, out, err = self._execute_cmd(cmd)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
+        logging.debug(cmd)
         logging.debug(sts)
         logging.debug(out)
         logging.debug(err)
-        sleep(self.delay)
-        cmd = "send_receive_pic /dev/ttyUSB0 %d\n" % direccion
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
         logging.info("Setting direccion %d done" % direccion)
 
     def set_velocidad(self, velocidad):
         '''
         Set motor velocity to be used in PIC (this is a delay between 200 - 400 ms)
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 v"
+        self.velocidad = velocidad
+        cmd = "send_receive_pic /dev/ttyUSB0 v:%d\r :" % velocidad
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
-        cmd = "send_receive_pic /dev/ttyUSB0 %d\n" % velocidad
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Setting velocidad %d done" % velocidad)
 
     def set_pasos(self, pasos):
         '''
         Set motor steps to be used in PIC
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 p"
+        self.pasos = pasos
+        cmd = "send_receive_pic /dev/ttyUSB0 p:%d\r :" % pasos
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
-        cmd = "send_receive_pic /dev/ttyUSB0 %d\n" % pasos
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         logging.info("Setting pasos %d done" % pasos)
-
-    def set_delay(self, delay):
-        logging.info("Setting delay entre instrucciones al pic: %f" % delay)
         
     def setup(self):
         '''
@@ -266,19 +232,12 @@ class BoardDarcController:
         self.set_direccion(self.direccion)
         self.set_velocidad(self.velocidad)
         self.set_pasos(self.pasos)
-        self.set_delay(self.delay)
 
     def loop_for_r0(self):
         '''
         Loop for r0
         '''
         self.setup()
-        cmd = "send_receive_pic /dev/ttyUSB0 6"
-        sts, out, err = self._execute_cmd(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
-        sleep(self.delay)
 
     def table(self,num_image):
         '''
