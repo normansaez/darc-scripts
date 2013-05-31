@@ -6,11 +6,18 @@ This script controls the board and communicates whith darc to take an image
 import ConfigParser
 import sys
 import logging
+import os
+
+import FITS
+import darc
+import time
+import numpy
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
 from time import sleep
-#logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+
+
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 class BoardDarcController:
     '''
@@ -37,13 +44,23 @@ class BoardDarcController:
             self.direccion = Config.getint('motor', 'direccion')
             self.velocidad = Config.getint('motor', 'velocidad')
             self.pasos = Config.getint('motor', 'pasos')
-            self.delay = Config.getfloat('other','delay')
-
+            self.pxlx  = Config.getint('darc', 'pxlx')
+            self.pxly  = Config.getint('darc', 'pxly')
+            self.image_prefix  = Config.get('darc', 'image_prefix')
+            self.image_path  = Config.get('darc', 'image_path')
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
             logging.error("Check line number: %d" % exc_tb.tb_lineno)
             sys.exit(-1)
+        try:
+            self.camera_name = Config.get('darc','camera')
+            self.darc = darc.Control(self.camera_name)
+        except Exception, ex:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+#            logging.error(ex)
+#            logging.error("Check line number: %d" % exc_tb.tb_lineno)
+#            sys.exit(-1)
 
     def _execute_cmd(self, cmd):
         ''' 
@@ -221,6 +238,24 @@ class BoardDarcController:
         logging.debug("err: "+str(err))
         logging.info("Setting pasos %d done" % pasos)
         
+    def take_img_from_darc(self):
+        '''
+        Using darc, take a FIT image and save it to the disk
+        '''
+        try:
+            logging.debug(self.image_path)
+            #stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
+            image_name = self.image_prefix+'_' + str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
+            path = os.path.normpath(self.image_path+image_name)
+            logging.debug(self.image_path)
+            #data = stream.reshape(self.pxly,self.pxlx)
+            #FITS.Write(data, path, writeMode='a')
+            logging.info('Image saved : %s' % path)
+        except Exception, ex:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logging.error(ex)
+            logging.error("Check line number: %d" % exc_tb.tb_lineno)
+            logging.error("Is darc running??") 
     def setup(self):
         '''
         Setup with default parameters taken from configurations.cfg
@@ -232,6 +267,7 @@ class BoardDarcController:
         self.set_direccion(self.direccion)
         self.set_velocidad(self.velocidad)
         self.set_pasos(self.pasos)
+
 
     def loop_for_r0(self):
         '''
@@ -250,7 +286,8 @@ class BoardDarcController:
             self.set_led_on()
             sleep(self.exposicion)
 
-            #capturar img con darc
+            #take img with darc
+            self.take_img_from_darc()
 
             #led off
             self.set_led_off()
@@ -260,7 +297,8 @@ class BoardDarcController:
             self.set_led_on()
             sleep(self.exposicion)
 
-            #capturar img con darc
+            #take img with darc
+            self.take_img_from_darc()
 
             #led off
             self.set_led_off()
@@ -270,7 +308,8 @@ class BoardDarcController:
             self.set_led_on()
             sleep(self.exposicion)
 
-            #capturar img con darc
+            #take img with darc
+            self.take_img_from_darc()
 
             #led off
             self.set_led_off()
