@@ -18,7 +18,6 @@ from subprocess import Popen, PIPE
 from time import sleep
 
 
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 class BoardDarcController:
     '''
     BoardDarcController:
@@ -243,12 +242,13 @@ class BoardDarcController:
         Using darc, take a FIT image and save it to the disk
         '''
         try:
-            logging.debug(self.image_path)
+            logging.debug('About to take image with darc ...')
             #stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
             image_name = self.image_prefix+'_' + str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
             path = os.path.normpath(self.image_path+image_name)
-            logging.debug(self.image_path)
+            logging.info('Image taken : %s' % path)
             #data = stream.reshape(self.pxly,self.pxlx)
+            logging.debug('About to save image to disk , name: %s' % path)
             #FITS.Write(data, path, writeMode='a')
             logging.info('Image saved : %s' % path)
         except Exception, ex:
@@ -256,6 +256,7 @@ class BoardDarcController:
             logging.error(ex)
             logging.error("Check line number: %d" % exc_tb.tb_lineno)
             logging.error("Is darc running??") 
+
     def setup(self):
         '''
         Setup with default parameters taken from configurations.cfg
@@ -330,8 +331,10 @@ if __name__ == '__main__':
     (options , args) = parser.parse_args()
     if options.verbose is False:
         logging.getLogger().setLevel(logging.INFO)
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
     else:
         logging.getLogger().setLevel(logging.DEBUG)
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s')
 
     if options.r0 is False and options.table is False:
         print usage
