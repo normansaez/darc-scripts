@@ -1,7 +1,7 @@
 #!/usr/bin/python 
 '''
-BoardDarcController:
-Controla Board y Darc desde el mismo script
+BoardDarcController
+This script controls the board and communicates whith darc to take an image
 '''
 import ConfigParser
 import sys
@@ -15,39 +15,40 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 class BoardDarcController:
     '''
     BoardDarcController:
-    Controla Board y Darc desde el mismo script
+    This script controls the board and communicates whith darc to take an image
     '''
     def __init__(self):
         '''
-        Lee parametros de configuracion desde configurations.cfg
+        Takes parameters configured in configurations.cfg file
+        path:
+        /home/dani/nsaez/board/configurations.cfg
         '''
         try:
             Config = ConfigParser.ConfigParser()
             Config.read("/home/dani/nsaez/board/configurations.cfg")
         except:
-            logging.error("No se encontro el archivo configurations.cfg, asegurese de que esta en el mismo directorio")
+            logging.error("configurations.cfg : File doesn't exits")
             sys.exit(-1)
         try:
-            self.led_num = Config.getint('led', 'led')
+            self.led = Config.getint('led', 'led')
             self.exposicion = Config.getint('led', 'exposicion')
             self.brillo = Config.getint('led', 'brillo')
-            self.motor_num = Config.getint('motor', 'motor')
+            self.motor = Config.getint('motor', 'motor')
             self.direccion = Config.getint('motor', 'direccion')
             self.velocidad = Config.getint('motor', 'velocidad')
             self.pasos = Config.getint('motor', 'pasos')
-            self.loop = Config.getboolean('motor', 'loop')
             self.delay = Config.getfloat('other','delay')
 
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
-            logging.error("revisar linea: %d" % exc_tb.tb_lineno)
+            logging.error("Check line number: %d" % exc_tb.tb_lineno)
             sys.exit(-1)
 
     def _execute_cmd(self, cmd):
         ''' 
-        Ejecutar comandos por consola,
-        retorna codestatus, stdout, stderr
+        Execute console commands.
+        return status, output and error messages
         '''
         process = Popen(cmd , stdout=PIPE , stderr=PIPE , shell=True)
         sts = process.wait()
@@ -55,9 +56,79 @@ class BoardDarcController:
         err = process.stderr.read().strip()
         return sts, out, err
 
+    def set_led_on(self):
+        '''
+        Turn led on , it is mandatory set a led first
+        '''
+        cmd = "send_receive_pic /dev/ttyUSB0 1"
+        sts, out, err = self._execute_cmd(cmd)
+        logging.debug(sts)
+        logging.debug(out)
+        logging.debug(err)
+        sleep(self.delay)
+        logging.info("Led %d ON" % self.led)
+
+    def set_led_off(self):
+        '''
+        Turn led off.
+        '''
+        cmd = "send_receive_pic /dev/ttyUSB0 2"
+        sts, out, err = self._execute_cmd(cmd)
+        logging.debug(sts)
+        logging.debug(out)
+        logging.debug(err)
+        sleep(self.delay)
+        logging.info("Led %d OFF" % self.led)
+
+    def set_motor_move(self):
+        '''
+        The motor moves given steps and direction
+        '''
+        cmd = "send_receive_pic /dev/ttyUSB0 3"
+        sts, out, err = self._execute_cmd(cmd)
+        logging.debug(sts)
+        logging.debug(out)
+        logging.debug(err)
+        sleep(self.delay)
+        logging.info("Motor %d pasos: %d, direccion %d" % (self.motor, self.pasos, self.direccion))
+
+    def set_led_on_off(self):
+        '''
+        '''
+        cmd = "send_receive_pic /dev/ttyUSB0 4"
+        sts, out, err = self._execute_cmd(cmd)
+        logging.debug(sts)
+        logging.debug(out)
+        logging.debug(err)
+        sleep(self.delay)
+        logging.info("Led %d exposicion %d" % (self.led, self.exposicion))
+
+    def move_motor_with_vel(self):
+        '''
+        '''
+        cmd = "send_receive_pic /dev/ttyUSB0 5"
+        sts, out, err = self._execute_cmd(cmd)
+        logging.debug(sts)
+        logging.debug(out)
+        logging.debug(err)
+        sleep(self.delay)
+        logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
+
+    def move_motor_forever(self):
+        '''
+        '''
+        logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
+        logging.info("Forever")
+        cmd = "send_receive_pic /dev/ttyUSB0 5"
+        sts, out, err = self._execute_cmd(cmd)
+        logging.debug(sts)
+        logging.debug(out)
+        logging.debug(err)
+        sleep(self.delay)
+
     def set_led(self, led):
         '''
-        Set led in pic
+        Set led to be used in PIC
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 l"
         sts, out, err = self._execute_cmd(cmd)
@@ -74,6 +145,9 @@ class BoardDarcController:
         logging.info("Setting led %d done" % led)
     
     def set_exposicion(self, exposicion):
+        '''
+        Set exposition time to be used on a specific led on PIC
+        '''
         cmd = "send_receive_pic /dev/ttyUSB0 e"
         sts, out, err = self._execute_cmd(cmd)
         logging.debug(sts)
@@ -89,6 +163,9 @@ class BoardDarcController:
         logging.info("Setting exposicion %d done" % exposicion)
 
     def set_brillo(self, brillo):
+        '''
+        Sets PWV function from 0 - 100 to simulate brigthness in PIC
+        '''
         cmd = "send_receive_pic /dev/ttyUSB0 b"
         sts, out, err = self._execute_cmd(cmd)
         logging.debug(sts)
@@ -104,6 +181,9 @@ class BoardDarcController:
         logging.info("Setting brillo %d done" % brillo)
 
     def set_motor(self,motor):
+        '''
+        Set motor to be used in PIC
+        '''
         cmd = "send_receive_pic /dev/ttyUSB0 m"
         sts, out, err = self._execute_cmd(cmd)
         logging.debug(sts)
@@ -119,6 +199,9 @@ class BoardDarcController:
         logging.info("Setting motor %d done" % motor)
 
     def set_direccion(self, direccion):
+        '''
+        Set motor direction to be used in PIC
+        '''
         cmd = "send_receive_pic /dev/ttyUSB0 d"
         sts, out, err = self._execute_cmd(cmd)
         logging.debug(sts)
@@ -134,6 +217,9 @@ class BoardDarcController:
         logging.info("Setting direccion %d done" % direccion)
 
     def set_velocidad(self, velocidad):
+        '''
+        Set motor velocity to be used in PIC (this is a delay between 200 - 400 ms)
+        '''
         cmd = "send_receive_pic /dev/ttyUSB0 v"
         sts, out, err = self._execute_cmd(cmd)
         logging.debug(sts)
@@ -149,6 +235,9 @@ class BoardDarcController:
         logging.info("Setting velocidad %d done" % velocidad)
 
     def set_pasos(self, pasos):
+        '''
+        Set motor steps to be used in PIC
+        '''
         cmd = "send_receive_pic /dev/ttyUSB0 p"
         sts, out, err = self._execute_cmd(cmd)
         logging.debug(sts)
@@ -163,29 +252,25 @@ class BoardDarcController:
         sleep(self.delay)
         logging.info("Setting pasos %d done" % pasos)
 
-    def set_loop(self, loop):
-        logging.info("Setting loop instead pasos: %r" % loop)
-
     def set_delay(self, delay):
         logging.info("Setting delay entre instrucciones al pic: %f" % delay)
         
     def setup(self):
         '''
-        Setup antes de enviar cualquier ejecucion de comandos
+        Setup with default parameters taken from configurations.cfg
         '''
-        self.set_led(self.led_num)
+        self.set_led(self.led)
         self.set_exposicion(self.exposicion)
         self.set_brillo(self.brillo)
-        self.set_motor(self.motor_num)
+        self.set_motor(self.motor)
         self.set_direccion(self.direccion)
         self.set_velocidad(self.velocidad)
         self.set_pasos(self.pasos)
-        self.set_loop(self.loop)
         self.set_delay(self.delay)
 
     def loop_for_r0(self):
         '''
-        Loop de calibracion para phase screens
+        Loop for r0
         '''
         self.setup()
         cmd = "send_receive_pic /dev/ttyUSB0 6"
@@ -195,80 +280,45 @@ class BoardDarcController:
         logging.debug(err)
         sleep(self.delay)
 
-    def mesa(self,num_image):
+    def table(self,num_image):
         '''
-        Loop de calibracion para phase screens
+        turn start by start, then move phase screen, and repeat
         '''
         self.setup()
         for i in range(0,num_image):
             # led 1 on
             self.set_led(1)
-            cmd = "send_receive_pic /dev/ttyUSB0 1"
-            sts, out, err = self._execute_cmd(cmd)
-            logging.debug(sts)
-            logging.debug(out)
-            logging.debug(err)
-            sleep(self.delay)
+            self.set_led_on()
             sleep(self.exposicion)
 
             #capturar img con darc
 
             #led off
-            cmd = "send_receive_pic /dev/ttyUSB0 2"
-            sts, out, err = self._execute_cmd(cmd)
-            logging.debug(sts)
-            logging.debug(out)
-            logging.debug(err)
-            sleep(self.delay)
+            self.set_led_off()
 
             # led 2 on
             self.set_led(2)
-            cmd = "send_receive_pic /dev/ttyUSB0 1"
-            sts, out, err = self._execute_cmd(cmd)
-            logging.debug(sts)
-            logging.debug(out)
-            logging.debug(err)
-            sleep(self.delay)
+            self.set_led_on()
             sleep(self.exposicion)
 
             #capturar img con darc
 
             #led off
-            cmd = "send_receive_pic /dev/ttyUSB0 2"
-            sts, out, err = self._execute_cmd(cmd)
-            logging.debug(sts)
-            logging.debug(out)
-            logging.debug(err)
-            sleep(self.delay)
+            self.set_led_off()
 
             # led 3 on
             self.set_led(3)
-            cmd = "send_receive_pic /dev/ttyUSB0 1"
-            sts, out, err = self._execute_cmd(cmd)
-            logging.debug(sts)
-            logging.debug(out)
-            logging.debug(err)
-            sleep(self.delay)
+            self.set_led_on()
             sleep(self.exposicion)
 
             #capturar img con darc
 
             #led off
-            cmd = "send_receive_pic /dev/ttyUSB0 2"
-            sts, out, err = self._execute_cmd(cmd)
-            logging.debug(sts)
-            logging.debug(out)
-            logging.debug(err)
-            sleep(self.delay)
+            self.set_led_off()
 
             #mover motores:
-            cmd = "send_receive_pic /dev/ttyUSB0 5"
-            sts, out, err = self._execute_cmd(cmd)
-            logging.debug(sts)
-            logging.debug(out)
-            logging.debug(err)
-            sleep(self.delay)
-        
+            self.move_motor_with_vel()
+
 if __name__ == '__main__':
     usage = '''
         BoardDarcController <options>
@@ -276,23 +326,23 @@ if __name__ == '__main__':
             Type -h, --help for help.
                 '''
     parser = OptionParser(usage)
-    parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Start calibracion r0 (loop infinito)")
-    parser.add_option("-m", "--mesa", dest="mesa", metavar="mesa", default=False, action="store_true", help = "Movimientos para mesa, 40 imagenes by default")
-    parser.add_option("-v", "--verbose", dest="verbose", metavar="verbose", default=False, action="store_true", help = "debug mode, con todos los printouts")
+    parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Star loop to obtain r0 (infinite loop)")
+    parser.add_option("-m", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
+    parser.add_option("-v", "--verbose", dest="verbose", metavar="verbose", default=False, action="store_true", help = "debug mode, prints all messages")
     (options , args) = parser.parse_args()
     if options.verbose is False:
         logging.getLogger().setLevel(logging.INFO)
     else:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    if options.r0 is False and options.mesa is False:
+    if options.r0 is False and options.table is False:
         print usage
-        print "Necesita opcion --r0 o bien --mesa, con -h se obtiene informacion mas detallada"
+        print "It is mandatory use --r0 or --table as parameter"
         sys.exit(-1)
 
     BDC = BoardDarcController()
     if options.r0 is True:
         BDC.loop_for_r0()
 
-    if options.mesa is True:
-        BDC.mesa(2)
+    if options.table is True:
+        BDC.table(2)
