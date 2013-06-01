@@ -17,7 +17,10 @@ from optparse import OptionParser
 from subprocess import Popen, PIPE
 from time import sleep
 
-
+__package__ = '''
+    BoardDarcController:
+    This script controls the board and communicates whith darc to take an image
+    '''
 class BoardDarcController:
     '''
     BoardDarcController:
@@ -279,6 +282,14 @@ class BoardDarcController:
         self.set_pasos(2147483600) 
         self.move_motor_forever()
 
+    def ledtest(self):
+        '''
+        Turn on/off a led, for test purposes
+        '''
+        self.setup()
+        self.set_led_on_off()
+
+
     def table(self,num_image):
         '''
         turn start by start, then move phase screen, and repeat
@@ -331,6 +342,7 @@ if __name__ == '__main__':
     parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Star loop to obtain r0 (infinite loop)")
     parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
     parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
+    parser.add_option("-l", "--ledtest", dest="ledtest", metavar="ledtest", default=False, action="store_true", help = "Test, turning on/off a led")
     (options , args) = parser.parse_args()
     if options.debug is False:
         logging.getLogger().setLevel(logging.INFO)
@@ -339,9 +351,9 @@ if __name__ == '__main__':
         logging.getLogger().setLevel(logging.DEBUG)
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s')
 
-    if options.r0 is False and options.table is False:
+    if options.r0 is False and options.table is False and options.ledtest is False:
         print usage
-        print "It is mandatory use --r0 or --table as parameter"
+        print "It is mandatory use --r0 , --table or --ledtest as parameter"
         sys.exit(-1)
 
     BDC = BoardDarcController()
@@ -350,3 +362,6 @@ if __name__ == '__main__':
 
     if options.table is True:
         BDC.table(2)
+
+    if options.ledtest is True:
+        BDC.ledtest()
