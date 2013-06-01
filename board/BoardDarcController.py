@@ -11,11 +11,9 @@ import os
 #import FITS
 #import darc
 import time
-import numpy
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
-from time import sleep
 
 __package__ = 'BoardDarcController'
 
@@ -207,7 +205,7 @@ class BoardDarcController:
         logging.debug("err: "+str(err))
         logging.info("Setting brillo %d done" % brillo)
 
-    def set_motor(self,motor):
+    def set_motor(self, motor):
         '''
         Set motor to be used in PIC. This method overwrite the default
         configuration taken from configuration file
@@ -321,7 +319,7 @@ class BoardDarcController:
         self.set_led_on_off()
 
 
-    def table(self,num):
+    def table(self, num):
         '''
         This method does:
         (a) turn on led 1
@@ -336,11 +334,11 @@ class BoardDarcController:
         variable
         '''
         self.setup()
-        for i in range(0,num):
+        for i in range(0, num):
             # led 1 on
             self.set_led(1)
             self.set_led_on()
-            sleep(self.exposicion)
+            time.sleep(self.exposicion)
 
             #take img with darc
             self.take_img_from_darc()
@@ -351,7 +349,7 @@ class BoardDarcController:
             # led 2 on
             self.set_led(2)
             self.set_led_on()
-            sleep(self.exposicion)
+            time.sleep(self.exposicion)
 
             #take img with darc
             self.take_img_from_darc()
@@ -362,7 +360,7 @@ class BoardDarcController:
             # led 3 on
             self.set_led(3)
             self.set_led_on()
-            sleep(self.exposicion)
+            time.sleep(self.exposicion)
 
             #take img with darc
             self.take_img_from_darc()
