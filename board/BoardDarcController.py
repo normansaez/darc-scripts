@@ -1,7 +1,7 @@
 #!/usr/bin/python 
 '''
 BoardDarcController
-This script controls the board and communicates whith darc to take an image
+This script controls the board and communicates with darc to take an image
 '''
 import ConfigParser
 import sys
@@ -17,19 +17,17 @@ from optparse import OptionParser
 from subprocess import Popen, PIPE
 from time import sleep
 
-__package__ = '''
-    BoardDarcController:
-    This script controls the board and communicates whith darc to take an image
-    '''
+__package__ = 'BoardDarcController'
+
 class BoardDarcController:
     '''
     BoardDarcController:
-    This script controls the board and communicates whith darc to take an image
+    This script controls the board and communicates with darc to take an image
     '''
     def __init__(self):
         '''
-        Takes parameters configured in configurations.cfg file
-        path:
+        Sets parameters taken from configurations.cfg file.
+        The current path for configuration file is:
         /home/dani/nsaez/board/configurations.cfg
         '''
         try:
@@ -77,7 +75,9 @@ class BoardDarcController:
 
     def set_led_on(self):
         '''
-        Turn led on , it is mandatory set a led first
+        Method to turn on a led with no specific time. To turn off a led,
+        set_led_off method needs to be called. Specific led is taken from
+        configuration file. To overwrite it, use set_led(led) method.
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 1 :"
         sts, out, err = self._execute_cmd(cmd)
@@ -89,7 +89,7 @@ class BoardDarcController:
 
     def set_led_off(self):
         '''
-        Turn led off.
+        Method to turn off all leds. Period.
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 2 :"
         sts, out, err = self._execute_cmd(cmd)
@@ -101,7 +101,10 @@ class BoardDarcController:
 
     def set_motor_move(self):
         '''
-        The motor moves given steps and direction
+        Method to move a motor, using steps (pasos) and direction (direccion).
+        Specific motor, step and direction is taken from configuration file. To
+        overwrite it, use set_motor(motor), set_pasos(steps) and
+        set_direccion(direction)
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 3 :"
         sts, out, err = self._execute_cmd(cmd)
@@ -113,6 +116,9 @@ class BoardDarcController:
 
     def set_led_on_off(self):
         '''
+        Method to turn on/off a led for a exposure time. Specific led, and
+        exposure time is taken from configuration file. To overwrite it, use
+        set_led(led) and set_exposicion(time) methods.
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 4 :"
         sts, out, err = self._execute_cmd(cmd)
@@ -124,6 +130,11 @@ class BoardDarcController:
 
     def move_motor_with_vel(self):
         '''
+        Method to move a motor, using steps (pasos) and direction (direccion)
+        and a velocity (velocidad) Specific motor, step, direction and velocity
+        is taken from configuration file. To overwrite it, use
+        set_motor(motor), set_pasos(steps) , set_direccion(direction)
+        set_velocidad(velocity) methods
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 5 :"
         sts, out, err = self._execute_cmd(cmd)
@@ -135,6 +146,14 @@ class BoardDarcController:
 
     def move_motor_forever(self):
         '''
+        Method to move a motor, using steps (pasos) and direction (direccion)
+        and a velocity (velocidad). The main difference with
+        move_motor_with_vel method is that once the motor moves specific steps,
+        it will start all over again (forever). The only way to stops motor is
+        reseting PIC. Specific motor, step, direction and velocity is taken
+        from configuration file. To overwrite it, use set_motor(motor),
+        set_pasos(steps) , set_direccion(direction) set_velocidad(velocity)
+        methods
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         logging.info("Forever")
@@ -147,7 +166,8 @@ class BoardDarcController:
 
     def set_led(self, led):
         '''
-        Set led to be used in PIC
+        Set led to be used in PIC. This method overwrite the default
+        configuration taken from configuration file.
         '''
         self.led = led
         cmd = "send_receive_pic /dev/ttyUSB0 l:%d\r :" % led
@@ -160,7 +180,8 @@ class BoardDarcController:
     
     def set_exposicion(self, exposicion):
         '''
-        Set exposition time to be used on a specific led on PIC
+        Set exposure time to be used on a specific led on PIC. This method
+        overwrite the default configuration taken from configuration file.
         '''
         self.exposicion = exposicion
         cmd = "send_receive_pic /dev/ttyUSB0 e:%d\r :" % exposicion
@@ -173,7 +194,9 @@ class BoardDarcController:
 
     def set_brillo(self, brillo):
         '''
-        Sets PWV function from 0 - 100 to simulate brigthness in PIC
+        Sets PWV function from 0 - 100 to simulate brightness in PIC. This
+        method overwrite the default configuration taken from configuration
+        file.
         '''
         self.brillo = brillo
         cmd = "send_receive_pic /dev/ttyUSB0 b:%d\r :" % brillo
@@ -186,7 +209,8 @@ class BoardDarcController:
 
     def set_motor(self,motor):
         '''
-        Set motor to be used in PIC
+        Set motor to be used in PIC. This method overwrite the default
+        configuration taken from configuration file
         '''
         self.motor = motor
         cmd = "send_receive_pic /dev/ttyUSB0 m:%d\r :" % motor
@@ -199,7 +223,8 @@ class BoardDarcController:
 
     def set_direccion(self, direccion):
         '''
-        Set motor direction to be used in PIC
+        Set motor direction to be used in PIC. This method overwrite the
+        default configuration taken from configuration file
         '''
         self.direccion = direccion
         cmd = "send_receive_pic /dev/ttyUSB0 d:%d\r :" % direccion
@@ -216,7 +241,9 @@ class BoardDarcController:
 
     def set_velocidad(self, velocidad):
         '''
-        Set motor velocity to be used in PIC (this is a delay between 200 - 400 ms)
+        Set motor velocity to be used in PIC (this is a delay between 200 - 400
+        ms). This method overwrite the default configuration taken from
+        configuration file
         '''
         self.velocidad = velocidad
         cmd = "send_receive_pic /dev/ttyUSB0 v:%d\r :" % velocidad
@@ -229,7 +256,8 @@ class BoardDarcController:
 
     def set_pasos(self, pasos):
         '''
-        Set motor steps to be used in PIC
+        Set motor steps to be used in PIC. This method overwrite the default
+        configuration taken from configuration file
         '''
         self.pasos = pasos
         cmd = "send_receive_pic /dev/ttyUSB0 p:%d\r :" % pasos
@@ -242,7 +270,10 @@ class BoardDarcController:
         
     def take_img_from_darc(self):
         '''
-        Using darc, take a FIT image and save it to the disk
+        Using darc, take a FITS image and save it into the disk. By default use
+        a image_prefix-YEAR-MONTH-DAY-T-HOUR-MIN-SEC.fits as image name.  The
+        path to be store the file as well as image_prefix can be modified in
+        configuration file
         '''
         try:
             logging.debug('About to take image with darc ...')
@@ -262,7 +293,7 @@ class BoardDarcController:
 
     def setup(self):
         '''
-        Setup with default parameters taken from configurations.cfg
+        Setup default parameters taken from configurations.cfg
         '''
         self.set_led(self.led)
         self.set_exposicion(self.exposicion)
@@ -275,7 +306,7 @@ class BoardDarcController:
 
     def loop_for_r0(self):
         '''
-        Loop for r0
+        Loop to calculate r0. Move a motor forever.
         '''
         self.setup()
         #numero muy muy grande de pasos
@@ -284,18 +315,28 @@ class BoardDarcController:
 
     def ledtest(self):
         '''
-        Turn on/off a led, for test purposes
+        Turn on/off a led, for test purposes.
         '''
         self.setup()
         self.set_led_on_off()
 
 
-    def table(self,num_image):
+    def table(self,num):
         '''
-        turn start by start, then move phase screen, and repeat
+        This method does:
+        (a) turn on led 1
+        (b) take image
+        (c) turn on led 2
+        (d) take image
+        (e) turn on led 3
+        (f) take image
+        (g) move a motor
+        
+        After that, start all over again, given a number of times in num
+        variable
         '''
         self.setup()
-        for i in range(0,num_image):
+        for i in range(0,num):
             # led 1 on
             self.set_led(1)
             self.set_led_on()
@@ -339,10 +380,11 @@ if __name__ == '__main__':
             Type -h, --help for help.
                 '''
     parser = OptionParser(usage)
-    parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Star loop to obtain r0 (infinite loop)")
+    parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Start loop to obtain r0 (infinite loop)")
     parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
-    parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
+    parser.add_option("-n", "--num", dest="num", metavar="num", type="int", default=2, help = "Number of iterations for --table method")
     parser.add_option("-l", "--ledtest", dest="ledtest", metavar="ledtest", default=False, action="store_true", help = "Test, turning on/off a led")
+    parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
     (options , args) = parser.parse_args()
     if options.debug is False:
         logging.getLogger().setLevel(logging.INFO)
@@ -361,7 +403,7 @@ if __name__ == '__main__':
         BDC.loop_for_r0()
 
     if options.table is True:
-        BDC.table(2)
+        BDC.table(options.num)
 
     if options.ledtest is True:
         BDC.ledtest()
