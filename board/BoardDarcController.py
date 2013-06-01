@@ -3,19 +3,22 @@
 BoardDarcController
 This script controls the board and communicates with darc to take an image
 '''
-import ConfigParser
 import sys
+sys.path.append('/rtc/lib/python')
+
+import ConfigParser
 import logging
 import os
 
-#import FITS
-#import darc
+import FITS
+import darc
 import time
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
 
 __package__ = 'BoardDarcController'
+
 
 class BoardDarcController:
     '''
@@ -56,9 +59,9 @@ class BoardDarcController:
             self.darc = darc.Control(self.camera_name)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
-#            logging.error(ex)
-#            logging.error("Check line number: %d" % exc_tb.tb_lineno)
-#            sys.exit(-1)
+            logging.error(ex)
+            logging.error("Check line number: %d" % exc_tb.tb_lineno)
+            sys.exit(-1)
 
     def _execute_cmd(self, cmd):
         ''' 
@@ -275,13 +278,13 @@ class BoardDarcController:
         '''
         try:
             logging.debug('About to take image with darc ...')
-            #stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
+            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
             image_name = self.image_prefix+'_' + str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
             path = os.path.normpath(self.image_path+image_name)
             logging.info('Image taken : %s' % path)
-            #data = stream.reshape(self.pxly,self.pxlx)
+            data = stream.reshape(self.pxly,self.pxlx)
             logging.debug('About to save image to disk , name: %s' % path)
-            #FITS.Write(data, path, writeMode='a')
+            FITS.Write(data, path, writeMode='a')
             logging.info('Image saved : %s' % path)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -307,7 +310,6 @@ class BoardDarcController:
         Loop to calculate r0. Move a motor forever.
         '''
         self.setup()
-        #numero muy muy grande de pasos
         self.set_pasos(2147483600) 
         self.move_motor_forever()
 
