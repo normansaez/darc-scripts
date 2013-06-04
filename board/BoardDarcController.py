@@ -47,7 +47,10 @@ class BoardDarcController:
             self.pasos = Config.getint('motor', 'pasos')
             self.pxlx  = Config.getint('darc', 'pxlx')
             self.pxly  = Config.getint('darc', 'pxly')
-            self.image_prefix  = Config.get('darc', 'image_prefix')
+            self.image_prefix_lgs1  = Config.get('darc', 'image_prefix_lgs1')
+            self.image_prefix_lgs2  = Config.get('darc', 'image_prefix_lgs2')
+            self.image_prefix_lgs3  = Config.get('darc', 'image_prefix_lgs3')
+            self.image_prefix_sci1  = Config.get('darc', 'image_prefix_sci1')
             self.image_path  = Config.get('darc', 'image_path')
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -269,7 +272,7 @@ class BoardDarcController:
         logging.debug("err: "+str(err))
         logging.info("Setting pasos %d done" % pasos)
         
-    def take_img_from_darc(self):
+    def take_img_from_darc(self, iteration, prefix):
         '''
         Using darc, take a FITS image and save it into the disk. By default use
         a image_prefix-YEAR-MONTH-DAY-T-HOUR-MIN-SEC.fits as image name.  The
@@ -279,7 +282,7 @@ class BoardDarcController:
         try:
             logging.debug('About to take image with darc ...')
             stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
-            image_name = self.image_prefix+'_' + str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
+            image_name = 's%s_'.zfill(3)+'wfs%s_'%prefix.zfill(3)+ str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
             path = os.path.normpath(self.image_path+image_name)
             logging.info('Image taken : %s' % path)
             data = stream.reshape(self.pxly,self.pxlx)
@@ -324,26 +327,26 @@ class BoardDarcController:
     def table(self, num):
         '''
         This method does:
-        (a) turn on led 1
-        (b) take image
-        (c) turn on led 2
-        (d) take image
-        (e) turn on led 3
-        (f) take image
-        (g) move a motor
+        1. turn on led 1
+        2. take image
+        3. turn on led 2
+        4. take image
+        5. turn on led 3
+        6. take image
+        7. move a motor
         
         After that, start all over again, given a number of times in num
         variable
         '''
         self.setup()
-        for i in range(0, num):
+        for iteration in range(0, num):
             # led 1 on
             self.set_led(1)
             self.set_led_on()
             time.sleep(self.exposicion)
 
             #take img with darc
-            self.take_img_from_darc()
+            self.take_img_from_darc(iteration,self.image_prefix_lgs1)
 
             #led off
             self.set_led_off()
@@ -354,7 +357,7 @@ class BoardDarcController:
             time.sleep(self.exposicion)
 
             #take img with darc
-            self.take_img_from_darc()
+            self.take_img_from_darc(iteration,self.image_prefix_lgs2)
 
             #led off
             self.set_led_off()
@@ -365,7 +368,18 @@ class BoardDarcController:
             time.sleep(self.exposicion)
 
             #take img with darc
-            self.take_img_from_darc()
+            self.take_img_from_darc(iteration,self.image_prefix_lgs3)
+
+            #led off
+            self.set_led_off()
+
+            # sci led on
+            self.set_led(4)
+            self.set_led_on()
+            time.sleep(self.exposicion)
+
+            #take img with darc
+            self.take_img_from_darc(iteration,self.image_prefix_sci1)
 
             #led off
             self.set_led_off()
