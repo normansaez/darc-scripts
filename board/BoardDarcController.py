@@ -329,6 +329,13 @@ class BoardDarcController:
         self.setup()
         self.set_led_on_off()
 
+    def motortest(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup()
+        self.move_motor_with_vel()
+
 
     def calibration(self):
         '''
@@ -465,6 +472,7 @@ if __name__ == '__main__':
     parser.add_option("-n", "--num", dest="num", metavar="num", type="int", default=2, help = "Number of iterations for --table method")
     parser.add_option("-c", "--calibration", dest="calibration", metavar="calibration", default=False, action="store_true", help = "Calibration method")
     parser.add_option("-l", "--ledtest", dest="ledtest", metavar="ledtest", default=False, action="store_true", help = "Test, turning on/off a led")
+    parser.add_option("-m", "--motortest", dest="motortest", metavar="motortest", default=False, action="store_true", help = "Test, turning on/off a motor")
     parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
     (options , args) = parser.parse_args()
     if options.debug is False:
@@ -474,7 +482,7 @@ if __name__ == '__main__':
         logging.getLogger().setLevel(logging.DEBUG)
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s')
 
-    if options.r0 is False and options.table is False and options.ledtest is False and options.calibration is False:
+    if options.r0 is False and options.table is False and options.ledtest is False and options.calibration is False and options.motortest is False:
         print usage
         print "It is mandatory use --r0 , --table, --calibration or --ledtest as parameter"
         sys.exit(-1)
@@ -491,3 +499,6 @@ if __name__ == '__main__':
 
     if options.calibration is True:
         BDC.calibration()
+
+    if options.motortest is True:
+        BDC.motortest()
