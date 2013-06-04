@@ -41,6 +41,10 @@ class BoardDarcController:
             self.led = Config.getint('led', 'led')
             self.exposicion = Config.getint('led', 'exposicion')
             self.brillo = Config.getint('led', 'brillo')
+            self.led_lgs1  = Config.getint('led', 'led_lgs1')
+            self.led_lgs2  = Config.getint('led', 'led_lgs2')
+            self.led_lgs3  = Config.getint('led', 'led_lgs3')
+            self.led_sci1  = Config.getint('led', 'led_sci1')
             self.motor = Config.getint('motor', 'motor')
             self.direccion = Config.getint('motor', 'direccion')
             self.velocidad = Config.getint('motor', 'velocidad')
@@ -342,7 +346,7 @@ class BoardDarcController:
 
         self.setup()
         # led 1 on
-        self.set_led(1)
+        self.set_led(self.led_lgs1)
         self.set_led_on()
         time.sleep(self.exposicion)
 
@@ -353,7 +357,7 @@ class BoardDarcController:
         self.set_led_off()
 
         # led 2 on
-        self.set_led(2)
+        self.set_led(self.led_lgs2)
         self.set_led_on()
         time.sleep(self.exposicion)
 
@@ -364,7 +368,7 @@ class BoardDarcController:
         self.set_led_off()
 
         # led 3 on
-        self.set_led(3)
+        self.set_led(self.led_lgs3)
         self.set_led_on()
         time.sleep(self.exposicion)
 
@@ -375,7 +379,7 @@ class BoardDarcController:
         self.set_led_off()
 
         # sci led on
-        self.set_led(4)
+        self.set_led(self.led_sci1)
         self.set_led_on()
         time.sleep(self.exposicion)
 
@@ -403,7 +407,7 @@ class BoardDarcController:
         self.setup()
         for iteration in range(0, num):
             # led 1 on
-            self.set_led(1)
+            self.set_led(self.led_lgs1)
             self.set_led_on()
             time.sleep(self.exposicion)
 
@@ -414,7 +418,7 @@ class BoardDarcController:
             self.set_led_off()
 
             # led 2 on
-            self.set_led(2)
+            self.set_led(self.led_lgs2)
             self.set_led_on()
             time.sleep(self.exposicion)
 
@@ -425,7 +429,7 @@ class BoardDarcController:
             self.set_led_off()
 
             # led 3 on
-            self.set_led(3)
+            self.set_led(self.led_lgs3)
             self.set_led_on()
             time.sleep(self.exposicion)
 
@@ -436,7 +440,7 @@ class BoardDarcController:
             self.set_led_off()
 
             # sci led on
-            self.set_led(4)
+            self.set_led(self.led_sci1)
             self.set_led_on()
             time.sleep(self.exposicion)
 
