@@ -281,13 +281,15 @@ class BoardDarcController:
         '''
         try:
             logging.debug('About to take image with darc ...')
-            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
-            image_name = 's%s_'.zfill(3)+'wfs%s_'%prefix.zfill(3)+ str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
+#            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
+            img_ite = 's_%s_'% str(iteration).zfill(3)
+            img_wfs = 'wfs_%s_'% str(prefix).zfill(3)
+            image_name= img_ite + img_wfs +'T' +str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
             path = os.path.normpath(self.image_path+image_name)
             logging.info('Image taken : %s' % path)
-            data = stream.reshape(self.pxly,self.pxlx)
+#            data = stream.reshape(self.pxly,self.pxlx)
             logging.debug('About to save image to disk , name: %s' % path)
-            FITS.Write(data, path, writeMode='a')
+#            FITS.Write(data, path, writeMode='a')
             logging.info('Image saved : %s' % path)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
