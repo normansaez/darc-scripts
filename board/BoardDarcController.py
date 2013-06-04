@@ -282,8 +282,8 @@ class BoardDarcController:
         try:
             logging.debug('About to take image with darc ...')
 #            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
-            img_ite = 's_%s_'% str(iteration).zfill(3)
-            img_wfs = 'wfs_%s_'% str(prefix).zfill(3)
+            img_ite = 's%s_'% str(iteration).zfill(3)
+            img_wfs = 'w%s_'% str(prefix).zfill(3)
             image_name= img_ite + img_wfs +'T' +str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
             path = os.path.normpath(self.image_path+image_name)
             logging.info('Image taken : %s' % path)
