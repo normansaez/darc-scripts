@@ -326,6 +326,66 @@ class BoardDarcController:
         self.set_led_on_off()
 
 
+    def calibration(self):
+        '''
+        This method does:
+        1. turn on led 1
+        2. take image
+        3. turn on led 2
+        4. take image
+        5. turn on led 3
+        6. take image
+       
+        For calibration purposes
+        '''
+        prefix = 'cal'
+
+        self.setup()
+        # led 1 on
+        self.set_led(1)
+        self.set_led_on()
+        time.sleep(self.exposicion)
+
+        #take img with darc
+        self.take_img_from_darc(prefix,self.image_prefix_lgs1)
+
+        #led off
+        self.set_led_off()
+
+        # led 2 on
+        self.set_led(2)
+        self.set_led_on()
+        time.sleep(self.exposicion)
+
+        #take img with darc
+        self.take_img_from_darc(prefix,self.image_prefix_lgs2)
+
+        #led off
+        self.set_led_off()
+
+        # led 3 on
+        self.set_led(3)
+        self.set_led_on()
+        time.sleep(self.exposicion)
+
+        #take img with darc
+        self.take_img_from_darc(prefix,self.image_prefix_lgs3)
+
+        #led off
+        self.set_led_off()
+
+        # sci led on
+        self.set_led(4)
+        self.set_led_on()
+        time.sleep(self.exposicion)
+
+        #take img with darc
+        self.take_img_from_darc(prefix,self.image_prefix_sci1)
+
+        #led off
+        self.set_led_off()
+
+
     def table(self, num):
         '''
         This method does:
@@ -399,6 +459,7 @@ if __name__ == '__main__':
     parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Start loop to obtain r0 (infinite loop)")
     parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
     parser.add_option("-n", "--num", dest="num", metavar="num", type="int", default=2, help = "Number of iterations for --table method")
+    parser.add_option("-c", "--calibration", dest="calibration", metavar="calibration", default=False, action="store_true", help = "Calibration method")
     parser.add_option("-l", "--ledtest", dest="ledtest", metavar="ledtest", default=False, action="store_true", help = "Test, turning on/off a led")
     parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
     (options , args) = parser.parse_args()
@@ -409,9 +470,9 @@ if __name__ == '__main__':
         logging.getLogger().setLevel(logging.DEBUG)
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s')
 
-    if options.r0 is False and options.table is False and options.ledtest is False:
+    if options.r0 is False and options.table is False and options.ledtest is False and options.calibration is False:
         print usage
-        print "It is mandatory use --r0 , --table or --ledtest as parameter"
+        print "It is mandatory use --r0 , --table, --calibration or --ledtest as parameter"
         sys.exit(-1)
 
     BDC = BoardDarcController()
@@ -423,3 +484,6 @@ if __name__ == '__main__':
 
     if options.ledtest is True:
         BDC.ledtest()
+
+    if options.calibration is True:
+        BDC.calibration()
