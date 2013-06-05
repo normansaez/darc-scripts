@@ -318,7 +318,9 @@ class BoardDarcController:
         '''
         Loop to calculate r0. Move a motor forever.
         '''
-        self.setup()
+        self.set_motor(self.motor)
+        self.set_direccion(self.direccion)
+        self.set_velocidad(self.velocidad)
         self.set_pasos(2147483600) 
         self.move_motor_forever()
 
@@ -326,14 +328,19 @@ class BoardDarcController:
         '''
         Turn on/off a led, for test purposes.
         '''
-        self.setup()
+        self.set_led(self.led)
+        self.set_exposicion(self.exposicion)
+        self.set_brillo(self.brillo)
         self.set_led_on_off()
 
     def motortest(self):
         '''
         Turn on/off a led, for test purposes.
         '''
-        self.setup()
+        self.set_motor(self.motor)
+        self.set_direccion(self.direccion)
+        self.set_velocidad(self.velocidad)
+        self.set_pasos(self.pasos)
         self.move_motor_with_vel()
 
 
