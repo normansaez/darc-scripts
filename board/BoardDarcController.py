@@ -77,8 +77,13 @@ class BoardDarcController:
         err = process.stderr.read().strip()
         logging.debug("cmd: "+str(cmd))
         logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
+        if str(out).__contains__("Error"):
+            logging.error("out: "+str(out))
+            logging.error("err: "+str(err))
+        else:
+            logging.debug("out: "+str(out))
+            logging.debug("err: "+str(err))
+
         return sts, out, err
 
     def set_led_on(self):
