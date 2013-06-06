@@ -10,8 +10,8 @@ import ConfigParser
 import logging
 import os
 
-#import FITS
-#import darc
+import FITS
+import darc
 import time
 
 from optparse import OptionParser
@@ -55,11 +55,11 @@ class BoardDarcController:
             logging.error("Check line number: %d" % exc_tb.tb_lineno)
             sys.exit(-1)
         try:
-            camera_name = self.Config.get('darc', 'camera')
+            self.camera_name = self.Config.get('darc', 'camera')
             self.pxlx  = self.Config.getint('darc',  'pxlx')
             self.pxly  = self.Config.getint('darc', 'pxly')
             self.image_path  = self.Config.get('darc', 'image_path')
-            #self.darc = darc.Control(camera_name)
+            self.darc = darc.Control(self.camera_name)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
@@ -241,15 +241,16 @@ class BoardDarcController:
         '''
         try:
             logging.debug('About to take image with darc ...')
-#            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
+            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
             img_ite = 's%s_'% str(iteration).zfill(3)
             img_wfs = 'w%s_'% str(prefix).zfill(3)
             image_name = img_ite + img_wfs +'T' +str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
             path = os.path.normpath(self.image_path+image_name)
             logging.info('Image taken : %s' % path)
-#            data = stream.reshape(self.pxly,self.pxlx)
+            logging.debug(stream)
+            data = stream[0].reshape(self.pxly,self.pxlx)
             logging.debug('About to save image to disk , name: %s' % path)
-#            FITS.Write(data, path, writeMode='a')
+            FITS.Write(data, path, writeMode='a')
             logging.info('Image saved : %s' % path)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
