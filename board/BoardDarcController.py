@@ -10,8 +10,8 @@ import ConfigParser
 import logging
 import os
 
-import FITS
-import darc
+#import FITS
+#import darc
 import time
 
 from optparse import OptionParser
@@ -31,43 +31,39 @@ class BoardDarcController:
         The current path for configuration file is:
         /home/dani/nsaez/board/configurations.cfg
         '''
+        Config = ConfigParser.ConfigParser()
+        self.Config = Config
         try:
-            Config = ConfigParser.ConfigParser()
-            Config.read("/home/dani/nsaez/board/configurations.cfg")
+            self.Config.read("/home/dani/nsaez/board/configurations.cfg")
+            #self.Config.read("configurations.cfg")
         except:
             logging.error("configurations.cfg : File doesn't exits")
             sys.exit(-1)
         try:
-            self.led = Config.getint('led', 'led')
-            self.exposicion = Config.getint('led', 'exposicion')
-            self.brillo = Config.getint('led', 'brillo')
-            self.led_lgs1  = Config.getint('led', 'led_lgs1')
-            self.led_lgs2  = Config.getint('led', 'led_lgs2')
-            self.led_lgs3  = Config.getint('led', 'led_lgs3')
-            self.led_sci1  = Config.getint('led', 'led_sci1')
-            self.motor = Config.getint('motor', 'motor')
-            self.direccion = Config.getint('motor', 'direccion')
-            self.velocidad = Config.getint('motor', 'velocidad')
-            self.pasos = Config.getint('motor', 'pasos')
-            self.pxlx  = Config.getint('darc', 'pxlx')
-            self.pxly  = Config.getint('darc', 'pxly')
-            self.image_prefix_lgs1  = Config.get('darc', 'image_prefix_lgs1')
-            self.image_prefix_lgs2  = Config.get('darc', 'image_prefix_lgs2')
-            self.image_prefix_lgs3  = Config.get('darc', 'image_prefix_lgs3')
-            self.image_prefix_sci1  = Config.get('darc', 'image_prefix_sci1')
-            self.image_path  = Config.get('darc', 'image_path')
+            self.led = None
+            self.exposicion = None
+            self.brillo = None
+            self.image_prefix = None
+
+            self.motor = None
+            self.pasos = None
+            self.velocidad = None
+            self.direccion = None
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
             logging.error("Check line number: %d" % exc_tb.tb_lineno)
             sys.exit(-1)
         try:
-            self.camera_name = Config.get('darc','camera')
-            self.darc = darc.Control(self.camera_name)
+            camera_name = self.Config.get('darc', 'camera')
+            self.pxlx  = self.Config.getint('darc',  'pxlx')
+            self.pxly  = self.Config.getint('darc', 'pxly')
+            self.image_path  = self.Config.get('darc', 'image_path')
+            #self.darc = darc.Control(camera_name)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
-            logging.error("Check line number: %d" % exc_tb.tb_lineno)
+            logging.error("Check line number: %d" % (exc_tb.tb_lineno))
             sys.exit(-1)
 
     def _execute_cmd(self, cmd):
@@ -79,6 +75,10 @@ class BoardDarcController:
         sts = process.wait()
         out = process.stdout.read().strip()
         err = process.stderr.read().strip()
+        logging.debug("cmd: "+str(cmd))
+        logging.debug("sts: "+str(sts))
+        logging.debug("out: "+str(out))
+        logging.debug("err: "+str(err))
         return sts, out, err
 
     def set_led_on(self):
@@ -89,10 +89,6 @@ class BoardDarcController:
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 1 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
         logging.info("Led %d ON" % self.led)
 
     def set_led_off(self):
@@ -101,10 +97,6 @@ class BoardDarcController:
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 2 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
         logging.info("Led %d OFF" % self.led)
 
     def set_motor_move(self):
@@ -116,11 +108,12 @@ class BoardDarcController:
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 3 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
-        logging.info("Motor %d pasos: %d, direccion %d" % (self.motor, self.pasos, self.direccion))
+        logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
+        logging.warning('Wating a time depending steps!')
+        logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
+        logging.warning('known issue, to be fixed')
+        logging.info('Waiting: %.2f [secs]'% (self.pasos/100.0))
+        time.sleep(self.pasos/100.0)
 
     def set_led_on_off(self):
         '''
@@ -130,12 +123,8 @@ class BoardDarcController:
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 4 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
-        logging.info("Led %d exposicion %d" % (self.led, self.exposicion))
-
+        logging.info("Led %d, exposicion %d [ms]" % (self.led, self.exposicion))
+        time.sleep(self.exposicion/1000.0)
     def move_motor_with_vel(self):
         '''
         Method to move a motor, using steps (pasos) and direction (direccion)
@@ -146,11 +135,12 @@ class BoardDarcController:
         '''
         cmd = "send_receive_pic /dev/ttyUSB0 5 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
+        logging.warning('Wating a time depending steps!')
+        logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
+        logging.warning('known issue, to be fixed')
+        logging.info('Waiting: %.2f [secs]'% (self.pasos/100.0))
+        time.sleep(self.pasos/100.0)
 
     def move_motor_forever(self):
         '''
@@ -164,13 +154,11 @@ class BoardDarcController:
         methods
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        logging.info("Forever")
         cmd = "send_receive_pic /dev/ttyUSB0 6 :"
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
+        logging.info("Forever")
+        logging.warning('PIC configured to run forever .... to make anything else, is mandatory reset PIC')
+        logging.warning('PIC is still running until reset it! ... leaving this wrapper')
 
     def set_led(self, led):
         '''
@@ -180,11 +168,7 @@ class BoardDarcController:
         self.led = led
         cmd = "send_receive_pic /dev/ttyUSB0 l:%d\r :" % led
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
-        logging.info("Setting led %d done" % led)
+        logging.info("Setting Led %d done" % led)
     
     def set_exposicion(self, exposicion):
         '''
@@ -194,11 +178,7 @@ class BoardDarcController:
         self.exposicion = exposicion
         cmd = "send_receive_pic /dev/ttyUSB0 e:%d\r :" % exposicion
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
-        logging.info("Setting exposicion %d done" % exposicion)
+        logging.info("Setting exposicion %d [ms] done" % exposicion)
 
     def set_brillo(self, brillo):
         '''
@@ -209,10 +189,6 @@ class BoardDarcController:
         self.brillo = brillo
         cmd = "send_receive_pic /dev/ttyUSB0 b:%d\r :" % brillo
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
         logging.info("Setting brillo %d done" % brillo)
 
     def set_motor(self, motor):
@@ -223,10 +199,6 @@ class BoardDarcController:
         self.motor = motor
         cmd = "send_receive_pic /dev/ttyUSB0 m:%d\r :" % motor
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
         logging.info("Setting motor %d done" % motor)
 
     def set_direccion(self, direccion):
@@ -237,14 +209,6 @@ class BoardDarcController:
         self.direccion = direccion
         cmd = "send_receive_pic /dev/ttyUSB0 d:%d\r :" % direccion
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
-        logging.debug(cmd)
-        logging.debug(sts)
-        logging.debug(out)
-        logging.debug(err)
         logging.info("Setting direccion %d done" % direccion)
 
     def set_velocidad(self, velocidad):
@@ -256,10 +220,6 @@ class BoardDarcController:
         self.velocidad = velocidad
         cmd = "send_receive_pic /dev/ttyUSB0 v:%d\r :" % velocidad
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
         logging.info("Setting velocidad %d done" % velocidad)
 
     def set_pasos(self, pasos):
@@ -270,10 +230,6 @@ class BoardDarcController:
         self.pasos = pasos
         cmd = "send_receive_pic /dev/ttyUSB0 p:%d\r :" % pasos
         sts, out, err = self._execute_cmd(cmd)
-        logging.debug("cmd: "+str(cmd))
-        logging.debug("sts: "+str(sts))
-        logging.debug("out: "+str(out))
-        logging.debug("err: "+str(err))
         logging.info("Setting pasos %d done" % pasos)
         
     def take_img_from_darc(self, iteration, prefix):
@@ -288,7 +244,7 @@ class BoardDarcController:
 #            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
             img_ite = 's%s_'% str(iteration).zfill(3)
             img_wfs = 'w%s_'% str(prefix).zfill(3)
-            image_name= img_ite + img_wfs +'T' +str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
+            image_name = img_ite + img_wfs +'T' +str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
             path = os.path.normpath(self.image_path+image_name)
             logging.info('Image taken : %s' % path)
 #            data = stream.reshape(self.pxly,self.pxlx)
@@ -301,48 +257,96 @@ class BoardDarcController:
             logging.error("Check line number: %d" % exc_tb.tb_lineno)
             logging.error("Is darc running??") 
 
-    def setup(self):
+    def setup(self, config_name='led_lgs1'):
         '''
         Setup default parameters taken from configurations.cfg
         '''
-        self.set_led(self.led)
-        self.set_exposicion(self.exposicion)
-        self.set_brillo(self.brillo)
-        self.set_motor(self.motor)
-        self.set_direccion(self.direccion)
-        self.set_velocidad(self.velocidad)
-        self.set_pasos(self.pasos)
+        logging.info('Configuring :%s ' % config_name)
+        if config_name.__contains__('led'):
+            led = self.Config.getint(config_name, 'led')
+            exposicion = self.Config.getint(config_name, 'exposicion')
+            brillo = self.Config.getint(config_name, 'brillo')
+            self.image_prefix  = self.Config.get(config_name, 'image_prefix')
+
+            self.set_led(led)
+            self.set_exposicion(exposicion)
+            self.set_brillo(brillo)
+
+        if config_name.__contains__('motor'):
+            motor = self.Config.getint(config_name, 'motor')
+            direccion = self.Config.getint(config_name, 'direccion')
+            velocidad = self.Config.getint(config_name, 'velocidad')
+            pasos = self.Config.getint(config_name, 'pasos')
+            self.set_motor(motor)
+            self.set_direccion(direccion)
+            self.set_velocidad(velocidad)
+            self.set_pasos(pasos)
+        logging.info('Configuration :%s done!' % config_name)
 
 
     def loop_for_r0(self):
         '''
         Loop to calculate r0. Move a motor forever.
         '''
-        self.set_motor(self.motor)
-        self.set_direccion(self.direccion)
-        self.set_velocidad(self.velocidad)
+        self.setup('motor_ground_layer')
         self.set_pasos(2147483600) 
         self.move_motor_forever()
 
-    def ledtest(self):
+    def led_lgs1(self):
         '''
         Turn on/off a led, for test purposes.
         '''
-        self.set_led(self.led)
-        self.set_exposicion(self.exposicion)
-        self.set_brillo(self.brillo)
-        self.set_led_on_off()
+        self.setup('led_lgs1')
+        self.set_led_on()
+        time.sleep(self.exposicion/1000.0)
+        self.set_led_off()
+    def led_lgs2(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('led_lgs2')
+        self.set_led_on()
+        time.sleep(self.exposicion/1000.0)
+        self.set_led_off()
 
-    def motortest(self):
+    def led_lgs3(self):
         '''
         Turn on/off a led, for test purposes.
         '''
-        self.set_motor(self.motor)
-        self.set_direccion(self.direccion)
-        self.set_velocidad(self.velocidad)
-        self.set_pasos(self.pasos)
+        self.setup('led_lgs3')
+        self.set_led_on()
+        time.sleep(self.exposicion/1000.0)
+        self.set_led_off()
+
+    def led_sci(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('led_sci')
+        self.set_led_on()
+        time.sleep(self.exposicion/1000.0)
+        self.set_led_off()
+
+    def motor_alt_vertical(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('motor_alt_vertical')
         self.move_motor_with_vel()
 
+    def motor_alt_horizontal(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('motor_alt_horizontal')
+        self.move_motor_with_vel()
+
+    def motor_ground_layer(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('motor_ground_layer')
+        self.move_motor_with_vel()
 
     def calibration(self):
         '''
@@ -358,53 +362,52 @@ class BoardDarcController:
         '''
         prefix = 'cal'
 
-        self.setup()
+        self.setup('led_lgs1')
         # led 1 on
-        self.set_led(self.led_lgs1)
         self.set_led_on()
-        time.sleep(self.exposicion)
+        time.sleep(self.exposicion/1000.0)
 
         #take img with darc
-        self.take_img_from_darc(prefix,self.image_prefix_lgs1)
+        self.take_img_from_darc(prefix, self.image_prefix)
 
         #led off
         self.set_led_off()
 
         # led 2 on
-        self.set_led(self.led_lgs2)
+        self.setup('led_lgs2')
         self.set_led_on()
-        time.sleep(self.exposicion)
+        time.sleep(self.exposicion/1000.0)
 
         #take img with darc
-        self.take_img_from_darc(prefix,self.image_prefix_lgs2)
+        self.take_img_from_darc(prefix, self.image_prefix)
 
         #led off
         self.set_led_off()
 
         # led 3 on
-        self.set_led(self.led_lgs3)
+        self.setup('led_lgs3')
         self.set_led_on()
-        time.sleep(self.exposicion)
+        time.sleep(self.exposicion/1000.0)
 
         #take img with darc
-        self.take_img_from_darc(prefix,self.image_prefix_lgs3)
+        self.take_img_from_darc(prefix, self.image_prefix)
 
         #led off
         self.set_led_off()
 
         # sci led on
-        self.set_led(self.led_sci1)
+        self.setup('led_sci')
         self.set_led_on()
-        time.sleep(self.exposicion)
+        time.sleep(self.exposicion/1000.0)
 
         #take img with darc
-        self.take_img_from_darc(prefix,self.image_prefix_sci1)
+        self.take_img_from_darc(prefix, self.image_prefix)
 
         #led off
         self.set_led_off()
 
 
-    def table(self, num):
+    def table(self,  num):
         '''
         This method does:
         1. turn on led 1
@@ -415,57 +418,64 @@ class BoardDarcController:
         6. take image
         7. move a motor
         
-        After that, start all over again, given a number of times in num
+        After that,  start all over again,  given a number of times in num
         variable
         '''
-        self.setup()
         for iteration in range(0, num):
+            self.setup('led_lgs1')
             # led 1 on
-            self.set_led(self.led_lgs1)
             self.set_led_on()
-            time.sleep(self.exposicion)
+            time.sleep(self.exposicion/1000.0)
 
             #take img with darc
-            self.take_img_from_darc(iteration,self.image_prefix_lgs1)
+            self.take_img_from_darc(iteration, self.image_prefix)
 
             #led off
             self.set_led_off()
 
             # led 2 on
-            self.set_led(self.led_lgs2)
+            self.setup('led_lgs2')
             self.set_led_on()
-            time.sleep(self.exposicion)
+            time.sleep(self.exposicion/1000.0)
 
             #take img with darc
-            self.take_img_from_darc(iteration,self.image_prefix_lgs2)
+            self.take_img_from_darc(iteration, self.image_prefix)
 
             #led off
             self.set_led_off()
 
             # led 3 on
-            self.set_led(self.led_lgs3)
+            self.setup('led_lgs3')
             self.set_led_on()
-            time.sleep(self.exposicion)
+            time.sleep(self.exposicion/1000.0)
 
             #take img with darc
-            self.take_img_from_darc(iteration,self.image_prefix_lgs3)
+            self.take_img_from_darc(iteration, self.image_prefix)
 
             #led off
             self.set_led_off()
 
             # sci led on
-            self.set_led(self.led_sci1)
+            self.setup('led_sci')
             self.set_led_on()
-            time.sleep(self.exposicion)
+            time.sleep(self.exposicion/1000.0)
 
             #take img with darc
-            self.take_img_from_darc(iteration,self.image_prefix_sci1)
+            self.take_img_from_darc(iteration, self.image_prefix)
 
             #led off
             self.set_led_off()
 
             #mover motores:
+            self.setup('motor_ground_layer')
             self.move_motor_with_vel()
+            #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
+            #que no se maneja el return desde el pic. Deberia esperar la
+            #respuesta final del pic para poder seguir moviendo.  Soluciones: en
+            #el return del pic enviar una senal EOF en cada funcion y esperar
+            #desde el codigo send_receive_pic hasta esta funcion. Con esto se
+            #soluciona el problema, pero no esta implementado.
+            time.sleep(self.pasos/100.0)
 
 if __name__ == '__main__':
     usage = '''
@@ -478,8 +488,13 @@ if __name__ == '__main__':
     parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
     parser.add_option("-n", "--num", dest="num", metavar="num", type="int", default=2, help = "Number of iterations for --table method")
     parser.add_option("-c", "--calibration", dest="calibration", metavar="calibration", default=False, action="store_true", help = "Calibration method")
-    parser.add_option("-l", "--ledtest", dest="ledtest", metavar="ledtest", default=False, action="store_true", help = "Test, turning on/off a led")
-    parser.add_option("-m", "--motortest", dest="motortest", metavar="motortest", default=False, action="store_true", help = "Test, turning on/off a motor")
+    parser.add_option("-1", "--led_lgs1", dest="led_lgs1", metavar="led_lgs1", default=False, action="store_true", help = "Test, turning on/off led_lgs1")
+    parser.add_option("-2", "--led_lgs2", dest="led_lgs2", metavar="led_lgs2", default=False, action="store_true", help = "Test, turning on/off led_lgs2")
+    parser.add_option("-3", "--led_lgs3", dest="led_lgs3", metavar="led_lgs3", default=False, action="store_true", help = "Test, turning on/off led_lgs3")
+    parser.add_option("-s", "--led_sci", dest="led_sci", metavar="led_sci", default=False, action="store_true", help = "Test, turning on/off led_sci")
+    parser.add_option("-v", "--motor_alt_vertical", dest="motor_alt_vertical", metavar="motor_alt_vertical", default=False, action="store_true", help = "Test, turning on/off motor_alt_vertical")
+    parser.add_option("-o", "--motor_alt_horizontal", dest="motor_alt_horizontal", metavar="motor_alt_horizontal", default=False, action="store_true", help = "Test, turning on/off motor_alt_horizontal")
+    parser.add_option("-g", "--motor_ground_layer", dest="motor_ground_layer", metavar="motor_ground_layer", default=False, action="store_true", help = "Test, turning on/off motor_ground_layer")
     parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
     (options , args) = parser.parse_args()
     if options.debug is False:
@@ -489,7 +504,16 @@ if __name__ == '__main__':
         logging.getLogger().setLevel(logging.DEBUG)
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s')
 
-    if options.r0 is False and options.table is False and options.ledtest is False and options.calibration is False and options.motortest is False:
+    if options.r0 is False and \
+    options.table is False and \
+    options.led_lgs1 is False and \
+    options.led_lgs2 is False and \
+    options.led_lgs3 is False and \
+    options.led_sci is False and \
+    options.calibration is False and \
+    options.motor_alt_vertical is False and \
+    options.motor_alt_horizontal is False and \
+    options.motor_ground_layer is False:
         print usage
         print "It is mandatory use --r0 , --table, --calibration or --ledtest as parameter"
         sys.exit(-1)
@@ -501,11 +525,27 @@ if __name__ == '__main__':
     if options.table is True:
         BDC.table(options.num)
 
-    if options.ledtest is True:
-        BDC.ledtest()
-
     if options.calibration is True:
         BDC.calibration()
 
-    if options.motortest is True:
-        BDC.motortest()
+    if options.motor_ground_layer is True:
+        BDC.motor_ground_layer()
+
+    if options.motor_alt_vertical is True:
+        BDC.motor_alt_vertical()
+
+    if options.motor_alt_horizontal is True:
+        BDC.motor_alt_horizontal()
+
+    if options.led_lgs1 is True:
+        BDC.led_lgs1()
+
+    if options.led_lgs2 is True:
+        BDC.led_lgs2()
+
+    if options.led_lgs3 is True:
+        BDC.led_lgs3()
+
+    if options.led_sci is True:
+        BDC.led_sci()
+
