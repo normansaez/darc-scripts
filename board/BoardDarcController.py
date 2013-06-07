@@ -114,9 +114,9 @@ class BoardDarcController:
         cmd = "send_receive_pic /dev/ttyUSB0 3 :"
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
-        logging.warning('Wating a time depending steps!')
-        logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
-        logging.warning('known issue, to be fixed')
+        #logging.warning('Wating a time depending steps!')
+        #logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
+        #logging.warning('known issue, to be fixed')
         logging.info('Waiting: %.2f [secs]'% (self.pasos/100.0))
         time.sleep(self.pasos/100.0)
 
@@ -141,9 +141,9 @@ class BoardDarcController:
         cmd = "send_receive_pic /dev/ttyUSB0 5 :"
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        logging.warning('Wating a time depending steps!')
-        logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
-        logging.warning('known issue, to be fixed')
+        #logging.warning('Wating a time depending steps!')
+        #logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
+        #logging.warning('known issue, to be fixed')
         logging.info('Waiting: %.2f [secs]'% (self.pasos/100.0))
         time.sleep(self.pasos/100.0)
 
