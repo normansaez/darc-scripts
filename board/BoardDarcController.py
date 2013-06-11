@@ -94,7 +94,7 @@ class BoardDarcController:
         set_led_off method needs to be called. Specific led is taken from
         configuration file. To overwrite it, use set_led(led) method.
         '''
-        cmd = "send_receive_pic /dev/ttyUSB1 1 :"
+        cmd = "sudo send_receive_pic %s 1 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d ON" % self.led)
 
@@ -102,7 +102,7 @@ class BoardDarcController:
         '''
         Method to turn off all leds. Period.
         '''
-        cmd = "send_receive_pic %s 2 :" % self.tty
+        cmd = "sudo send_receive_pic %s 2 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d OFF" % self.led)
 
@@ -113,7 +113,7 @@ class BoardDarcController:
         overwrite it, use set_motor(motor), set_pasos(steps) and
         set_direccion(direction)
         '''
-        cmd = "send_receive_pic %s 3 :" % self.tty
+        cmd = "sudo send_receive_pic %s 3 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
         #logging.warning('Wating a time depending steps!')
@@ -128,7 +128,7 @@ class BoardDarcController:
         exposure time is taken from configuration file. To overwrite it, use
         set_led(led) and set_exposicion(time) methods.
         '''
-        cmd = "send_receive_pic %s 4 :" % self.tty
+        cmd = "sudo send_receive_pic %s 4 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d, exposicion %d [ms]" % (self.led, self.exposicion))
         time.sleep(self.exposicion/1000.0)
@@ -141,7 +141,7 @@ class BoardDarcController:
         set_motor(motor), set_pasos(steps) , set_direccion(direction)
         set_velocidad(velocity) methods
         '''
-        cmd = "send_receive_pic %s 5 :" % self.tty
+        cmd = "sudo send_receive_pic %s 5 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         #logging.warning('Wating a time depending steps!')
@@ -162,7 +162,7 @@ class BoardDarcController:
         methods
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        cmd = "send_receive_pic %s 6 :" % self.tty
+        cmd = "sudo send_receive_pic %s 6 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Forever")
         logging.warning('PIC configured to run forever .... to make anything else, is mandatory reset PIC')
@@ -174,7 +174,7 @@ class BoardDarcController:
         configuration taken from configuration file.
         '''
         self.led = led
-        cmd = "send_receive_pic %s l:%d\r :" % (self.tty, led)
+        cmd = "sudo send_receive_pic %s l:%d\r :" % (self.tty, led)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting Led %d done" % led)
     
@@ -184,7 +184,7 @@ class BoardDarcController:
         overwrite the default configuration taken from configuration file.
         '''
         self.exposicion = exposicion
-        cmd = "send_receive_pic %s e:%d\r :" % (self.tty, exposicion)
+        cmd = "sudo send_receive_pic %s e:%d\r :" % (self.tty, exposicion)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting exposicion %d [ms] done" % exposicion)
 
@@ -195,7 +195,7 @@ class BoardDarcController:
         file.
         '''
         self.brillo = brillo
-        cmd = "send_receive_pic %s b:%d\r :" % (self.tty, brillo)
+        cmd = "sudo send_receive_pic %s b:%d\r :" % (self.tty, brillo)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting brillo %d done" % brillo)
 
@@ -205,7 +205,7 @@ class BoardDarcController:
         configuration taken from configuration file
         '''
         self.motor = motor
-        cmd = "send_receive_pic %s m:%d\r :" % (self.tty, motor)
+        cmd = "sudo send_receive_pic %s m:%d\r :" % (self.tty, motor)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting motor %d done" % motor)
 
@@ -215,7 +215,7 @@ class BoardDarcController:
         default configuration taken from configuration file
         '''
         self.direccion = direccion
-        cmd = "send_receive_pic %s d:%d\r :" % (self.tty, direccion)
+        cmd = "sudo send_receive_pic %s d:%d\r :" % (self.tty, direccion)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting direccion %d done" % direccion)
 
@@ -226,7 +226,7 @@ class BoardDarcController:
         configuration file
         '''
         self.velocidad = velocidad
-        cmd = "send_receive_pic %s v:%d\r :" % (self.tty, velocidad)
+        cmd = "sudo send_receive_pic %s v:%d\r :" % (self.tty, velocidad)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting velocidad %d done" % velocidad)
 
@@ -236,7 +236,7 @@ class BoardDarcController:
         configuration taken from configuration file
         '''
         self.pasos = pasos
-        cmd = "send_receive_pic %s p:%d\r :" % (self.tty, pasos)
+        cmd = "sudo send_receive_pic %s p:%d\r :" % (self.tty, pasos)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting pasos %d done" % pasos)
         
