@@ -6,45 +6,20 @@ This script controls the board and communicates with darc to take an image
 import sys
 sys.path.append('/rtc/lib/python')
 
-import ConfigParser
-import logging
 import os
-import  glob
-import  re
-
-import FITS
-import darc
+import re
 import time
+import glob
+import logging
+import ConfigParser
+
+import darc
+import FITS
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
 
 __package__ = 'BoardDarcController'
-
-def find_usb_tty(vendor_id = None, product_id = None) :
-    tty_devs    = []
-
-    for dn in glob.glob('/sys/bus/usb/devices/*') :
-        try     :
-            vid = int(open(os.path.join(dn, "idVendor" )).read().strip(), 16)
-            pid = int(open(os.path.join(dn, "idProduct")).read().strip(), 16)
-            if  ((vendor_id is None) or (vid == vendor_id)) and ((product_id is None) or (pid == product_id)) :
-                dns = glob.glob(os.path.join(dn, os.path.basename(dn) + "*"))
-                for sdn in dns :
-                    for fn in glob.glob(os.path.join(sdn, "*")) :
-                        if  re.search(r"\/ttyUSB[0-9]+$", fn) :
-                            #tty_devs.append("/dev" + os.path.basename(fn))
-                            tty_devs.append(os.path.join("/dev", os.path.basename(fn)))
-                        pass
-                    pass
-                pass
-            pass
-        except ( ValueError, TypeError, AttributeError, OSError, IOError ) :
-            pass
-        pass
-
-    return tty_devs
-
 
 class BoardDarcController:
     '''
@@ -157,6 +132,7 @@ class BoardDarcController:
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d, exposicion %d [ms]" % (self.led, self.exposicion))
         time.sleep(self.exposicion/1000.0)
+
     def move_motor_with_vel(self):
         '''
         Method to move a motor, using steps (pasos) and direction (direccion)
@@ -509,6 +485,38 @@ class BoardDarcController:
             #desde el codigo send_receive_pic hasta esta funcion. Con esto se
             #soluciona el problema, pero no esta implementado.
             time.sleep(self.pasos/100.0)
+
+########### funcion auxiliar ########################################
+def find_usb_tty(vendor_id = None, product_id = None):
+    '''
+    find_usb_tty: used to get the correct /dev/ttyUSB*
+    Not included in BoardControlled class
+    '''
+    tty_devs    = []
+
+    for dn in glob.glob('/sys/bus/usb/devices/*') :
+        try     :
+            vid = int(open(os.path.join(dn, "idVendor" )).read().strip(), 16)
+            pid = int(open(os.path.join(dn, "idProduct")).read().strip(), 16)
+            if  ((vendor_id is None) or (vid == vendor_id)) and ((product_id is None) or (pid == product_id)) :
+                dns = glob.glob(os.path.join(dn, os.path.basename(dn) + "*"))
+                for sdn in dns :
+                    for fn in glob.glob(os.path.join(sdn, "*")) :
+                        if  re.search(r"\/ttyUSB[0-9]+$", fn) :
+                            #tty_devs.append("/dev" + os.path.basename(fn))
+                            tty_devs.append(os.path.join("/dev", os.path.basename(fn)))
+                        pass
+                    pass
+                pass
+            pass
+        except ( ValueError, TypeError, AttributeError, OSError, IOError ) :
+            pass
+        pass
+    return tty_devs
+
+#####################################################################
+############################# MAIN ##################################
+#####################################################################
 
 if __name__ == '__main__':
     usage = '''
