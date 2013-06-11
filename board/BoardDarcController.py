@@ -9,6 +9,8 @@ sys.path.append('/rtc/lib/python')
 import ConfigParser
 import logging
 import os
+import  glob
+import  re
 
 import FITS
 import darc
@@ -18,6 +20,30 @@ from optparse import OptionParser
 from subprocess import Popen, PIPE
 
 __package__ = 'BoardDarcController'
+
+def find_usb_tty(vendor_id = None, product_id = None) :
+    tty_devs    = []
+
+    for dn in glob.glob('/sys/bus/usb/devices/*') :
+        try     :
+            vid = int(open(os.path.join(dn, "idVendor" )).read().strip(), 16)
+            pid = int(open(os.path.join(dn, "idProduct")).read().strip(), 16)
+            if  ((vendor_id is None) or (vid == vendor_id)) and ((product_id is None) or (pid == product_id)) :
+                dns = glob.glob(os.path.join(dn, os.path.basename(dn) + "*"))
+                for sdn in dns :
+                    for fn in glob.glob(os.path.join(sdn, "*")) :
+                        if  re.search(r"\/ttyUSB[0-9]+$", fn) :
+                            #tty_devs.append("/dev" + os.path.basename(fn))
+                            tty_devs.append(os.path.join("/dev", os.path.basename(fn)))
+                        pass
+                    pass
+                pass
+            pass
+        except ( ValueError, TypeError, AttributeError, OSError, IOError ) :
+            pass
+        pass
+
+    return tty_devs
 
 
 class BoardDarcController:
@@ -40,6 +66,7 @@ class BoardDarcController:
             logging.error("configurations.cfg : File doesn't exits")
             sys.exit(-1)
         try:
+            self.tty = find_usb_tty()[0]
             self.led = None
             self.exposicion = None
             self.brillo = None
@@ -92,7 +119,7 @@ class BoardDarcController:
         set_led_off method needs to be called. Specific led is taken from
         configuration file. To overwrite it, use set_led(led) method.
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 1 :"
+        cmd = "send_receive_pic /dev/ttyUSB1 1 :"
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d ON" % self.led)
 
@@ -100,7 +127,7 @@ class BoardDarcController:
         '''
         Method to turn off all leds. Period.
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 2 :"
+        cmd = "send_receive_pic %s 2 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d OFF" % self.led)
 
@@ -111,7 +138,7 @@ class BoardDarcController:
         overwrite it, use set_motor(motor), set_pasos(steps) and
         set_direccion(direction)
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 3 :"
+        cmd = "send_receive_pic %s 3 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
         #logging.warning('Wating a time depending steps!')
@@ -126,7 +153,7 @@ class BoardDarcController:
         exposure time is taken from configuration file. To overwrite it, use
         set_led(led) and set_exposicion(time) methods.
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 4 :"
+        cmd = "send_receive_pic %s 4 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d, exposicion %d [ms]" % (self.led, self.exposicion))
         time.sleep(self.exposicion/1000.0)
@@ -138,7 +165,7 @@ class BoardDarcController:
         set_motor(motor), set_pasos(steps) , set_direccion(direction)
         set_velocidad(velocity) methods
         '''
-        cmd = "send_receive_pic /dev/ttyUSB0 5 :"
+        cmd = "send_receive_pic %s 5 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         #logging.warning('Wating a time depending steps!')
@@ -159,7 +186,7 @@ class BoardDarcController:
         methods
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        cmd = "send_receive_pic /dev/ttyUSB0 6 :"
+        cmd = "send_receive_pic %s 6 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Forever")
         logging.warning('PIC configured to run forever .... to make anything else, is mandatory reset PIC')
@@ -171,7 +198,7 @@ class BoardDarcController:
         configuration taken from configuration file.
         '''
         self.led = led
-        cmd = "send_receive_pic /dev/ttyUSB0 l:%d\r :" % led
+        cmd = "send_receive_pic %s l:%d\r :" % (self.tty, led)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting Led %d done" % led)
     
@@ -181,7 +208,7 @@ class BoardDarcController:
         overwrite the default configuration taken from configuration file.
         '''
         self.exposicion = exposicion
-        cmd = "send_receive_pic /dev/ttyUSB0 e:%d\r :" % exposicion
+        cmd = "send_receive_pic %s e:%d\r :" % (self.tty, exposicion)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting exposicion %d [ms] done" % exposicion)
 
@@ -192,7 +219,7 @@ class BoardDarcController:
         file.
         '''
         self.brillo = brillo
-        cmd = "send_receive_pic /dev/ttyUSB0 b:%d\r :" % brillo
+        cmd = "send_receive_pic %s b:%d\r :" % (self.tty, brillo)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting brillo %d done" % brillo)
 
@@ -202,7 +229,7 @@ class BoardDarcController:
         configuration taken from configuration file
         '''
         self.motor = motor
-        cmd = "send_receive_pic /dev/ttyUSB0 m:%d\r :" % motor
+        cmd = "send_receive_pic %s m:%d\r :" % (self.tty, motor)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting motor %d done" % motor)
 
@@ -212,7 +239,7 @@ class BoardDarcController:
         default configuration taken from configuration file
         '''
         self.direccion = direccion
-        cmd = "send_receive_pic /dev/ttyUSB0 d:%d\r :" % direccion
+        cmd = "send_receive_pic %s d:%d\r :" % (self.tty, direccion)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting direccion %d done" % direccion)
 
@@ -223,7 +250,7 @@ class BoardDarcController:
         configuration file
         '''
         self.velocidad = velocidad
-        cmd = "send_receive_pic /dev/ttyUSB0 v:%d\r :" % velocidad
+        cmd = "send_receive_pic %s v:%d\r :" % (self.tty, velocidad)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting velocidad %d done" % velocidad)
 
@@ -233,7 +260,7 @@ class BoardDarcController:
         configuration taken from configuration file
         '''
         self.pasos = pasos
-        cmd = "send_receive_pic /dev/ttyUSB0 p:%d\r :" % pasos
+        cmd = "send_receive_pic %s p:%d\r :" % (self.tty, pasos)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting pasos %d done" % pasos)
         
