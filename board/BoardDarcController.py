@@ -34,6 +34,15 @@ class BoardDarcController:
         '''
         Config = ConfigParser.ConfigParser()
         self.Config = Config
+        self.led = None
+        self.exposicion = None
+        self.brillo = None
+        self.image_prefix = None
+
+        self.motor = None
+        self.pasos = None
+        self.velocidad = None
+        self.direccion = None
         try:
             self.Config.read("/home/dani/nsaez/board/configurations.cfg")
             #self.Config.read("configurations.cfg")
@@ -42,18 +51,11 @@ class BoardDarcController:
             sys.exit(-1)
         try:
             self.tty = find_usb_tty()[0]
-            self.led = None
-            self.exposicion = None
-            self.brillo = None
-            self.image_prefix = None
-
-            self.motor = None
-            self.pasos = None
-            self.velocidad = None
-            self.direccion = None
+            logging.info("USB connected: %s" % self.tty)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
+            logging.error("Seems to be unplugged usb cable to pic ! ")
             logging.error("Check line number: %d" % exc_tb.tb_lineno)
             sys.exit(-1)
         try:
