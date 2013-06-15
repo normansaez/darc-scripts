@@ -43,6 +43,8 @@ class BoardDarcController:
         self.pasos = None
         self.velocidad = None
         self.direccion = None
+        self.dir_name = None
+
         try:
             self.Config.read("/home/dani/nsaez/board/configurations.cfg")
             #self.Config.read("configurations.cfg")
@@ -121,8 +123,8 @@ class BoardDarcController:
         #logging.warning('Wating a time depending steps!')
         #logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
         #logging.warning('known issue, to be fixed')
-        logging.info('Waiting: %.2f [secs]'% (self.pasos/100.0))
-        time.sleep(self.pasos/100.0)
+        logging.info('Waiting: %.2f [secs]'% (self.pasos/1000.0))
+        time.sleep(self.pasos/1000.0)
 
     def set_led_on_off(self):
         '''
@@ -149,8 +151,8 @@ class BoardDarcController:
         #logging.warning('Wating a time depending steps!')
         #logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
         #logging.warning('known issue, to be fixed')
-        logging.info('Waiting: %.2f [secs]'% (self.pasos/100.0))
-        time.sleep(self.pasos/100.0)
+        logging.info('Waiting: %.2f [secs]'% (self.pasos/1000.0))
+        time.sleep(self.pasos/1000.0)
 
     def move_motor_forever(self):
         '''
@@ -242,6 +244,23 @@ class BoardDarcController:
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting pasos %d done" % pasos)
         
+    def get_directory(self, image_path):
+        '''
+        Set image directory name to take images
+        return a string with these image directory
+        '''
+        current =  str(time.strftime("%Y_%m_%d", time.gmtime()))
+        current_dir = glob.glob(image_path+'*')
+        current_dir = sorted(current_dir)
+        last = current_dir[-1]
+        if last.split('/')[-1].split('.')[0] == current:
+            adquisition_number = int(last.split('/')[-1].split('.')[1]) + 1
+            dir_name = current+'.'+ str(adquisition_number)
+        else:
+            dir_name = current+'.0'
+        logging.info('Directory name: %s'% dir_name)
+        return dir_name
+
     def take_img_from_darc(self, iteration, prefix):
         '''
         Using darc, take a FITS image and save it into the disk. By default use
@@ -255,7 +274,9 @@ class BoardDarcController:
             img_ite = 's%s_'% str(iteration).zfill(3)
             img_wfs = 'w%s_'% str(prefix).zfill(3)
             image_name = img_ite + img_wfs +'T' +str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
-            path = os.path.normpath(self.image_path+image_name)
+            if os.path.exists(self.image_path+self.dir_name) is False:
+                os.mkdir(self.image_path+self.dir_name)
+            path = os.path.normpath(self.image_path+self.dir_name+'/'+image_name)
             logging.info('Image taken : %s' % path)
             logging.debug(stream)
             data = stream[0].reshape(self.pxly,self.pxlx)
@@ -421,6 +442,7 @@ class BoardDarcController:
     def table(self,  num):
         '''
         This method does:
+        0. take image (dark)
         1. turn on led 1
         2. take image
         3. turn on led 2
@@ -432,6 +454,8 @@ class BoardDarcController:
         After that,  start all over again,  given a number of times in num
         variable
         '''
+        self.dir_name = self.get_directory(self.image_path)
+        self.take_img_from_darc('dark', 'dark')
         for iteration in range(0, num):
             self.setup('led_lgs1')
             # led 1 on
@@ -478,7 +502,8 @@ class BoardDarcController:
             self.set_led_off()
 
             #mover motores:
-            self.setup('motor_ground_layer')
+#            self.setup('motor_ground_layer')
+            self.setup('motor_alt_horizontal')
             self.move_motor_with_vel()
             #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
             #que no se maneja el return desde el pic. Deberia esperar la
@@ -486,7 +511,7 @@ class BoardDarcController:
             #el return del pic enviar una senal EOF en cada funcion y esperar
             #desde el codigo send_receive_pic hasta esta funcion. Con esto se
             #soluciona el problema, pero no esta implementado.
-            time.sleep(self.pasos/100.0)
+            time.sleep(self.pasos/1000.0)
 
 ########### funcion auxiliar ########################################
 def find_usb_tty(vendor_id = None, product_id = None):
