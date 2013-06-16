@@ -280,6 +280,7 @@ class BoardDarcController:
             logging.info('Image taken : %s' % path)
             logging.debug(stream)
             data = stream[0].reshape(self.pxly,self.pxlx)
+            data = data.view('h')
             logging.debug('About to save image to disk , name: %s' % path)
             FITS.Write(data, path, writeMode='a')
             logging.info('Image saved : %s' % path)
