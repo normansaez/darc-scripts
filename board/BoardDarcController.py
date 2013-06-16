@@ -11,6 +11,7 @@ import re
 import time
 import glob
 import logging
+import random
 import ConfigParser
 
 import darc
