@@ -440,7 +440,7 @@ class BoardDarcController:
         self.set_led_off()
 
 
-    def table(self,  num):
+    def table(self, num, israndom=False):
         '''
         This method does:
         0. take image (dark)
@@ -503,16 +503,27 @@ class BoardDarcController:
             self.set_led_off()
 
             #mover motores:
-#            self.setup('motor_ground_layer')
-            self.setup('motor_alt_horizontal')
-            self.move_motor_with_vel()
-            #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
-            #que no se maneja el return desde el pic. Deberia esperar la
-            #respuesta final del pic para poder seguir moviendo.  Soluciones: en
-            #el return del pic enviar una senal EOF en cada funcion y esperar
-            #desde el codigo send_receive_pic hasta esta funcion. Con esto se
-            #soluciona el problema, pero no esta implementado.
-            time.sleep(self.pasos/1000.0)
+            if israndom is True:
+                self.pasos = random.randint(1e2, 1e3)
+                self.setup('motor_alt_horizontal')
+                self.move_motor_with_vel()
+                time.sleep(self.pasos/1000.0)
+                #####################################
+                self.pasos = random.randint(1e2, 1e3)
+                self.setup('motor_alt_vertical')
+                self.move_motor_with_vel()
+                time.sleep(self.pasos/1000.0)
+            else:
+                #mover motores:
+                self.setup('motor_alt_vertical')
+                self.move_motor_with_vel()
+                #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
+                #que no se maneja el return desde el pic. Deberia esperar la
+                #respuesta final del pic para poder seguir moviendo.  Soluciones: en
+                #el return del pic enviar una senal EOF en cada funcion y esperar
+                #desde el codigo send_receive_pic hasta esta funcion. Con esto se
+                #soluciona el problema, pero no esta implementado.
+                time.sleep(self.pasos/1000.0)
 
 ########### funcion auxiliar ########################################
 def find_usb_tty(vendor_id = None, product_id = None):
@@ -555,6 +566,7 @@ if __name__ == '__main__':
     parser = OptionParser(usage)
     parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Start loop to obtain r0 (infinite loop)")
     parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
+    parser.add_option("-a", "--aleatory", dest="aleatory", metavar="aleatory", default=False, action="store_true", help = "Movement needed for table, aleatory motor_alt_vertical, motor_alt_horizontal")
     parser.add_option("-n", "--num", dest="num", metavar="num", type="int", default=2, help = "Number of iterations for --table method")
     parser.add_option("-c", "--calibration", dest="calibration", metavar="calibration", default=False, action="store_true", help = "Calibration method")
     parser.add_option("-1", "--led_lgs1", dest="led_lgs1", metavar="led_lgs1", default=False, action="store_true", help = "Test, turning on/off led_lgs1")
@@ -582,6 +594,7 @@ if __name__ == '__main__':
     options.calibration is False and \
     options.motor_alt_vertical is False and \
     options.motor_alt_horizontal is False and \
+    options.aleatory is False and \
     options.motor_ground_layer is False:
         print usage
         print "It is mandatory use --r0 , --table, --calibration or --ledtest as parameter"
@@ -593,6 +606,9 @@ if __name__ == '__main__':
 
     if options.table is True:
         BDC.table(options.num)
+
+    if options.aleatory is True:
+        BDC.table(options.num, israndom=True)
 
     if options.calibration is True:
         BDC.calibration()
