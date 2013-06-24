@@ -381,6 +381,7 @@ class BoardDarcController:
         '''
         self.setup('motor_ground_layer')
         self.move_motor_with_vel()
+        #self.set_motor_move()
 
     def calibration(self):
         '''
@@ -516,7 +517,7 @@ class BoardDarcController:
                 time.sleep(self.pasos/1000.0)
             else:
                 #mover motores:
-                self.setup('motor_alt_vertical')
+                self.setup('motor_alt_horizontal')
                 self.move_motor_with_vel()
                 #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
                 #que no se maneja el return desde el pic. Deberia esperar la
