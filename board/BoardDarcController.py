@@ -68,6 +68,8 @@ class BoardDarcController:
             self.tty = find_usb_tty()[0]
             self._execute_cmd('sudo chmod 777 %s' % self.tty)
             logging.info("USB connected: %s" % self.tty)
+            self.pic = serial.Serial(self.tty) 
+            logging.info("USB <--> PIC using python")
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
