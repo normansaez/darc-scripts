@@ -10,7 +10,6 @@ import os
 import re
 import time
 import glob
-import serial
 import logging
 import random
 import ConfigParser
@@ -33,7 +32,7 @@ CRIM     = '\033[36m'
 NO_COLOR = '\033[0m'
 
 MILI2SEC  = 1e-3
-MOTOR_CTE = 1.5e-3*0
+MOTOR_CTE = 1.5e-3
 
 class BoardDarcController:
     '''
@@ -58,7 +57,6 @@ class BoardDarcController:
         self.velocidad = None
         self.direccion = None
         self.dir_name = None
-        self.delay = 0.5
         try:
             self.Config.read("/home/dani/nsaez/board/configurations.cfg")
             #self.Config.read("configurations.cfg")
@@ -67,29 +65,11 @@ class BoardDarcController:
             sys.exit(-1)
         try:
             self.tty = find_usb_tty()[0]
-            self._execute_cmd('sudo chmod 777 %s' % self.tty)
             logging.info("USB connected: %s" % self.tty)
-            self.pic = serial.Serial(self.tty) 
-            self.pic.port = "/dev/ttyUSB1"
-            self.pic.baudrate = 9600
-            self.pic.bytesize = serial.EIGHTBITS #number of bits per bytes
-            self.pic.parity = serial.PARITY_NONE #set parity check: no parity
-            self.pic.stopbits = serial.STOPBITS_ONE #number of stop bits
-            self.pic.timeout = None          #block read
-            #self.pic.timeout = 0             #non-block read
-            #self.pic.timeout = 2              #timeout block read
-            self.pic.xonxoff = False     #disable software flow control
-            self.pic.rtscts = False     #disable hardware (RTS/CTS) flow control
-            self.pic.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-            #self.pic.writeTimeout = 2     #timeout for write
-            self.pic.writeTimeout = None     #block write
-            self.pic.open()
-            #check http://pyserial.sourceforge.net/pyserial_api.html
-            logging.info("USB <--> PIC using python")
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
-            logging.error("Seems to be unplugged usb cable to pic ! or connecting with PIC")
+            logging.error("Seems to be unplugged usb cable to pic ! ")
             logging.error("Check line number: %d" % exc_tb.tb_lineno)
             sys.exit(-1)
         try:
@@ -103,11 +83,6 @@ class BoardDarcController:
             logging.error(ex)
             logging.error("Check line number: %d" % (exc_tb.tb_lineno))
             sys.exit(-1)
-    def __del__(self):
-        '''
-        Destructor
-        '''
-        self.pic.close()
 
     def _execute_cmd(self, cmd):
         ''' 
@@ -129,38 +104,22 @@ class BoardDarcController:
 
         return sts, out, err
 
-    def _get_response(self):
-        '''
-        Get response from PIC
-        '''
-        numOfLines = 0
-        while True:
-            response = self.pic.readline()
-            #logging.debug("read data: " + response)
-            print "read data: " + response
-            numOfLines = numOfLines + 1
-            if (numOfLines >= 5):
-                break
-        return response
-
     def set_led_on(self):
         '''
         Method to turn on a led with no specific time. To turn off a led,
         set_led_off method needs to be called. Specific led is taken from
         configuration file. To overwrite it, use set_led(led) method.
         '''
-        self.pic.write("1")
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s 1 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d ON" % self.led)
 
     def set_led_off(self):
         '''
         Method to turn off all leds. Period.
         '''
-        self.pic.write("2")
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s 2 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d OFF" % self.led)
 
     def set_motor_move(self):
@@ -170,9 +129,8 @@ class BoardDarcController:
         overwrite it, use set_motor(motor), set_pasos(steps) and
         set_direccion(direction)
         '''
-        self.pic.write("3")
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s 3 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
         logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
         time.sleep(self.pasos*MOTOR_CTE)
@@ -183,9 +141,8 @@ class BoardDarcController:
         exposure time is taken from configuration file. To overwrite it, use
         set_led(led) and set_exposicion(time) methods.
         '''
-        self.pic.write("4")
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s 4 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d, exposicion %d [ms]" % (self.led, self.exposicion))
         time.sleep(self.exposicion*MILI2SEC)
 
@@ -197,9 +154,8 @@ class BoardDarcController:
         set_motor(motor), set_pasos(steps) , set_direccion(direction)
         set_velocidad(velocity) methods
         '''
-        self.pic.write("5")
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s 5 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
         time.sleep(self.pasos*MOTOR_CTE)
@@ -208,19 +164,15 @@ class BoardDarcController:
         '''
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        self.pic.write("6")
-        time.sleep(self.delay)
-        out = self._get_response()
-        time.sleep(self.pasos*MOTOR_CTE)
+        cmd = "sudo send_receive_pic %s 6 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
 
     def move_motor_skip_sensor(self):
         '''
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        self.pic.write("7")
-        time.sleep(self.delay)
-        out = self._get_response()
-        time.sleep(self.pasos*MOTOR_CTE)
+        cmd = "sudo send_receive_pic %s 7 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
 
     def set_led(self, led):
         '''
@@ -228,11 +180,8 @@ class BoardDarcController:
         configuration taken from configuration file.
         '''
         self.led = led
-        self.pic.write("l")
-        time.sleep(self.delay)
-        self.pic.write("%d\r" % led)
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s l:%d\r :" % (self.tty, led)
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting Led %d done" % led)
     
     def set_exposicion(self, exposicion):
@@ -241,11 +190,8 @@ class BoardDarcController:
         overwrite the default configuration taken from configuration file.
         '''
         self.exposicion = exposicion
-        self.pic.write("e")
-        time.sleep(self.delay)
-        self.pic.write("%d\r" % exposicion)
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s e:%d\r :" % (self.tty, exposicion)
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting exposicion %d [ms] done" % exposicion)
 
     def set_brillo(self, brillo):
@@ -255,11 +201,8 @@ class BoardDarcController:
         file.
         '''
         self.brillo = brillo
-        self.pic.write("b")
-        time.sleep(self.delay)
-        self.pic.write("%d\r" % brillo)
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s b:%d\r :" % (self.tty, brillo)
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting brillo %d done" % brillo)
 
     def set_motor(self, motor):
@@ -268,11 +211,8 @@ class BoardDarcController:
         configuration taken from configuration file
         '''
         self.motor = motor
-        self.pic.write("m")
-        time.sleep(self.delay)
-        self.pic.write("%d\r" % motor)
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s m:%d\r :" % (self.tty, motor)
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting motor %d done" % motor)
 
     def set_direccion(self, direccion):
@@ -281,11 +221,8 @@ class BoardDarcController:
         default configuration taken from configuration file
         '''
         self.direccion = direccion
-        self.pic.write("d")
-        time.sleep(self.delay)
-        self.pic.write("%d\r" % direccion)
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s d:%d\r :" % (self.tty, direccion)
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting direccion %d done" % direccion)
 
     def set_velocidad(self, velocidad):
@@ -295,11 +232,8 @@ class BoardDarcController:
         configuration file
         '''
         self.velocidad = velocidad
-        self.pic.write("v")
-        time.sleep(self.delay)
-        self.pic.write("%d\r" % velocidad)
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s v:%d\r :" % (self.tty, velocidad)
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting velocidad %d done" % velocidad)
 
     def set_pasos(self, pasos):
@@ -308,11 +242,8 @@ class BoardDarcController:
         configuration taken from configuration file
         '''
         self.pasos = pasos
-        self.pic.write("p")
-        time.sleep(self.delay)
-        self.pic.write("%d\r" % pasos)
-        time.sleep(self.delay)
-        out = self._get_response()
+        cmd = "sudo send_receive_pic %s p:%d\r :" % (self.tty, pasos)
+        sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting pasos %d done" % pasos)
         
     def get_directory(self, image_path):
@@ -554,8 +485,7 @@ class BoardDarcController:
                 if valid == 'y':
                     valid_step_end = all_steps
                     print "valid_step_end :%d" % valid_step_end
-                self.set_led_off()
-
+                
             valid = 'n'
             if full_range == 0 and valid_step_init > 0 and valid_step_end > 0:
                 print "Is this the end of the path? [y/n]"
