@@ -495,25 +495,67 @@ class BoardDarcController:
         valid_step_end  = 0
         full_range = 0
 
+        star_cal_1 = 0
+        star_cal_2 = 0
+        star_1 = 'led_lgs1'
+        star_2 = 'led_lgs2'
+
         self.set_pasos(steps)
+        start_dir ={1:'led_lgs1',2:'led_lgs2',3:'led_lgs3',4:'led_sci'}
         while (True):
             self.move_motor_skip_sensor()
             all_steps = all_steps + steps
+            if star_cal_1 == 0:
+                msg ='''
+                INIT:
+                Press 1 to turn on a star calibrate: led_lgs1 
+                Press 2 to turn on a star calibrate: led_lgs2
+                Press 3 to turn on a star calibrate: led_lgs3
+                Press 4 to turn on a star calibrate: led_sci
+                '''
+                star = raw_input(msg)
+                try:
+                    star_1 = start_dir[int(star)]
+                except Exception, ex:
+                    logging.error(RED+"Please put an allowed number: 1,2,3 or 4"+NO_COLOR)
+                star_cal_1 = 1
+
+            if star_cal_2 == 0:
+                msg ='''
+                END:
+                Press 1 to turn on a star calibrate: led_lgs1 
+                Press 2 to turn on a star calibrate: led_lgs2
+                Press 3 to turn on a star calibrate: led_lgs3
+                Press 4 to turn on a star calibrate: led_sci
+                '''
+                star = raw_input(msg)
+                try:
+                    star_2 = start_dir[int(star)]
+                except Exception, ex:
+                    logging.error(RED+"Please put an allowed number: 1,2,3 or 4"+NO_COLOR)
+                star_cal_2 = 1
+
             if valid_step_init == 0:
+                self.setup(star_1)
+                self.set_led_on()
                 print "Is this a valid init range? [y/n]"
                 valid= raw_input()
                 if valid == 'y':
                     valid_step_init = all_steps
                     print "valid_step_init :%d" % valid_step_init
+                self.set_led_off()
             valid = 'n'
 
             if valid_step_end == 0 and valid_step_init > 0:
+                self.setup(star_2)
+                self.set_led_on()
                 print "Is this a valid end range? [y/n]"
                 valid= raw_input()
                 if valid == 'y':
                     valid_step_end = all_steps
                     print "valid_step_end :%d" % valid_step_end
-                
+                self.set_led_off()
+
             valid = 'n'
             if full_range == 0 and valid_step_init > 0 and valid_step_end > 0:
                 print "Is this the end of the path? [y/n]"
