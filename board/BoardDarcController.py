@@ -84,6 +84,7 @@ class BoardDarcController:
             #self.pic.writeTimeout = 2     #timeout for write
             self.pic.writeTimeout = None     #block write
             self.pic.open()
+            #check http://pyserial.sourceforge.net/pyserial_api.html
             logging.info("USB <--> PIC using python")
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
