@@ -412,10 +412,10 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         self.move_motor_skip_sensor()
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        #if self.direccion == 1:
+        #    self.set_direccion(0)
+        #else:
+        #    self.set_direccion(1)
         #################################
         msg = '''
         Please put steps
@@ -503,10 +503,10 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         self.move_motor_skip_sensor()
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        #if self.direccion == 1:
+        #    self.set_direccion(0)
+        #else:
+        #    self.set_direccion(1)
         #################################
         logging.info(GREEN+'Back to original position'+NO_COLOR)
         self.set_pasos(full_range) 
@@ -519,10 +519,10 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         self.move_motor_skip_sensor()
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        #if self.direccion == 1:
+        #    self.set_direccion(0)
+        #else:
+        #    self.set_direccion(1)
         #################################
         logging.info(GREEN+'Calibration DONE'+NO_COLOR)
         logging.info(GREEN+('valid_step_init: %d' % valid_step_init)+NO_COLOR)
