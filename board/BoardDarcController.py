@@ -22,6 +22,18 @@ from subprocess import Popen, PIPE
 
 __package__ = 'BoardDarcController'
 
+#COLOR CONST
+BLUE     = '\033[34m'
+RED      = '\033[31m'
+GREEN    = '\033[32m'
+YELLOW   = '\033[33m'
+BLACK    = '\033[30m'
+CRIM     = '\033[36m'
+NO_COLOR = '\033[0m'
+
+MILI2SEC  = 1e-3
+MOTOR_CTE = 1.5e-3
+
 class BoardDarcController:
     '''
     BoardDarcController:
@@ -45,7 +57,6 @@ class BoardDarcController:
         self.velocidad = None
         self.direccion = None
         self.dir_name = None
-        self.motor_timeout = 1500
         try:
             self.Config.read("/home/dani/nsaez/board/configurations.cfg")
             #self.Config.read("configurations.cfg")
@@ -121,8 +132,8 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 3 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
-        logging.info('Waiting: %.2f [secs]'% (self.pasos/self.motor_timeout))
-        time.sleep(self.pasos/self.motor_timeout)
+        logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
+        time.sleep(self.pasos*MOTOR_CTE)
 
     def set_led_on_off(self):
         '''
@@ -133,7 +144,7 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 4 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Led %d, exposicion %d [ms]" % (self.led, self.exposicion))
-        time.sleep(self.exposicion/1000.0)
+        time.sleep(self.exposicion*MILI2SEC)
 
     def move_motor_with_vel(self):
         '''
@@ -146,8 +157,8 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 5 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        logging.info('Waiting: %.2f [secs]'% (self.pasos/self.motor_timeout))
-        time.sleep(self.pasos/self.motor_timeout)
+        logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
+        time.sleep(self.pasos*MOTOR_CTE)
 
     def move_motor_with_sensor(self):
         '''
@@ -322,7 +333,7 @@ class BoardDarcController:
         '''
         self.setup('led_lgs1')
         self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
+        time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
     def led_lgs2(self):
         '''
@@ -330,7 +341,7 @@ class BoardDarcController:
         '''
         self.setup('led_lgs2')
         self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
+        time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
 
     def led_lgs3(self):
@@ -339,7 +350,7 @@ class BoardDarcController:
         '''
         self.setup('led_lgs3')
         self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
+        time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
 
     def led_sci(self):
@@ -348,7 +359,7 @@ class BoardDarcController:
         '''
         self.setup('led_sci')
         self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
+        time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
 
     def motor_alt_vertical(self):
@@ -387,14 +398,14 @@ class BoardDarcController:
         try:
             m = motor_dir[int(motor)]
         except Exception, ex:
-            logging.error("Please put an allowed number: 1,2 or 3")
+            logging.error(RED+"Please put an allowed number: 1,2 or 3"+NO_COLOR)
 
         self.setup(m)
-        logging.info('Moving until find a sensor')
+        logging.info(GREEN+'Moving until find a sensor'+NO_COLOR)
         self.set_pasos(2147483600) 
         self.move_motor_with_sensor()
         #################################
-        logging.info('Skipping from sensor')
+        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
         self.set_pasos(2000) 
         if self.direccion == 1:
             self.set_direccion(0)
@@ -444,7 +455,7 @@ class BoardDarcController:
             if full_range > 0 and valid_step_init > 0 and valid_step_end > 0:
                 break
         #################################
-        logging.info('Skipping from sensor')
+        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
         self.set_pasos(2000) 
         if self.direccion == 1:
             self.set_direccion(0)
@@ -456,11 +467,11 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         #################################
-        logging.info('Back to original position')
+        logging.info(GREEN+'Back to original position'+NO_COLOR)
         self.set_pasos(full_range) 
         self.move_motor_with_sensor()
         #################################
-        logging.info('Skipping from sensor')
+        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
         self.set_pasos(2000) 
         if self.direccion == 1:
             self.set_direccion(0)
@@ -472,10 +483,10 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         #################################
-        logging.info('Calibration DONE')
-        logging.info('valid_step_init: %d' % valid_step_init)
-        logging.info('valid_step_end : %d' % valid_step_end)
-        logging.info('full_range     : %d' % full_range)
+        logging.info(GREEN+'Calibration DONE'+NO_COLOR)
+        logging.info(GREEN+('valid_step_init: %d' % valid_step_init)+NO_COLOR)
+        logging.info(GREEN+('valid_step_end : %d' % valid_step_end)+NO_COLOR)
+        logging.info(GREEN+('full_range     : %d' % full_range)+NO_COLOR)
 
     def table(self, num, israndom=False):
         '''
@@ -498,7 +509,7 @@ class BoardDarcController:
             self.setup('led_lgs1')
             # led 1 on
             self.set_led_on()
-            time.sleep(self.exposicion/1000.0)
+            time.sleep(self.exposicion*MILI2SEC)
 
             #take img with darc
             self.take_img_from_darc(iteration, self.image_prefix)
@@ -509,7 +520,7 @@ class BoardDarcController:
             # led 2 on
             self.setup('led_lgs2')
             self.set_led_on()
-            time.sleep(self.exposicion/1000.0)
+            time.sleep(self.exposicion*MILI2SEC)
 
             #take img with darc
             self.take_img_from_darc(iteration, self.image_prefix)
@@ -520,7 +531,7 @@ class BoardDarcController:
             # led 3 on
             self.setup('led_lgs3')
             self.set_led_on()
-            time.sleep(self.exposicion/1000.0)
+            time.sleep(self.exposicion*MILI2SEC)
 
             #take img with darc
             self.take_img_from_darc(iteration, self.image_prefix)
@@ -531,7 +542,7 @@ class BoardDarcController:
             # sci led on
             self.setup('led_sci')
             self.set_led_on()
-            time.sleep(self.exposicion/1000.0)
+            time.sleep(self.exposicion*MILI2SEC)
 
             #take img with darc
             self.take_img_from_darc(iteration, self.image_prefix)
@@ -544,12 +555,12 @@ class BoardDarcController:
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_horizontal')
                 self.move_motor_with_vel()
-                time.sleep(self.pasos/self.motor_timeout)
+                time.sleep(self.pasos*MOTOR_CTE)
                 #####################################
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_vertical')
                 self.move_motor_with_vel()
-                time.sleep(self.pasos/self.motor_timeout)
+                time.sleep(self.pasos*MOTOR_CTE)
             else:
                 #mover motores:
                 self.setup('motor_alt_horizontal')
@@ -560,7 +571,7 @@ class BoardDarcController:
                 #el return del pic enviar una senal EOF en cada funcion y esperar
                 #desde el codigo send_receive_pic hasta esta funcion. Con esto se
                 #soluciona el problema, pero no esta implementado.
-                time.sleep(self.pasos/self.motor_timeout)
+                time.sleep(self.pasos*MOTOR_CTE)
 
 ########### funcion auxiliar ########################################
 def find_usb_tty(vendor_id = None, product_id = None):
@@ -605,7 +616,7 @@ if __name__ == '__main__':
     parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
     parser.add_option("-a", "--aleatory", dest="aleatory", metavar="aleatory", default=False, action="store_true", help = "Movement needed for table, aleatory motor_alt_vertical, motor_alt_horizontal")
     parser.add_option("-n", "--num", dest="num", metavar="num", type="int", default=2, help = "Number of iterations for --table method")
-    parser.add_option("-c", "--calibration", dest="calibration", metavar="calibration", default=False, action="store_true", help = "Calibration method")
+    parser.add_option("-c", "--calibration", dest="calibration", metavar="calibration", default=False, action="store_true", help = "Calibration method for MOTORS")
     parser.add_option("-1", "--led_lgs1", dest="led_lgs1", metavar="led_lgs1", default=False, action="store_true", help = "Test, turning on/off led_lgs1")
     parser.add_option("-2", "--led_lgs2", dest="led_lgs2", metavar="led_lgs2", default=False, action="store_true", help = "Test, turning on/off led_lgs2")
     parser.add_option("-3", "--led_lgs3", dest="led_lgs3", metavar="led_lgs3", default=False, action="store_true", help = "Test, turning on/off led_lgs3")
