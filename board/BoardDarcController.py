@@ -39,13 +39,13 @@ class BoardDarcController:
         self.exposicion = None
         self.brillo = None
         self.image_prefix = None
-
+        
         self.motor = None
         self.pasos = None
         self.velocidad = None
         self.direccion = None
         self.dir_name = None
-
+        self.motor_timeout = 1500
         try:
             self.Config.read("/home/dani/nsaez/board/configurations.cfg")
             #self.Config.read("configurations.cfg")
@@ -121,11 +121,8 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 3 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
-        #logging.warning('Wating a time depending steps!')
-        #logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
-        #logging.warning('known issue, to be fixed')
-        logging.info('Waiting: %.2f [secs]'% (self.pasos/1000.0))
-        time.sleep(self.pasos/1000.0)
+        logging.info('Waiting: %.2f [secs]'% (self.pasos/self.motor_timeout))
+        time.sleep(self.pasos/self.motor_timeout)
 
     def set_led_on_off(self):
         '''
@@ -149,29 +146,22 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 5 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
-        #logging.warning('Wating a time depending steps!')
-        #logging.warning('Notice that this is NOT waiting until motor finish because PIC doesn\'t return nothing to know it!')
-        #logging.warning('known issue, to be fixed')
-        logging.info('Waiting: %.2f [secs]'% (self.pasos/1000.0))
-        time.sleep(self.pasos/1000.0)
+        logging.info('Waiting: %.2f [secs]'% (self.pasos/self.motor_timeout))
+        time.sleep(self.pasos/self.motor_timeout)
 
-    def move_motor_forever(self):
+    def move_motor_with_sensor(self):
         '''
-        Method to move a motor, using steps (pasos) and direction (direccion)
-        and a velocity (velocidad). The main difference with
-        move_motor_with_vel method is that once the motor moves specific steps,
-        it will start all over again (forever). The only way to stops motor is
-        reseting PIC. Specific motor, step, direction and velocity is taken
-        from configuration file. To overwrite it, use set_motor(motor),
-        set_pasos(steps) , set_direccion(direction) set_velocidad(velocity)
-        methods
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         cmd = "sudo send_receive_pic %s 6 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
-        logging.info("Forever")
-        logging.warning('PIC configured to run forever .... to make anything else, is mandatory reset PIC')
-        logging.warning('PIC is still running until reset it! ... leaving this wrapper')
+
+    def move_motor_skip_sensor(self):
+        '''
+        '''
+        logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
+        cmd = "sudo send_receive_pic %s 7 :" % self.tty
+        sts, out, err = self._execute_cmd(cmd)
 
     def set_led(self, led):
         '''
@@ -324,7 +314,7 @@ class BoardDarcController:
         '''
         self.setup('motor_ground_layer')
         self.set_pasos(2147483600) 
-        self.move_motor_forever()
+        self.move_motor_with_sensor()
 
     def led_lgs1(self):
         '''
@@ -381,66 +371,111 @@ class BoardDarcController:
         '''
         self.setup('motor_ground_layer')
         self.move_motor_with_vel()
-        #self.set_motor_move()
 
     def calibration(self):
         '''
-        This method does:
-        1. turn on led 1
-        2. take image
-        3. turn on led 2
-        4. take image
-        5. turn on led 3
-        6. take image
-       
-        For calibration purposes
+        Calibrate motors
         '''
-        prefix = 'cal'
+        msg ='''
+        Press 1 to calibrate: motor_ground_layer
+        Press 2 to calibrate: motor_alt_vertical
+        Press 3 to calibrate: motor_alt_horizontal
+        '''
+        m = 'motor_ground_layer'
+        motor = raw_input(msg)
+        motor_dir ={1:'motor_ground_layer',2:'motor_alt_vertical',3:'motor_alt_horizontal'}
+        try:
+            m = motor_dir[int(motor)]
+        except Exception, ex:
+            logging.error("Please put an allowed number: 1,2 or 3")
 
-        self.setup('led_lgs1')
-        # led 1 on
-        self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
+        self.setup(m)
+        logging.info('Moving until find a sensor')
+        self.set_pasos(2147483600) 
+        self.move_motor_with_sensor()
+        #################################
+        logging.info('Skipping from sensor')
+        self.set_pasos(2000) 
+        if self.direccion == 1:
+            self.set_direccion(0)
+        else:
+            self.set_direccion(1)
+        self.move_motor_skip_sensor()
+        if self.direccion == 1:
+            self.set_direccion(0)
+        else:
+            self.set_direccion(1)
+        #################################
+        msg = '''
+        Please put steps
+        '''
+        steps = int(raw_input(msg))
+        all_steps = 0
+        valid_step_init = 0
+        valid_step_end  = 0
+        full_range = 0
 
-        #take img with darc
-        self.take_img_from_darc(prefix, self.image_prefix)
+        self.set_pasos(steps)
+        while (True):
+            self.move_motor_skip_sensor()
+            all_steps = all_steps + steps
+            if valid_step_init == 0:
+                print "Is this a valid init range? [y/n]"
+                valid= raw_input()
+                if valid == 'y':
+                    valid_step_init = all_steps
+                    print "valid_step_init :%d" % valid_step_init
+            valid = 'n'
 
-        #led off
-        self.set_led_off()
-
-        # led 2 on
-        self.setup('led_lgs2')
-        self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
-
-        #take img with darc
-        self.take_img_from_darc(prefix, self.image_prefix)
-
-        #led off
-        self.set_led_off()
-
-        # led 3 on
-        self.setup('led_lgs3')
-        self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
-
-        #take img with darc
-        self.take_img_from_darc(prefix, self.image_prefix)
-
-        #led off
-        self.set_led_off()
-
-        # sci led on
-        self.setup('led_sci')
-        self.set_led_on()
-        time.sleep(self.exposicion/1000.0)
-
-        #take img with darc
-        self.take_img_from_darc(prefix, self.image_prefix)
-
-        #led off
-        self.set_led_off()
-
+            if valid_step_end == 0 and valid_step_init > 0:
+                print "Is this a valid end range? [y/n]"
+                valid= raw_input()
+                if valid == 'y':
+                    valid_step_end = all_steps
+                    print "valid_step_end :%d" % valid_step_end
+                
+            valid = 'n'
+            if full_range == 0 and valid_step_init > 0 and valid_step_end > 0:
+                print "Is this the end of the path? [y/n]"
+                valid= raw_input()
+                if valid == 'y':
+                    full_range = all_steps
+                    print "full_range :%d" % full_range
+            if full_range > 0 and valid_step_init > 0 and valid_step_end > 0:
+                break
+        #################################
+        logging.info('Skipping from sensor')
+        self.set_pasos(2000) 
+        if self.direccion == 1:
+            self.set_direccion(0)
+        else:
+            self.set_direccion(1)
+        self.move_motor_skip_sensor()
+        if self.direccion == 1:
+            self.set_direccion(0)
+        else:
+            self.set_direccion(1)
+        #################################
+        logging.info('Back to original position')
+        self.set_pasos(full_range) 
+        self.move_motor_with_sensor()
+        #################################
+        logging.info('Skipping from sensor')
+        self.set_pasos(2000) 
+        if self.direccion == 1:
+            self.set_direccion(0)
+        else:
+            self.set_direccion(1)
+        self.move_motor_skip_sensor()
+        if self.direccion == 1:
+            self.set_direccion(0)
+        else:
+            self.set_direccion(1)
+        #################################
+        logging.info('Calibration DONE')
+        logging.info('valid_step_init: %d' % valid_step_init)
+        logging.info('valid_step_end : %d' % valid_step_end)
+        logging.info('full_range     : %d' % full_range)
 
     def table(self, num, israndom=False):
         '''
@@ -509,12 +544,12 @@ class BoardDarcController:
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_horizontal')
                 self.move_motor_with_vel()
-                time.sleep(self.pasos/1000.0)
+                time.sleep(self.pasos/self.motor_timeout)
                 #####################################
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_vertical')
                 self.move_motor_with_vel()
-                time.sleep(self.pasos/1000.0)
+                time.sleep(self.pasos/self.motor_timeout)
             else:
                 #mover motores:
                 self.setup('motor_alt_horizontal')
@@ -525,7 +560,7 @@ class BoardDarcController:
                 #el return del pic enviar una senal EOF en cada funcion y esperar
                 #desde el codigo send_receive_pic hasta esta funcion. Con esto se
                 #soluciona el problema, pero no esta implementado.
-                time.sleep(self.pasos/1000.0)
+                time.sleep(self.pasos/self.motor_timeout)
 
 ########### funcion auxiliar ########################################
 def find_usb_tty(vendor_id = None, product_id = None):
