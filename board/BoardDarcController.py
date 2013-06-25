@@ -10,6 +10,7 @@ import os
 import re
 import time
 import glob
+import serial
 import logging
 import random
 import ConfigParser
@@ -65,6 +66,7 @@ class BoardDarcController:
             sys.exit(-1)
         try:
             self.tty = find_usb_tty()[0]
+            self._execute_cmd('sudo chmod 777 %s' % self.tty)
             logging.info("USB connected: %s" % self.tty)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
