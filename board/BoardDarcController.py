@@ -70,7 +70,7 @@ class BoardDarcController:
             self._execute_cmd('sudo chmod 777 %s' % self.tty)
             logging.info("USB connected: %s" % self.tty)
             self.pic = serial.Serial(self.tty) 
-            self.pic.port = "/dev/ttyUSB1"
+            self.pic.port = self.tty
             self.pic.baudrate = 9600
             self.pic.bytesize = serial.EIGHTBITS #number of bits per bytes
             self.pic.parity = serial.PARITY_NONE #set parity check: no parity
