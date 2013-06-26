@@ -481,10 +481,10 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         self.move_motor_skip_sensor()
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        #if self.direccion == 1:
+        #    self.set_direccion(0)
+        #else:
+        #    self.set_direccion(1)
         #################################
         msg = '''
         Please put steps
@@ -497,6 +497,10 @@ class BoardDarcController:
 
         star_cal_1 = 0
         star_cal_2 = 0
+
+        star_off_1 = True
+        star_off_2 = True
+
         star_1 = 'led_lgs1'
         star_2 = 'led_lgs2'
 
@@ -536,26 +540,29 @@ class BoardDarcController:
                 star_cal_2 = 1
 
             if valid_step_init == 0:
-                self.setup(star_1)
-                self.set_led_on()
+                if star_off_1:
+                    self.setup(star_1)
+                    self.set_led_on()
+                    star_off_1 = False
                 print "Is this a valid init range? [y/n]"
                 valid= raw_input()
                 if valid == 'y':
                     valid_step_init = all_steps
                     print "valid_step_init :%d" % valid_step_init
-                self.set_led_off()
             valid = 'n'
 
             if valid_step_end == 0 and valid_step_init > 0:
-                self.setup(star_2)
-                self.set_led_on()
+                self.set_led_off()
+                if star_off_2:
+                    self.setup(star_2)
+                    self.set_led_on()
+                    star_off_2 = False
                 print "Is this a valid end range? [y/n]"
                 valid= raw_input()
                 if valid == 'y':
                     valid_step_end = all_steps
                     print "valid_step_end :%d" % valid_step_end
-                self.set_led_off()
-
+                
             valid = 'n'
             if full_range == 0 and valid_step_init > 0 and valid_step_end > 0:
                 print "Is this the end of the path? [y/n]"
@@ -573,10 +580,10 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         self.move_motor_skip_sensor()
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        #if self.direccion == 1:
+        #    self.set_direccion(0)
+        #else:
+        #    self.set_direccion(1)
         #################################
         logging.info(GREEN+'Back to original position'+NO_COLOR)
         self.set_pasos(full_range) 
@@ -589,11 +596,12 @@ class BoardDarcController:
         else:
             self.set_direccion(1)
         self.move_motor_skip_sensor()
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        #if self.direccion == 1:
+        #    self.set_direccion(0)
+        #else:
+        #    self.set_direccion(1)
         #################################
+        self.set_led_off()
         logging.info(GREEN+'Calibration DONE'+NO_COLOR)
         logging.info(GREEN+('valid_step_init: %d' % valid_step_init)+NO_COLOR)
         logging.info(GREEN+('valid_step_end : %d' % valid_step_end)+NO_COLOR)
