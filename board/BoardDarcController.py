@@ -32,7 +32,7 @@ CRIM     = '\033[36m'
 NO_COLOR = '\033[0m'
 
 MILI2SEC  = 1e-3
-MOTOR_CTE = 1.5e-3
+MOTOR_CTE = 2.0e-4
 
 class BoardDarcController:
     '''
