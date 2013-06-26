@@ -423,6 +423,7 @@ class BoardDarcController:
         Turn on/off a led, for test purposes.
         '''
         self.setup('led_lgs1')
+        #self.set_led_on_off()
         self.set_led_on()
         time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
@@ -431,6 +432,7 @@ class BoardDarcController:
         Turn on/off a led, for test purposes.
         '''
         self.setup('led_lgs2')
+        #self.set_led_on_off()
         self.set_led_on()
         time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
@@ -440,6 +442,7 @@ class BoardDarcController:
         Turn on/off a led, for test purposes.
         '''
         self.setup('led_lgs3')
+        #self.set_led_on_off()
         self.set_led_on()
         time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
@@ -449,6 +452,7 @@ class BoardDarcController:
         Turn on/off a led, for test purposes.
         '''
         self.setup('led_sci')
+        #self.set_led_on_off()
         self.set_led_on()
         time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
