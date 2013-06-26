@@ -58,7 +58,7 @@ class BoardDarcController:
         self.velocidad = None
         self.direccion = None
         self.dir_name = None
-        self.delay = 2.0
+        self.delay = 0.1
         try:
             self.Config.read("/home/dani/nsaez/board/configurations.cfg")
             #self.Config.read("configurations.cfg")
@@ -75,13 +75,13 @@ class BoardDarcController:
             self.pic.bytesize = serial.EIGHTBITS #number of bits per bytes
             self.pic.parity = serial.PARITY_NONE #set parity check: no parity
             self.pic.stopbits = serial.STOPBITS_ONE #number of stop bits
-            self.pic.timeout = None          #block read
+            #self.pic.timeout = None          #block read
             #self.pic.timeout = 0             #non-block read
-            #self.pic.timeout = 2              #timeout block read
+            self.pic.timeout = 1              #timeout block read
             self.pic.xonxoff = False     #disable software flow control
             self.pic.rtscts = False     #disable hardware (RTS/CTS) flow control
             self.pic.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-            self.pic.writeTimeout = 0.7     #timeout for write
+            self.pic.writeTimeout = 0.3     #timeout for write
             #self.pic.writeTimeout = None     #block write
             self.pic.open()
             #check http://pyserial.sourceforge.net/pyserial_api.html
