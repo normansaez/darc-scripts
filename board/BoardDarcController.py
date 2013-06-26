@@ -58,7 +58,7 @@ class BoardDarcController:
         self.velocidad = None
         self.direccion = None
         self.dir_name = None
-        self.delay = 0.5
+        self.delay = 2.0
         try:
             self.Config.read("/home/dani/nsaez/board/configurations.cfg")
             #self.Config.read("configurations.cfg")
@@ -81,8 +81,8 @@ class BoardDarcController:
             self.pic.xonxoff = False     #disable software flow control
             self.pic.rtscts = False     #disable hardware (RTS/CTS) flow control
             self.pic.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-            #self.pic.writeTimeout = 2     #timeout for write
-            self.pic.writeTimeout = None     #block write
+            self.pic.writeTimeout = 0.7     #timeout for write
+            #self.pic.writeTimeout = None     #block write
             self.pic.open()
             #check http://pyserial.sourceforge.net/pyserial_api.html
             logging.info("USB <--> PIC using python")
@@ -150,6 +150,7 @@ class BoardDarcController:
         configuration file. To overwrite it, use set_led(led) method.
         '''
         self.pic.write("1")
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Led %d ON" % self.led)
@@ -159,6 +160,7 @@ class BoardDarcController:
         Method to turn off all leds. Period.
         '''
         self.pic.write("2")
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Led %d OFF" % self.led)
@@ -171,6 +173,7 @@ class BoardDarcController:
         set_direccion(direction)
         '''
         self.pic.write("3")
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
@@ -184,6 +187,7 @@ class BoardDarcController:
         set_led(led) and set_exposicion(time) methods.
         '''
         self.pic.write("4")
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Led %d, exposicion %d [ms]" % (self.led, self.exposicion))
@@ -197,7 +201,9 @@ class BoardDarcController:
         set_motor(motor), set_pasos(steps) , set_direccion(direction)
         set_velocidad(velocity) methods
         '''
+        logging.info("TO BE Motor %d, velocidad %d" % (self.motor, self.velocidad))
         self.pic.write("5")
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
@@ -209,6 +215,7 @@ class BoardDarcController:
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         self.pic.write("6")
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         time.sleep(self.pasos*MOTOR_CTE)
@@ -218,6 +225,7 @@ class BoardDarcController:
         '''
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         self.pic.write("7")
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         time.sleep(self.pasos*MOTOR_CTE)
@@ -229,8 +237,10 @@ class BoardDarcController:
         '''
         self.led = led
         self.pic.write("l")
+        self.pic.flush()
         time.sleep(self.delay)
         self.pic.write("%d\r" % led)
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Setting Led %d done" % led)
@@ -242,8 +252,10 @@ class BoardDarcController:
         '''
         self.exposicion = exposicion
         self.pic.write("e")
+        self.pic.flush()
         time.sleep(self.delay)
         self.pic.write("%d\r" % exposicion)
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Setting exposicion %d [ms] done" % exposicion)
@@ -256,8 +268,10 @@ class BoardDarcController:
         '''
         self.brillo = brillo
         self.pic.write("b")
+        self.pic.flush()
         time.sleep(self.delay)
         self.pic.write("%d\r" % brillo)
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Setting brillo %d done" % brillo)
@@ -269,8 +283,10 @@ class BoardDarcController:
         '''
         self.motor = motor
         self.pic.write("m")
+        self.pic.flush()
         time.sleep(self.delay)
         self.pic.write("%d\r" % motor)
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Setting motor %d done" % motor)
@@ -282,8 +298,10 @@ class BoardDarcController:
         '''
         self.direccion = direccion
         self.pic.write("d")
+        self.pic.flush()
         time.sleep(self.delay)
         self.pic.write("%d\r" % direccion)
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Setting direccion %d done" % direccion)
@@ -296,8 +314,10 @@ class BoardDarcController:
         '''
         self.velocidad = velocidad
         self.pic.write("v")
+        self.pic.flush()
         time.sleep(self.delay)
         self.pic.write("%d\r" % velocidad)
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Setting velocidad %d done" % velocidad)
@@ -310,7 +330,9 @@ class BoardDarcController:
         self.pasos = pasos
         self.pic.write("p")
         time.sleep(self.delay)
+        self.pic.flush()
         self.pic.write("%d\r" % pasos)
+        self.pic.flush()
         time.sleep(self.delay)
         out = self._get_response()
         logging.info("Setting pasos %d done" % pasos)
