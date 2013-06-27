@@ -14,8 +14,8 @@ import logging
 import random
 import ConfigParser
 
-import darc
-import FITS
+#import darc
+#import FITS
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
@@ -33,6 +33,10 @@ NO_COLOR = '\033[0m'
 
 MILI2SEC  = 1e-3
 MOTOR_CTE = 2.0e-4
+CHANGEDIR = {0:1,1:0}
+DIR2HUMAN = {0:"INIT_POS",1:"END_POS"}
+MOTORDICT ={1:'motor_ground_layer',2:'motor_alt_vertical',3:'motor_alt_horizontal'}
+STARDICT ={1:'led_lgs1',2:'led_lgs2',3:'led_lgs3',4:'led_sci'}
 
 class BoardDarcController:
     '''
@@ -58,13 +62,15 @@ class BoardDarcController:
         self.direccion = None
         self.dir_name = None
         try:
-            self.Config.read("/home/dani/nsaez/board/configurations.cfg")
-            #self.Config.read("configurations.cfg")
+            self.configfile = "configurations.cfg"
+            #self.configfile = "/home/dani/nsaez/board/configurations.cfg"
+            self.Config.read(self.configfile)
         except:
             logging.error("configurations.cfg : File doesn't exits")
             sys.exit(-1)
         try:
-            self.tty = find_usb_tty()[0]
+            #self.tty = find_usb_tty()[0]
+            self.tty = "/dev/USB"
             logging.info("USB connected: %s" % self.tty)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -77,7 +83,7 @@ class BoardDarcController:
             self.pxlx  = self.Config.getint('darc',  'pxlx')
             self.pxly  = self.Config.getint('darc', 'pxly')
             self.image_path  = self.Config.get('darc', 'image_path')
-            self.darc = darc.Control(self.camera_name)
+            #self.darc = darc.Control(self.camera_name)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
@@ -103,6 +109,7 @@ class BoardDarcController:
             logging.debug("err: "+str(err))
 
         return sts, out, err
+
 
     def set_led_on(self):
         '''
@@ -131,7 +138,7 @@ class BoardDarcController:
         '''
         cmd = "sudo send_receive_pic %s 3 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
-        logging.info("Motor %d pasos: %d, direccion %d" %(self.motor, self.pasos, self.direccion))
+        logging.info("Motor %d pasos: %d, direccion %s" %(self.motor, self.pasos, DIR2HUMAN[self.direccion]))
         logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
         time.sleep(self.pasos*MOTOR_CTE)
 
@@ -223,7 +230,7 @@ class BoardDarcController:
         self.direccion = direccion
         cmd = "sudo send_receive_pic %s d:%d\r :" % (self.tty, direccion)
         sts, out, err = self._execute_cmd(cmd)
-        logging.info("Setting direccion %d done" % direccion)
+        logging.info("Setting direccion %s done" % DIR2HUMAN[direccion])
 
     def set_velocidad(self, velocidad):
         '''
@@ -245,6 +252,30 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s p:%d\r :" % (self.tty, pasos)
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting pasos %d done" % pasos)
+
+    def set_init_valid_range(self, pasos):
+        '''
+        '''
+        self.Config.set(MOTORDICT[self.motor],'init_valid_range',str(pasos))
+        offset_init = self.Config.getint(MOTORDICT[self.motor], 'offset_init')
+        self.init_valid_range = pasos + offset_init
+        logging.info("Setting init_valid_range %d + %d offset" % (pasos, offset_init))
+        
+    def set_end_valid_range(self, pasos):
+        '''
+        '''
+        self.Config.set(MOTORDICT[self.motor],'end_valid_range',str(pasos))
+        offset_end = self.Config.getint(MOTORDICT[self.motor], 'offset_end')
+        self.end_valid_range = pasos + offset_end
+        logging.info("Setting end_valid_range %d + %d offset" % (pasos, offset_end))
+
+    def set_max_range(self, pasos):
+        '''
+        '''
+        self.max_range = pasos
+        self.Config.set(MOTORDICT[self.motor],'max_range',str(pasos))
+        logging.info("Setting max_range %d done" % pasos)
+        
         
     def get_directory(self, image_path):
         '''
@@ -312,20 +343,32 @@ class BoardDarcController:
             direccion = self.Config.getint(config_name, 'direccion')
             velocidad = self.Config.getint(config_name, 'velocidad')
             pasos = self.Config.getint(config_name, 'pasos')
+            print config_name
+            init_valid_range = self.Config.getint(config_name, 'init_valid_range')
+            end_valid_range = self.Config.getint(config_name, 'end_valid_range')
+            max_range = self.Config.getint(config_name, 'max_range')
             self.set_motor(motor)
             self.set_direccion(direccion)
             self.set_velocidad(velocidad)
             self.set_pasos(pasos)
+            self.set_init_valid_range(init_valid_range)
+            self.set_end_valid_range(end_valid_range)
+            self.set_init_valid_range(init_valid_range)
+
         logging.info('Configuration :%s done!' % config_name)
 
 
-    def loop_for_r0(self):
+    def loop_for_r0(self, num):
         '''
         Loop to calculate r0. Move a motor forever.
         '''
         self.setup('motor_ground_layer')
-        self.set_pasos(2147483600) 
-        self.move_motor_with_sensor()
+        self.motor_to_init('motor_ground_layer')
+        cur_pos = 0
+        step = 1000
+        for i in range(0,num):
+            cur_pos, cmd_pos = self.move_in_valid_range(cur_pos, step)
+            print "cur_pos %d" % cur_pos
 
     def led_lgs1(self):
         '''
@@ -383,6 +426,53 @@ class BoardDarcController:
         self.setup('motor_ground_layer')
         self.move_motor_with_vel()
 
+    def motor_to_init(self, motor):
+        '''
+        Moves motor to init
+        '''
+        self.setup(motor)
+        logging.info(GREEN+'Moving until find a sensor'+NO_COLOR)
+        self.set_pasos(2147483600) 
+        self.move_motor_with_sensor()
+        #################################
+        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
+        self.set_pasos(2000) 
+        self.set_direccion(CHANGEDIR[self.direccion])
+        self.move_motor_skip_sensor()
+        #################################
+
+    def move_in_valid_range(self, current_position, step):
+        '''
+        Movements in valid ranges
+        '''
+        self.motor
+        logging.info("cur_pos : %d" % current_position)
+        cmd_position = current_position + step
+        logging.info("cmd_pos : %d" % cmd_position)
+        if cmd_position < self.init_valid_range:
+            logging.error("cmd from %d --> %d" % (cmd_position, self.init_valid_range))
+            cmd_position = self.init_valid_range
+        if cmd_position > self.end_valid_range:
+            logging.error("cmd from %d --> %d" % (cmd_position, self.init_valid_range))
+            cmd_position = self.init_valid_range
+
+        pasos = cmd_position - current_position
+        if pasos > 0:
+            logging.info("steps to cmd_pos: %d" % pasos)
+            self.set_pasos(pasos)
+            #directin current
+            self.move_motor_with_sensor()
+        else:
+            logging.info("steps to cmd_pos: %d" % pasos)
+            self.set_direccion(CHANGEDIR[self.direccion])
+            pasos = abs(pasos)
+            self.set_pasos(pasos)
+            self.move_motor_with_sensor()
+            self.set_direccion(CHANGEDIR[self.direccion])
+
+        current_position = cmd_position
+        return current_position, cmd_position
+
     def calibration(self):
         '''
         Calibrate motors
@@ -394,37 +484,20 @@ class BoardDarcController:
         '''
         m = 'motor_ground_layer'
         motor = raw_input(msg)
-        motor_dir ={1:'motor_ground_layer',2:'motor_alt_vertical',3:'motor_alt_horizontal'}
         try:
-            m = motor_dir[int(motor)]
+            m = MOTORDICT[int(motor)]
         except Exception, ex:
             logging.error(RED+"Please put an allowed number: 1,2 or 3"+NO_COLOR)
-
-        self.setup(m)
-        logging.info(GREEN+'Moving until find a sensor'+NO_COLOR)
-        self.set_pasos(2147483600) 
-        self.move_motor_with_sensor()
-        #################################
-        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
-        self.set_pasos(2000) 
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
-        self.move_motor_skip_sensor()
-        #if self.direccion == 1:
-        #    self.set_direccion(0)
-        #else:
-        #    self.set_direccion(1)
-        #################################
+        #moving to init
+        self.motor_to_init(m)
         msg = '''
         Please put steps
         '''
         steps = int(raw_input(msg))
         all_steps = 0
-        valid_step_init = 0
-        valid_step_end  = 0
-        full_range = 0
+        init_valid_range = 0
+        end_valid_range  = 0
+        max_range = 0
 
         star_cal_1 = 0
         star_cal_2 = 0
@@ -436,7 +509,6 @@ class BoardDarcController:
         star_2 = 'led_lgs2'
 
         self.set_pasos(steps)
-        start_dir ={1:'led_lgs1',2:'led_lgs2',3:'led_lgs3',4:'led_sci'}
         while (True):
             self.move_motor_skip_sensor()
             all_steps = all_steps + steps
@@ -450,7 +522,7 @@ class BoardDarcController:
                 '''
                 star = raw_input(msg)
                 try:
-                    star_1 = start_dir[int(star)]
+                    star_1 = STARDICT[int(star)]
                 except Exception, ex:
                     logging.error(RED+"Please put an allowed number: 1,2,3 or 4"+NO_COLOR)
                 star_cal_1 = 1
@@ -465,12 +537,12 @@ class BoardDarcController:
                 '''
                 star = raw_input(msg)
                 try:
-                    star_2 = start_dir[int(star)]
+                    star_2 = STARDICT[int(star)]
                 except Exception, ex:
                     logging.error(RED+"Please put an allowed number: 1,2,3 or 4"+NO_COLOR)
                 star_cal_2 = 1
 
-            if valid_step_init == 0:
+            if init_valid_range == 0:
                 if star_off_1:
                     self.setup(star_1)
                     self.set_led_on()
@@ -478,11 +550,11 @@ class BoardDarcController:
                 print "Is this a valid init range? [y/n]"
                 valid= raw_input()
                 if valid == 'y':
-                    valid_step_init = all_steps
-                    print "valid_step_init :%d" % valid_step_init
+                    init_valid_range = all_steps
+                    print "init_valid_range :%d" % init_valid_range
             valid = 'n'
 
-            if valid_step_end == 0 and valid_step_init > 0:
+            if end_valid_range == 0 and init_valid_range > 0:
                 self.set_led_off()
                 if star_off_2:
                     self.setup(star_2)
@@ -491,52 +563,44 @@ class BoardDarcController:
                 print "Is this a valid end range? [y/n]"
                 valid= raw_input()
                 if valid == 'y':
-                    valid_step_end = all_steps
-                    print "valid_step_end :%d" % valid_step_end
+                    end_valid_range = all_steps
+                    print "end_valid_range :%d" % end_valid_range
                 
             valid = 'n'
-            if full_range == 0 and valid_step_init > 0 and valid_step_end > 0:
+            if max_range == 0 and init_valid_range > 0 and end_valid_range > 0:
                 print "Is this the end of the path? [y/n]"
                 valid= raw_input()
                 if valid == 'y':
-                    full_range = all_steps
-                    print "full_range :%d" % full_range
-            if full_range > 0 and valid_step_init > 0 and valid_step_end > 0:
+                    max_range = all_steps
+                    print "max_range :%d" % max_range
+            if max_range > 0 and init_valid_range > 0 and end_valid_range > 0:
                 break
         #################################
         logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
         self.set_pasos(2000) 
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        self.set_direccion(CHANGEDIR[self.direccion])
         self.move_motor_skip_sensor()
-        #if self.direccion == 1:
-        #    self.set_direccion(0)
-        #else:
-        #    self.set_direccion(1)
         #################################
         logging.info(GREEN+'Back to original position'+NO_COLOR)
-        self.set_pasos(full_range) 
+        self.set_pasos(max_range) 
         self.move_motor_with_sensor()
         #################################
         logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
         self.set_pasos(2000) 
-        if self.direccion == 1:
-            self.set_direccion(0)
-        else:
-            self.set_direccion(1)
+        self.set_direccion(CHANGEDIR[self.direccion])
         self.move_motor_skip_sensor()
-        #if self.direccion == 1:
-        #    self.set_direccion(0)
-        #else:
-        #    self.set_direccion(1)
         #################################
         self.set_led_off()
         logging.info(GREEN+'Calibration DONE'+NO_COLOR)
-        logging.info(GREEN+('valid_step_init: %d' % valid_step_init)+NO_COLOR)
-        logging.info(GREEN+('valid_step_end : %d' % valid_step_end)+NO_COLOR)
-        logging.info(GREEN+('full_range     : %d' % full_range)+NO_COLOR)
+        logging.info(GREEN+('init_valid_range: %d' % init_valid_range)+NO_COLOR)
+        logging.info(GREEN+('end_valid_range : %d' % end_valid_range)+NO_COLOR)
+        logging.info(GREEN+('max_range       : %d' % max_range)+NO_COLOR)
+        self.set_init_valid_range(init_valid_range)
+        self.set_end_valid_range(end_valid_range)
+        self.set_max_range(max_range)
+        logging.info(GREEN+('VALUES STORED IN CONFIGURATION FILE')+NO_COLOR)
+        with open(self.configfile, 'wb') as configfile:
+            self.Config.write(configfile)
 
     def table(self, num, israndom=False):
         '''
@@ -700,7 +764,7 @@ if __name__ == '__main__':
 
     BDC = BoardDarcController()
     if options.r0 is True:
-        BDC.loop_for_r0()
+        BDC.loop_for_r0(options.num)
 
     if options.table is True:
         BDC.table(options.num)
