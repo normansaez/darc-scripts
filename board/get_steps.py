@@ -1,12 +1,12 @@
 import logging
 
-CAMBIO = {"IZQUIERDA":"DERECHA","DERECHA":"IZQUIERDA"}
+CAMBIO = {"FINAL":"INICIO","INICIO":"FINAL"}
 class DummyTest:
     def __init__(self):
         self.valid_init_range =  4
         self.valid_end_range  =  8
         self.full_range = 10
-        self.dire = "DERECHA"
+        self.dire = "FINAL"
         self.cur_pos = 0
         self.cmd_pos = 0
         logging.getLogger().setLevel(logging.DEBUG)
