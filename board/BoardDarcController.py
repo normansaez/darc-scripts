@@ -343,7 +343,6 @@ class BoardDarcController:
             direccion = self.Config.getint(config_name, 'direccion')
             velocidad = self.Config.getint(config_name, 'velocidad')
             pasos = self.Config.getint(config_name, 'pasos')
-            print config_name
             init_valid_range = self.Config.getint(config_name, 'init_valid_range')
             end_valid_range = self.Config.getint(config_name, 'end_valid_range')
             max_range = self.Config.getint(config_name, 'max_range')
