@@ -33,8 +33,8 @@ NO_COLOR = '\033[0m'
 
 MILI2SEC  = 1e-3
 MOTOR_CTE = 0.0e-4
-CHANGEDIR = {0:1,1:0}
-DIR2HUMAN = {0:"INIT_POS",1:"END_POS"}
+CHANGEDIR = {0:1, 1:0}
+DIR2HUMAN = {0:"INIT_POS", 1:"END_POS"}
 
 class BoardDarcController:
     '''
@@ -54,6 +54,7 @@ class BoardDarcController:
         self.brillo = None
         self.image_prefix = None
         
+        self.motor_name = None
         self.motor = None
         self.pasos = None
         self.velocidad = None
@@ -229,6 +230,13 @@ class BoardDarcController:
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Setting brillo %d done" % brillo)
 
+    def set_motor_name(self, motor_name):
+        '''
+        '''
+        self.motor_name = motor_name
+        logging.info("Setting motor name %s done" % motor_name)
+        
+
     def set_motor(self, motor):
         '''
         Set motor to be used in PIC. This method overwrite the default
@@ -273,16 +281,16 @@ class BoardDarcController:
     def set_init_valid_range(self, pasos):
         '''
         '''
-        self.Config.set(MOTORDICT[self.motor],'init_valid_range',str(pasos))
-        offset_init = self.Config.getint(MOTORDICT[self.motor], 'offset_init')
+        self.Config.set(self.motor_name, 'init_valid_range', str(pasos))
+        offset_init = self.Config.getint(self.motor_name, 'offset_init')
         self.init_valid_range = pasos + offset_init
         logging.info("Setting init_valid_range %d + %d offset" % (pasos, offset_init))
         
     def set_end_valid_range(self, pasos):
         '''
         '''
-        self.Config.set(MOTORDICT[self.motor],'end_valid_range',str(pasos))
-        offset_end = self.Config.getint(MOTORDICT[self.motor], 'offset_end')
+        self.Config.set(self.motor_name, 'end_valid_range', str(pasos))
+        offset_end = self.Config.getint(self.motor_name, 'offset_end')
         self.end_valid_range = pasos + offset_end
         logging.info("Setting end_valid_range %d + %d offset" % (pasos, offset_end))
 
@@ -290,7 +298,7 @@ class BoardDarcController:
         '''
         '''
         self.max_range = pasos
-        self.Config.set(MOTORDICT[self.motor],'max_range',str(pasos))
+        self.Config.set(self.motor_name, 'max_range', str(pasos))
         logging.info("Setting max_range %d done" % pasos)
         
         
@@ -329,7 +337,7 @@ class BoardDarcController:
             path = os.path.normpath(self.image_path+self.dir_name+'/'+image_name)
             logging.info('Image taken : %s' % path)
             logging.debug(stream)
-            data = stream[0].reshape(self.pxly,self.pxlx)
+            data = stream[0].reshape(self.pxly, self.pxlx)
             data = data.view('h')
             logging.debug('About to save image to disk , name: %s' % path)
             FITS.Write(data, path, writeMode='a')
@@ -363,6 +371,7 @@ class BoardDarcController:
             init_valid_range = self.Config.getint(config_name, 'init_valid_range')
             end_valid_range = self.Config.getint(config_name, 'end_valid_range')
             max_range = self.Config.getint(config_name, 'max_range')
+            self.set_motor_name(config_name)
             self.set_motor(motor)
             self.set_direccion(direccion)
             self.set_velocidad(velocidad)
@@ -382,7 +391,7 @@ class BoardDarcController:
         self.motor_to_init('motor_ground_layer')
         cur_pos = 0
         step = 1000
-        for i in range(0,num):
+        for i in range(0, num):
             cur_pos, cmd_pos = self.move_in_valid_range(cur_pos, step)
             print "cur_pos %d" % cur_pos
 
@@ -495,9 +504,9 @@ class BoardDarcController:
         #NOTE: This constants are only for this method (for the main menu,
         #please don't get confused with real values, which are deployed in the
         #configuration file
-        MOTORDICT ={1:'motor_ground_layer',2:'motor_alt_vertical',3:'motor_alt_horizontal'}
-        STARDICT ={1:'led_lgs1',2:'led_lgs2',3:'led_lgs3',4:'led_sci'}
-        msg ='''
+        MOTORDICT = {1:'motor_ground_layer', 2:'motor_alt_vertical', 3:'motor_alt_horizontal'}
+        STARDICT = {1:'led_lgs1', 2:'led_lgs2', 3:'led_lgs3', 4:'led_sci'}
+        msg = '''
         Press 1 to calibrate: motor_ground_layer
         Press 2 to calibrate: motor_alt_vertical
         Press 3 to calibrate: motor_alt_horizontal
@@ -533,7 +542,7 @@ class BoardDarcController:
             self.move_motor_skip_sensor()
             all_steps = all_steps + steps
             if star_cal_1 == 0:
-                msg ='''
+                msg = '''
                 INIT:
                 Press 1 to turn on a star calibrate: led_lgs1 
                 Press 2 to turn on a star calibrate: led_lgs2
@@ -548,7 +557,7 @@ class BoardDarcController:
                 star_cal_1 = 1
 
             if star_cal_2 == 0:
-                msg ='''
+                msg = '''
                 END:
                 Press 1 to turn on a star calibrate: led_lgs1 
                 Press 2 to turn on a star calibrate: led_lgs2
@@ -568,7 +577,7 @@ class BoardDarcController:
                     self.set_led_on()
                     star_off_1 = False
                 print "Is this a valid init range? [y/n]"
-                valid= raw_input()
+                valid = raw_input()
                 if valid == 'y':
                     init_valid_range = all_steps
                     print "init_valid_range :%d" % init_valid_range
@@ -581,7 +590,7 @@ class BoardDarcController:
                     self.set_led_on()
                     star_off_2 = False
                 print "Is this a valid end range? [y/n]"
-                valid= raw_input()
+                valid = raw_input()
                 if valid == 'y':
                     end_valid_range = all_steps
                     print "end_valid_range :%d" % end_valid_range
@@ -589,7 +598,7 @@ class BoardDarcController:
             valid = 'n'
             if max_range == 0 and init_valid_range > 0 and end_valid_range > 0:
                 print "Is this the end of the path? [y/n]"
-                valid= raw_input()
+                valid = raw_input()
                 if valid == 'y':
                     max_range = all_steps
                     print "max_range :%d" % max_range
