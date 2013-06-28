@@ -14,8 +14,8 @@ import logging
 import random
 import ConfigParser
 
-#import darc
-#import FITS
+import darc
+import FITS
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
@@ -35,8 +35,6 @@ MILI2SEC  = 1e-3
 MOTOR_CTE = 0.0e-4
 CHANGEDIR = {0:1,1:0}
 DIR2HUMAN = {0:"INIT_POS",1:"END_POS"}
-MOTORDICT ={1:'motor_ground_layer',2:'motor_alt_vertical',3:'motor_alt_horizontal'}
-STARDICT ={1:'led_lgs1',2:'led_lgs2',3:'led_lgs3',4:'led_sci'}
 
 class BoardDarcController:
     '''
@@ -62,15 +60,14 @@ class BoardDarcController:
         self.direccion = None
         self.dir_name = None
         try:
-            self.configfile = "configurations.cfg"
-            #self.configfile = "/home/dani/nsaez/board/configurations.cfg"
+            #self.configfile = "configurations.cfg"
+            self.configfile = "/home/dani/nsaez/board/configurations.cfg"
             self.Config.read(self.configfile)
         except:
             logging.error("configurations.cfg : File doesn't exits")
             sys.exit(-1)
         try:
-            #self.tty = find_usb_tty()[0]
-            self.tty = "/dev/USB"
+            self.tty = find_usb_tty()[0]
             logging.info("USB connected: %s" % self.tty)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -83,7 +80,7 @@ class BoardDarcController:
             self.pxlx  = self.Config.getint('darc',  'pxlx')
             self.pxly  = self.Config.getint('darc', 'pxly')
             self.image_path  = self.Config.get('darc', 'image_path')
-            #self.darc = darc.Control(self.camera_name)
+            self.darc = darc.Control(self.camera_name)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logging.error(ex)
@@ -166,6 +163,12 @@ class BoardDarcController:
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
         time.sleep(self.pasos*MOTOR_CTE)
+        #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
+        #que no se maneja el return desde el pic. Deberia esperar la
+        #respuesta final del pic para poder seguir moviendo.  Soluciones: en
+        #el return del pic enviar una senal EOF en cada funcion y esperar
+        #desde el codigo send_receive_pic hasta esta funcion. Con esto se
+        #soluciona el problema, pero no esta implementado.
 
     def move_motor_with_sensor(self):
         '''
@@ -174,6 +177,12 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 6 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         time.sleep(self.pasos*MOTOR_CTE)
+        #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
+        #que no se maneja el return desde el pic. Deberia esperar la
+        #respuesta final del pic para poder seguir moviendo.  Soluciones: en
+        #el return del pic enviar una senal EOF en cada funcion y esperar
+        #desde el codigo send_receive_pic hasta esta funcion. Con esto se
+        #soluciona el problema, pero no esta implementado.
 
     def move_motor_skip_sensor(self):
         '''
@@ -182,6 +191,12 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 7 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         time.sleep(self.pasos*MOTOR_CTE)
+        #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
+        #que no se maneja el return desde el pic. Deberia esperar la
+        #respuesta final del pic para poder seguir moviendo.  Soluciones: en
+        #el return del pic enviar una senal EOF en cada funcion y esperar
+        #desde el codigo send_receive_pic hasta esta funcion. Con esto se
+        #soluciona el problema, pero no esta implementado.
 
     def set_led(self, led):
         '''
@@ -477,6 +492,11 @@ class BoardDarcController:
         '''
         Calibrate motors
         '''
+        #NOTE: This constants are only for this method (for the main menu,
+        #please don't get confused with real values, which are deployed in the
+        #configuration file
+        MOTORDICT ={1:'motor_ground_layer',2:'motor_alt_vertical',3:'motor_alt_horizontal'}
+        STARDICT ={1:'led_lgs1',2:'led_lgs2',3:'led_lgs3',4:'led_sci'}
         msg ='''
         Press 1 to calibrate: motor_ground_layer
         Press 2 to calibrate: motor_alt_vertical
@@ -619,6 +639,18 @@ class BoardDarcController:
         '''
         self.dir_name = self.get_directory(self.image_path)
         self.take_img_from_darc('dark', 'dark')
+        if israndom is True:
+            self.setup('motor_alt_horizontal')
+            self.motor_to_init('motor_alt_horizontal')
+            self.setup('motor_alt_vertical')
+            self.motor_to_init('motor_alt_vertical')
+        else:
+            self.setup('motor_ground_layer')
+            self.motor_to_init('motor_ground_layer')
+
+        cur_pos_1 = 0
+        cur_pos_2 = 0
+        step = 1000
         for iteration in range(0, num):
             self.setup('led_lgs1')
             # led 1 on
@@ -668,21 +700,15 @@ class BoardDarcController:
             if israndom is True:
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_horizontal')
-                self.move_motor_with_vel()
+                cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
                 #####################################
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_vertical')
-                self.move_motor_with_vel()
+                cur_pos_2, cmd_pos = self.move_in_valid_range(cur_pos_2, step)
             else:
                 #mover motores:
                 self.setup('motor_alt_horizontal')
-                self.move_motor_with_vel()
-                #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
-                #que no se maneja el return desde el pic. Deberia esperar la
-                #respuesta final del pic para poder seguir moviendo.  Soluciones: en
-                #el return del pic enviar una senal EOF en cada funcion y esperar
-                #desde el codigo send_receive_pic hasta esta funcion. Con esto se
-                #soluciona el problema, pero no esta implementado.
+                cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
 
 ########### funcion auxiliar ########################################
 def find_usb_tty(vendor_id = None, product_id = None):
