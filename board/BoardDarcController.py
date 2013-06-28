@@ -32,7 +32,7 @@ CRIM     = '\033[36m'
 NO_COLOR = '\033[0m'
 
 MILI2SEC  = 1e-3
-MOTOR_CTE = 2.0e-4
+MOTOR_CTE = 0.0e-4
 CHANGEDIR = {0:1,1:0}
 DIR2HUMAN = {0:"INIT_POS",1:"END_POS"}
 MOTORDICT ={1:'motor_ground_layer',2:'motor_alt_vertical',3:'motor_alt_horizontal'}
@@ -173,6 +173,7 @@ class BoardDarcController:
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         cmd = "sudo send_receive_pic %s 6 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
+        time.sleep(self.pasos*MOTOR_CTE)
 
     def move_motor_skip_sensor(self):
         '''
@@ -180,6 +181,7 @@ class BoardDarcController:
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         cmd = "sudo send_receive_pic %s 7 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
+        time.sleep(self.pasos*MOTOR_CTE)
 
     def set_led(self, led):
         '''
@@ -459,7 +461,6 @@ class BoardDarcController:
         if pasos > 0:
             logging.info("steps to cmd_pos: %d" % pasos)
             self.set_pasos(pasos)
-            #directin current
             self.move_motor_with_sensor()
         else:
             logging.info("steps to cmd_pos: %d" % pasos)
@@ -668,12 +669,10 @@ class BoardDarcController:
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_horizontal')
                 self.move_motor_with_vel()
-                time.sleep(self.pasos*MOTOR_CTE)
                 #####################################
                 self.pasos = random.randint(1e2, 1e3)
                 self.setup('motor_alt_vertical')
                 self.move_motor_with_vel()
-                time.sleep(self.pasos*MOTOR_CTE)
             else:
                 #mover motores:
                 self.setup('motor_alt_horizontal')
@@ -684,7 +683,6 @@ class BoardDarcController:
                 #el return del pic enviar una senal EOF en cada funcion y esperar
                 #desde el codigo send_receive_pic hasta esta funcion. Con esto se
                 #soluciona el problema, pero no esta implementado.
-                time.sleep(self.pasos*MOTOR_CTE)
 
 ########### funcion auxiliar ########################################
 def find_usb_tty(vendor_id = None, product_id = None):
