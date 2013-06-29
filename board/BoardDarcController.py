@@ -32,9 +32,10 @@ CRIM     = '\033[36m'
 NO_COLOR = '\033[0m'
 
 MILI2SEC  = 1e-3
-MOTOR_CTE = 0.0e-4
+MOTOR_CTE = 30 #secs
 CHANGEDIR = {0:1, 1:0}
 DIR2HUMAN = {0:"INIT_POS", 1:"END_POS"}
+MAX_NUM = 2147483600
 
 class BoardDarcController:
     '''
@@ -137,8 +138,8 @@ class BoardDarcController:
         cmd = "sudo send_receive_pic %s 3 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d pasos: %d, direccion %s" %(self.motor, self.pasos, DIR2HUMAN[self.direccion]))
-        logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
-        time.sleep(self.pasos*MOTOR_CTE)
+        logging.info('Waiting: %.2f [secs]'% (MOTOR_CTE))
+        time.sleep(MOTOR_CTE)
 
     def set_led_on_off(self):
         '''
@@ -163,7 +164,7 @@ class BoardDarcController:
         sts, out, err = self._execute_cmd(cmd)
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         logging.info('Waiting: %.2f [secs]'% (self.pasos*MOTOR_CTE))
-        time.sleep(self.pasos*MOTOR_CTE)
+        time.sleep(MOTOR_CTE)
         #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
         #que no se maneja el return desde el pic. Deberia esperar la
         #respuesta final del pic para poder seguir moviendo.  Soluciones: en
@@ -177,7 +178,8 @@ class BoardDarcController:
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         cmd = "sudo send_receive_pic %s 6 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
-        time.sleep(self.pasos*MOTOR_CTE)
+        time.sleep(MOTOR_CTE)
+        #time.sleep(self.pasos*MOTOR_CTE)
         #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
         #que no se maneja el return desde el pic. Deberia esperar la
         #respuesta final del pic para poder seguir moviendo.  Soluciones: en
@@ -191,7 +193,8 @@ class BoardDarcController:
         logging.info("Motor %d, velocidad %d" % (self.motor, self.velocidad))
         cmd = "sudo send_receive_pic %s 7 :" % self.tty
         sts, out, err = self._execute_cmd(cmd)
-        time.sleep(self.pasos*MOTOR_CTE)
+        time.sleep(MOTOR_CTE)
+        #time.sleep(self.pasos*MOTOR_CTE)
         #XXX to be fixed , espera 60 seg hasta que el motor se mueva por
         #que no se maneja el return desde el pic. Deberia esperar la
         #respuesta final del pic para poder seguir moviendo.  Soluciones: en
@@ -390,7 +393,7 @@ class BoardDarcController:
         self.setup('motor_ground_layer')
         self.motor_to_init('motor_ground_layer')
         cur_pos = 0
-        step = 1000
+        step = 5000
         for i in range(0, num):
             cur_pos, cmd_pos = self.move_in_valid_range(cur_pos, step)
             print "cur_pos %d" % cur_pos
@@ -403,6 +406,7 @@ class BoardDarcController:
         self.set_led_on()
         time.sleep(self.exposicion*MILI2SEC)
         self.set_led_off()
+
     def led_lgs2(self):
         '''
         Turn on/off a led, for test purposes.
@@ -457,7 +461,7 @@ class BoardDarcController:
         '''
         self.setup(motor)
         logging.info(GREEN+'Moving until find a sensor'+NO_COLOR)
-        self.set_pasos(2147483600) 
+        self.set_pasos(MAX_NUM) 
         self.move_motor_with_sensor()
         #################################
         logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
