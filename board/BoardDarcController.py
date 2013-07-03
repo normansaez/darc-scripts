@@ -13,7 +13,7 @@ import glob
 import logging
 import random
 import ConfigParser
-
+import numpy
 import darc
 import FITS
 
@@ -31,8 +31,8 @@ BLACK    = '\033[30m'
 CRIM     = '\033[36m'
 NO_COLOR = '\033[0m'
 
-MILI2SEC  = 1e-3
-MOTOR_CTE = 30 #secs
+MILI2SEC  = 0.1e-3
+MOTOR_CTE = 0 #secs
 CHANGEDIR = {0:1, 1:0}
 DIR2HUMAN = {0:"INIT_POS", 1:"END_POS"}
 MAX_NUM = 2147483600
@@ -340,7 +340,23 @@ class BoardDarcController:
             path = os.path.normpath(self.image_path+self.dir_name+'/'+image_name)
             logging.info('Image taken : %s' % path)
             logging.debug(stream)
+            print "stream info:"
+            print type(stream)
+            print stream
+            print type(stream[0])
+            print "####################"
+            print type(stream[1])
             data = stream[0].reshape(self.pxly, self.pxlx)
+            print data.shape
+            print "data info:"
+            print type(data)
+            print data
+            print data.shape
+            data = data/4
+            print "--------------"
+            print data
+            print type(data)
+#            data = data.view(dtype=numpy.int32)
             data = data.view('h')
             logging.debug('About to save image to disk , name: %s' % path)
             FITS.Write(data, path, writeMode='a')
