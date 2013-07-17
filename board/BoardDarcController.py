@@ -32,7 +32,7 @@ CRIM     = '\033[36m'
 NO_COLOR = '\033[0m'
 
 MILI2SEC  = 0.1e-3
-MOTOR_CTE = 0 #secs
+MOTOR_CTE = 15 #secs
 CHANGEDIR = {0:1, 1:0}
 DIR2HUMAN = {0:"INIT_POS", 1:"END_POS"}
 MAX_NUM = 2147483600
@@ -604,8 +604,8 @@ class BoardDarcController:
             valid = 'n'
 
             if end_valid_range == 0 and init_valid_range > 0:
-                self.set_led_off()
                 if star_off_2:
+                    self.set_led_off()
                     self.setup(star_2)
                     self.set_led_on()
                     star_off_2 = False
@@ -736,7 +736,7 @@ class BoardDarcController:
                 cur_pos_2, cmd_pos = self.move_in_valid_range(cur_pos_2, step)
             else:
                 #mover motores:
-                self.setup('motor_alt_horizontal')
+                self.setup('motor_ground_layer')
                 cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
 
 ########### funcion auxiliar ########################################
