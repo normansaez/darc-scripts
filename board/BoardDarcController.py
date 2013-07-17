@@ -666,20 +666,27 @@ class BoardDarcController:
         After that,  start all over again,  given a number of times in num
         variable
         '''
+        cur_pos_1 = 0
+        cur_pos_2 = 0
+        step = 5000
         self.dir_name = self.get_directory(self.image_path)
         self.take_img_from_darc('dark', 'dark')
         if israndom is True:
+            self.pasos = random.randint(1e2, 1e3)
             self.setup('motor_alt_horizontal')
             self.motor_to_init('motor_alt_horizontal')
+            cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
+            #####################################
+            self.pasos = random.randint(1e2, 1e3)
             self.setup('motor_alt_vertical')
             self.motor_to_init('motor_alt_vertical')
+            cur_pos_2, cmd_pos = self.move_in_valid_range(cur_pos_2, step)
         else:
+            #mover motores:
             self.setup('motor_ground_layer')
             self.motor_to_init('motor_ground_layer')
+            cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
 
-        cur_pos_1 = 0
-        cur_pos_2 = 0
-        step = 1000
         for iteration in range(0, num):
             self.setup('led_lgs1')
             # led 1 on
