@@ -340,23 +340,22 @@ class BoardDarcController:
             path = os.path.normpath(self.image_path+self.dir_name+'/'+image_name)
             logging.info('Image taken : %s' % path)
             logging.debug(stream)
-            print "stream info:"
-            print type(stream)
-            print stream
-            print type(stream[0])
-            print "####################"
-            print type(stream[1])
+            #print "stream info:"
+            #print type(stream)
+            #print stream
+            #print type(stream[0])
+            #print "####################"
+            #print type(stream[1])
             data = stream[0].reshape(self.pxly, self.pxlx)
-            print data.shape
-            print "data info:"
-            print type(data)
-            print data
-            print data.shape
+            #print data.shape
+            #print "data info:"
+            #print type(data)
+            #print data
+            #print data.shape
             data = data/4
-            print "--------------"
-            print data
-            print type(data)
-#            data = data.view(dtype=numpy.int32)
+            #print "--------------"
+            #print data
+            #print type(data)
             data = data.view('h')
             logging.debug('About to save image to disk , name: %s' % path)
             FITS.Write(data, path, writeMode='a')
