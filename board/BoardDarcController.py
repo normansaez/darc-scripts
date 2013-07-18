@@ -481,9 +481,10 @@ class BoardDarcController:
         self.move_motor_with_sensor()
         #################################
         logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
-        self.set_pasos(2000) 
+        self.set_pasos(3000) 
         self.set_direccion(CHANGEDIR[self.direccion])
         self.move_motor_skip_sensor()
+        self.set_direccion(CHANGEDIR[self.direccion])
         #################################
 
     def move_in_valid_range(self, current_position, step):
