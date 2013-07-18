@@ -70,6 +70,7 @@ class BoardDarcController:
             sys.exit(-1)
         try:
             self.tty = find_usb_tty()[0]
+            #self.tty = "/dev/USB0"
             logging.info("USB connected: %s" % self.tty)
         except Exception, ex:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -408,10 +409,11 @@ class BoardDarcController:
         self.setup('motor_ground_layer')
         self.motor_to_init('motor_ground_layer')
         cur_pos = 0
-        step = 5000
+        step = 1000
+        self.set_direccion(CHANGEDIR[self.direccion])
         for i in range(0, num):
             cur_pos, cmd_pos = self.move_in_valid_range(cur_pos, step)
-            print "cur_pos %d" % cur_pos
+            #print "cur_pos %d" % cur_pos
 
     def led_lgs1(self):
         '''
@@ -470,6 +472,21 @@ class BoardDarcController:
         self.setup('motor_ground_layer')
         self.move_motor_with_vel()
 
+    def motor_skip_sensor(self, motor):
+        '''
+        Skip sensor
+        '''
+        self.setup(motor)
+        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
+        self.set_pasos(3000) 
+        logging.info("Original direccion %s" % (DIR2HUMAN[self.direccion]))
+        self.set_direccion(CHANGEDIR[self.direccion])
+        logging.info("Direccion to skip sensor %s SET OK" % (DIR2HUMAN[self.direccion]))
+        self.move_motor_skip_sensor()
+        logging.info("About to back to direccion: %s" % (DIR2HUMAN[CHANGEDIR[self.direccion]]))
+        self.set_direccion(CHANGEDIR[self.direccion])
+        logging.info("Original direction %s SET OK" % (DIR2HUMAN[self.direccion]))
+
     def motor_to_init(self, motor):
         '''
         Moves motor to init
@@ -478,13 +495,7 @@ class BoardDarcController:
         logging.info(GREEN+'Moving until find a sensor'+NO_COLOR)
         self.set_pasos(MAX_NUM) 
         self.move_motor_with_sensor()
-        #################################
-        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
-        self.set_pasos(3000) 
-        self.set_direccion(CHANGEDIR[self.direccion])
-        self.move_motor_skip_sensor()
-        self.set_direccion(CHANGEDIR[self.direccion])
-        #################################
+        self.motor_skip_sensor(motor)
 
     def move_in_valid_range(self, current_position, step):
         '''
@@ -503,12 +514,12 @@ class BoardDarcController:
 
         pasos = cmd_position - current_position
         if pasos > 0:
-            logging.info("steps to cmd_pos: %d" % pasos)
+            logging.info("STEPS to cmd_pos: %d --> to %s" % (pasos,DIR2HUMAN[self.direccion]))
             self.set_pasos(pasos)
             self.move_motor_with_sensor()
         else:
-            logging.info("steps to cmd_pos: %d" % pasos)
             self.set_direccion(CHANGEDIR[self.direccion])
+            logging.info("STEPS to cmd_pos: %d --> to %s" % (pasos,DIR2HUMAN[self.direccion]))
             pasos = abs(pasos)
             self.set_pasos(pasos)
             self.move_motor_with_sensor()
@@ -625,19 +636,11 @@ class BoardDarcController:
             if max_range > 0 and init_valid_range > 0 and end_valid_range > 0:
                 break
         #################################
-        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
-        self.set_pasos(2000) 
-        self.set_direccion(CHANGEDIR[self.direccion])
-        self.move_motor_skip_sensor()
+        self.motor_skip_sensor(m)
         #################################
-        logging.info(GREEN+'Back to original position'+NO_COLOR)
-        self.set_pasos(max_range) 
-        self.move_motor_with_sensor()
+        self.motor_to_init(m)
         #################################
-        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
-        self.set_pasos(2000) 
-        self.set_direccion(CHANGEDIR[self.direccion])
-        self.move_motor_skip_sensor()
+        #self.motor_skip_sensor(m)
         #################################
         self.set_led_off()
         logging.info(GREEN+'Calibration DONE'+NO_COLOR)
@@ -675,16 +678,18 @@ class BoardDarcController:
             self.pasos = random.randint(1e2, 1e3)
             self.setup('motor_alt_horizontal')
             self.motor_to_init('motor_alt_horizontal')
+            self.set_direccion(CHANGEDIR[self.direccion])
             cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
-            #####################################
             self.pasos = random.randint(1e2, 1e3)
             self.setup('motor_alt_vertical')
             self.motor_to_init('motor_alt_vertical')
+            self.set_direccion(CHANGEDIR[self.direccion])
             cur_pos_2, cmd_pos = self.move_in_valid_range(cur_pos_2, step)
         else:
             #mover motores:
             self.setup('motor_ground_layer')
             self.motor_to_init('motor_ground_layer')
+            self.set_direccion(CHANGEDIR[self.direccion])
             cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
 
         for iteration in range(0, num):
@@ -734,16 +739,14 @@ class BoardDarcController:
 
             #mover motores:
             if israndom is True:
-                self.pasos = random.randint(1e2, 1e3)
-                self.setup('motor_alt_horizontal')
+                self.set_pasos(random.randint(1e2, 1e3))
+                self.set_pasos(self.pasos)
                 cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
                 #####################################
-                self.pasos = random.randint(1e2, 1e3)
-                self.setup('motor_alt_vertical')
+                self.set_pasos(random.randint(1e2, 1e3))
                 cur_pos_2, cmd_pos = self.move_in_valid_range(cur_pos_2, step)
             else:
                 #mover motores:
-                self.setup('motor_ground_layer')
                 cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
 
 ########### funcion auxiliar ########################################
