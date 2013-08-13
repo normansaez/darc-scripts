@@ -66,6 +66,78 @@ class BBBTest(unittest.TestCase):
                 self.assertEqual (l.__class__.__name__,'Led')
         ####################
 
+    def test_led_simulated(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Led
+        l = Led(1)
+
+        in_val = True
+        out_val = False
+        l.set_simulated(in_val)
+        out_val = l.get_simulated()
+        self.assertEqual(in_val, out_val)
+
+    def test_led_pin(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Led
+        l = Led(1)
+
+        in_val = 1
+        out_val = 0
+        l.set_pin(in_val)
+        out_val = l.get_pin()
+        self.assertEqual(in_val, out_val)
+
+    def test_led_name(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Led
+        l = Led(1)
+
+        in_val = 'name'
+        out_val = ''
+        l.set_name(in_val)
+        out_val = l.get_name()
+        self.assertEqual(in_val, out_val)
+
+    def test_led_exp_time(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Led
+        l = Led(1)
+
+        in_val = 10
+        out_val = 0
+        l.set_exp_time(in_val)
+        out_val = l.get_exp_time()
+        self.assertEqual(in_val, out_val)
+
+    def test_led_brightness(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Led
+        l = Led(1)
+
+        in_val = 10
+        out_val = 0
+        l.set_brightness(in_val)
+        out_val = l.get_brightness()
+        self.assertEqual(in_val, out_val)
+
+    def test_led_brightness(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Led
+        l = Led(1)
+
+        in_val = 10
+        out_val = 0
+        l.set_brightness(in_val)
+        out_val = l.get_brightness()
+        self.assertEqual(in_val, out_val)
+
     def test_led_on(self):
         '''
         '''
@@ -74,6 +146,127 @@ class BBBTest(unittest.TestCase):
         self.assertEqual (l.__class__.__name__,'Led')
         l.set_on()
         ####################
+
+    def test_led_off(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Led
+        l = Led(1)
+        self.assertEqual (l.__class__.__name__,'Led')
+        l.set_off()
+        ####################
+#-----------------------------------------------------------------------
+    def test_motor_simulated(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = True
+        out_val = False
+        m.set_simulated(in_val)
+        out_val = m.get_simulated()
+        self.assertEqual(in_val, out_val)
+
+    def test_motor_name(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 'name'
+        out_val = ''
+        m.set_name(in_val)
+        out_val = m.get_name()
+        self.assertEqual(in_val, out_val)
+
+    def test_motor_pin(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 1
+        out_val = 0
+        m.set_pin(in_val)
+        out_val = m.get_pin()
+        self.assertEqual(in_val, out_val)
+
+    def test_cur_pos(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 1
+        out_val = 0
+        m.set_cur_pos(in_val)
+        out_val = m.get_cur_pos()
+        self.assertEqual(in_val, out_val)
+
+    def test_steps(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 1
+        out_val = 0
+        m.set_steps(in_val)
+        out_val = m.get_steps()
+        self.assertEqual(in_val, out_val)
+
+
+    def test_direction(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 1
+        out_val = 0
+        m.set_direction(in_val)
+        out_val = m.get_direction()
+        self.assertEqual(in_val, out_val)
+
+
+    def test_velocity(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 1
+        out_val = 0
+        m.set_velocity(in_val)
+        out_val = m.get_velocity()
+        self.assertEqual(in_val, out_val)
+
+    def test_vr_init(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 1
+        out_val = 0
+        m.set_vr_init(in_val)
+        out_val = m.get_vr_init()
+        self.assertEqual(in_val, out_val)
+
+    def test_vr_end(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+
+        in_val = 1
+        out_val = 0
+        m.set_vr_end(in_val)
+        out_val = m.get_vr_end()
+        self.assertEqual(in_val, out_val)
+
+
 
 if __name__ == '__main__':
     bbbt = unittest.TestLoader().loadTestsFromTestCase(BBBTest)
