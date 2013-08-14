@@ -1,0 +1,621 @@
+#!/usr/bin/python 
+'''
+Controller
+This script controls the board and communicates with darc to take an image
+'''
+import sys
+sys.path.append('/rtc/lib/python')
+
+import os
+import re
+import time
+import glob
+import logging
+import random
+import ConfigParser
+import numpy
+import darc
+import FITS
+
+from optparse import OptionParser
+from subprocess import Popen, PIPE
+
+__package__ = 'Controller'
+
+#COLOR CONST
+BLUE     = '\033[34m'
+RED      = '\033[31m'
+GREEN    = '\033[32m'
+YELLOW   = '\033[33m'
+BLACK    = '\033[30m'
+CRIM     = '\033[36m'
+NO_COLOR = '\033[0m'
+
+MILI2SEC  = 0.1e-3
+MOTOR_CTE = 15 #secs
+CHANGEDIR = {0:1, 1:0}
+DIR2HUMAN = {0:"INIT_POS", 1:"END_POS"}
+MAX_NUM = 2147483600
+
+class Controller:
+    '''
+    Controller:
+    This script controls the board and communicates with darc to take an image
+    '''
+    def __init__(self):
+        '''
+        Sets parameters taken from configurations.cfg file.
+        The current path for configuration file is:
+        /home/dani/nsaez/board/configurations.cfg
+        '''
+        Config = ConfigParser.ConfigParser()
+        self.Config = Config
+        self.image_prefix = None
+        self.dir_name = None
+        try:
+            self.configfile = "configurations.cfg"
+            #self.configfile = "/home/dani/nsaez/board/configurations.cfg"
+            self.Config.read(self.configfile)
+        except:
+            logging.error("configurations.cfg : File doesn't exits")
+            sys.exit(-1)
+        try:
+            #self.tty = find_usb_tty()[0]
+            self.tty = "/dev/USB0"
+            logging.info("USB connected: %s" % self.tty)
+        except Exception, ex:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logging.error(ex)
+            logging.error("Seems to be unplugged usb cable to pic ! ")
+            logging.error("Check line number: %d" % exc_tb.tb_lineno)
+            sys.exit(-1)
+        try:
+            self.camera_name = self.Config.get('darc', 'camera')
+            self.pxlx  = self.Config.getint('darc',  'pxlx')
+            self.pxly  = self.Config.getint('darc', 'pxly')
+            self.image_path  = self.Config.get('darc', 'image_path')
+            self.darc = darc.Control(self.camera_name)
+        except Exception, ex:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logging.error(ex)
+            logging.error("Check line number: %d" % (exc_tb.tb_lineno))
+            sys.exit(-1)
+        
+    def get_directory(self, image_path):
+        '''
+        Set image directory name to take images
+        return a string with these image directory
+        '''
+        current =  str(time.strftime("%Y_%m_%d", time.gmtime()))
+        current_dir = glob.glob(image_path+'*')
+        current_dir = sorted(current_dir)
+        last = current_dir[-1]
+        if last.split('/')[-1].split('.')[0] == current:
+            adquisition_number = int(last.split('/')[-1].split('.')[1]) + 1
+            dir_name = current+'.'+ str(adquisition_number)
+        else:
+            dir_name = current+'.0'
+        logging.info('Directory name: %s'% dir_name)
+        return dir_name
+
+    def take_img_from_darc(self, iteration, prefix):
+        '''
+        Using darc, take a FITS image and save it into the disk. By default use
+        a image_prefix-YEAR-MONTH-DAY-T-HOUR-MIN-SEC.fits as image name.  The
+        path to be store the file as well as image_prefix can be modified in
+        configuration file
+        '''
+        try:
+            logging.debug('About to take image with darc ...')
+            stream = self.darc.GetStream(self.camera_name+'rtcPxlBuf')
+            img_ite = 's%s_'% str(iteration).zfill(3)
+            img_wfs = 'w%s_'% str(prefix).zfill(3)
+            image_name = img_ite + img_wfs +'T' +str(time.strftime("%Y_%m_%dT%H_%M_%S.fits", time.gmtime()))
+            if os.path.exists(self.image_path+self.dir_name) is False:
+                os.mkdir(self.image_path+self.dir_name)
+            path = os.path.normpath(self.image_path+self.dir_name+'/'+image_name)
+            logging.info('Image taken : %s' % path)
+            logging.debug(stream)
+            data = stream[0].reshape(self.pxly, self.pxlx)
+            data = data/4
+            data = data.view('h')
+            logging.debug('About to save image to disk , name: %s' % path)
+            FITS.Write(data, path, writeMode='a')
+            logging.info('Image saved : %s' % path)
+        except Exception, ex:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logging.error(ex)
+            logging.error("Check line number: %d" % exc_tb.tb_lineno)
+            logging.error("Is darc running??") 
+
+    def setup(self, config_name='led_lgs1'):
+        '''
+        Setup default parameters taken from configurations.cfg
+        '''
+        logging.info('Configuring :%s ' % config_name)
+        if config_name.__contains__('led'):
+            led = self.Config.getint(config_name, 'led')
+            exposicion = self.Config.getint(config_name, 'exposicion')
+            brillo = self.Config.getint(config_name, 'brillo')
+            self.image_prefix  = self.Config.get(config_name, 'image_prefix')
+
+            self.set_led(led)
+            self.set_exposicion(exposicion)
+            self.set_brillo(brillo)
+
+        if config_name.__contains__('motor'):
+            motor = self.Config.getint(config_name, 'motor')
+            direccion = self.Config.getint(config_name, 'direccion')
+            velocidad = self.Config.getint(config_name, 'velocidad')
+            pasos = self.Config.getint(config_name, 'pasos')
+            init_valid_range = self.Config.getint(config_name, 'init_valid_range')
+            end_valid_range = self.Config.getint(config_name, 'end_valid_range')
+            max_range = self.Config.getint(config_name, 'max_range')
+            self.set_motor_name(config_name)
+            self.set_motor(motor)
+            self.set_direccion(direccion)
+            self.set_velocidad(velocidad)
+            self.set_pasos(pasos)
+            self.set_init_valid_range(init_valid_range)
+            self.set_end_valid_range(end_valid_range)
+            self.set_init_valid_range(init_valid_range)
+
+        logging.info('Configuration :%s done!' % config_name)
+
+
+    def loop_for_r0(self, num):
+        '''
+        Loop to calculate r0. Move a motor forever.
+        '''
+        self.setup('motor_ground_layer')
+        self.motor_to_init('motor_ground_layer')
+        cur_pos = 0
+        step = 1000
+        self.set_direccion(CHANGEDIR[self.direccion])
+        for i in range(0, num):
+            cur_pos, cmd_pos = self.move_in_valid_range(cur_pos, step)
+            #print "cur_pos %d" % cur_pos
+
+    def led_lgs1(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('led_lgs1')
+        self.set_led_on()
+        time.sleep(self.exposicion*MILI2SEC)
+        self.set_led_off()
+
+    def led_lgs2(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('led_lgs2')
+        self.set_led_on()
+        time.sleep(self.exposicion*MILI2SEC)
+        self.set_led_off()
+
+    def led_lgs3(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('led_lgs3')
+        self.set_led_on()
+        time.sleep(self.exposicion*MILI2SEC)
+        self.set_led_off()
+
+    def led_sci(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('led_sci')
+        self.set_led_on()
+        time.sleep(self.exposicion*MILI2SEC)
+        self.set_led_off()
+
+    def motor_alt_vertical(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('motor_alt_vertical')
+        self.move_motor_with_vel()
+
+    def motor_alt_horizontal(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('motor_alt_horizontal')
+        self.move_motor_with_vel()
+
+    def motor_ground_layer(self):
+        '''
+        Turn on/off a led, for test purposes.
+        '''
+        self.setup('motor_ground_layer')
+        self.move_motor_with_vel()
+
+    def motor_skip_sensor(self, motor):
+        '''
+        Skip sensor
+        '''
+        self.setup(motor)
+        logging.info(GREEN+'Skipping from sensor'+NO_COLOR)
+        self.set_pasos(3000) 
+        logging.info("Original direccion %s" % (DIR2HUMAN[self.direccion]))
+        self.set_direccion(CHANGEDIR[self.direccion])
+        logging.info("Direccion to skip sensor %s SET OK" % (DIR2HUMAN[self.direccion]))
+        self.move_motor_skip_sensor()
+        logging.info("About to back to direccion: %s" % (DIR2HUMAN[CHANGEDIR[self.direccion]]))
+        self.set_direccion(CHANGEDIR[self.direccion])
+        logging.info("Original direction %s SET OK" % (DIR2HUMAN[self.direccion]))
+
+    def motor_to_init(self, motor):
+        '''
+        Moves motor to init
+        '''
+        self.setup(motor)
+        logging.info(GREEN+'Moving until find a sensor'+NO_COLOR)
+        self.set_pasos(MAX_NUM) 
+        self.move_motor_with_sensor()
+        self.motor_skip_sensor(motor)
+
+    def move_in_valid_range(self, current_position, step):
+        '''
+        Movements in valid ranges
+        '''
+        self.motor
+        logging.info("cur_pos : %d" % current_position)
+        cmd_position = current_position + step
+        logging.info("cmd_pos : %d" % cmd_position)
+        if cmd_position < self.init_valid_range:
+            logging.error("cmd from %d --> %d" % (cmd_position, self.init_valid_range))
+            cmd_position = self.init_valid_range
+        if cmd_position > self.end_valid_range:
+            logging.error("cmd from %d --> %d" % (cmd_position, self.init_valid_range))
+            cmd_position = self.init_valid_range
+
+        pasos = cmd_position - current_position
+        if pasos > 0:
+            logging.info("STEPS to cmd_pos: %d --> to %s" % (pasos,DIR2HUMAN[self.direccion]))
+            self.set_pasos(pasos)
+            self.move_motor_with_sensor()
+        else:
+            self.set_direccion(CHANGEDIR[self.direccion])
+            logging.info("STEPS to cmd_pos: %d --> to %s" % (pasos,DIR2HUMAN[self.direccion]))
+            pasos = abs(pasos)
+            self.set_pasos(pasos)
+            self.move_motor_with_sensor()
+            self.set_direccion(CHANGEDIR[self.direccion])
+
+        current_position = cmd_position
+        return current_position, cmd_position
+
+    def calibration(self):
+        '''
+        Calibrate motors
+        '''
+        #NOTE: This constants are only for this method (for the main menu,
+        #please don't get confused with real values, which are deployed in the
+        #configuration file
+        MOTORDICT = {1:'motor_ground_layer', 2:'motor_alt_vertical', 3:'motor_alt_horizontal'}
+        STARDICT = {1:'led_lgs1', 2:'led_lgs2', 3:'led_lgs3', 4:'led_sci'}
+        msg = '''
+        Press 1 to calibrate: motor_ground_layer
+        Press 2 to calibrate: motor_alt_vertical
+        Press 3 to calibrate: motor_alt_horizontal
+        '''
+        m = 'motor_ground_layer'
+        motor = raw_input(msg)
+        try:
+            m = MOTORDICT[int(motor)]
+        except Exception, ex:
+            logging.error(RED+"Please put an allowed number: 1,2 or 3"+NO_COLOR)
+        #moving to init
+        self.motor_to_init(m)
+        msg = '''
+        Please put steps
+        '''
+        steps = int(raw_input(msg))
+        all_steps = 0
+        init_valid_range = 0
+        end_valid_range  = 0
+        max_range = 0
+
+        star_cal_1 = 0
+        star_cal_2 = 0
+
+        star_off_1 = True
+        star_off_2 = True
+
+        star_1 = 'led_lgs1'
+        star_2 = 'led_lgs2'
+
+        self.set_pasos(steps)
+        while (True):
+            self.move_motor_skip_sensor()
+            all_steps = all_steps + steps
+            if star_cal_1 == 0:
+                msg = '''
+                INIT:
+                Press 1 to turn on a star calibrate: led_lgs1 
+                Press 2 to turn on a star calibrate: led_lgs2
+                Press 3 to turn on a star calibrate: led_lgs3
+                Press 4 to turn on a star calibrate: led_sci
+                '''
+                star = raw_input(msg)
+                try:
+                    star_1 = STARDICT[int(star)]
+                except Exception, ex:
+                    logging.error(RED+"Please put an allowed number: 1,2,3 or 4"+NO_COLOR)
+                star_cal_1 = 1
+
+            if star_cal_2 == 0:
+                msg = '''
+                END:
+                Press 1 to turn on a star calibrate: led_lgs1 
+                Press 2 to turn on a star calibrate: led_lgs2
+                Press 3 to turn on a star calibrate: led_lgs3
+                Press 4 to turn on a star calibrate: led_sci
+                '''
+                star = raw_input(msg)
+                try:
+                    star_2 = STARDICT[int(star)]
+                except Exception, ex:
+                    logging.error(RED+"Please put an allowed number: 1,2,3 or 4"+NO_COLOR)
+                star_cal_2 = 1
+
+            if init_valid_range == 0:
+                if star_off_1:
+                    self.setup(star_1)
+                    self.set_led_on()
+                    star_off_1 = False
+                print "Is this a valid init range? [y/n]"
+                valid = raw_input()
+                if valid == 'y':
+                    init_valid_range = all_steps
+                    print "init_valid_range :%d" % init_valid_range
+            valid = 'n'
+
+            if end_valid_range == 0 and init_valid_range > 0:
+                if star_off_2:
+                    self.set_led_off()
+                    self.setup(star_2)
+                    self.set_led_on()
+                    star_off_2 = False
+                print "Is this a valid end range? [y/n]"
+                valid = raw_input()
+                if valid == 'y':
+                    end_valid_range = all_steps
+                    print "end_valid_range :%d" % end_valid_range
+                
+            valid = 'n'
+            if max_range == 0 and init_valid_range > 0 and end_valid_range > 0:
+                print "Is this the end of the path? [y/n]"
+                valid = raw_input()
+                if valid == 'y':
+                    max_range = all_steps
+                    print "max_range :%d" % max_range
+            if max_range > 0 and init_valid_range > 0 and end_valid_range > 0:
+                break
+        #################################
+        self.motor_skip_sensor(m)
+        #################################
+        self.motor_to_init(m)
+        #################################
+        #self.motor_skip_sensor(m)
+        #################################
+        self.set_led_off()
+        logging.info(GREEN+'Calibration DONE'+NO_COLOR)
+        logging.info(GREEN+('init_valid_range: %d' % init_valid_range)+NO_COLOR)
+        logging.info(GREEN+('end_valid_range : %d' % end_valid_range)+NO_COLOR)
+        logging.info(GREEN+('max_range       : %d' % max_range)+NO_COLOR)
+        self.set_init_valid_range(init_valid_range)
+        self.set_end_valid_range(end_valid_range)
+        self.set_max_range(max_range)
+        logging.info(GREEN+('VALUES STORED IN CONFIGURATION FILE')+NO_COLOR)
+        with open(self.configfile, 'wb') as configfile:
+            self.Config.write(configfile)
+
+    def table(self, num, israndom=False):
+        '''
+        This method does:
+        0. take image (dark)
+        1. turn on led 1
+        2. take image
+        3. turn on led 2
+        4. take image
+        5. turn on led 3
+        6. take image
+        7. move a motor
+        
+        After that,  start all over again,  given a number of times in num
+        variable
+        '''
+        cur_pos_1 = 0
+        cur_pos_2 = 0
+        step = 5000
+        self.dir_name = self.get_directory(self.image_path)
+        self.take_img_from_darc('dark', 'dark')
+        if israndom is True:
+            self.pasos = random.randint(1e2, 1e3)
+            self.setup('motor_alt_horizontal')
+            self.motor_to_init('motor_alt_horizontal')
+            self.set_direccion(CHANGEDIR[self.direccion])
+            cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
+            self.pasos = random.randint(1e2, 1e3)
+            self.setup('motor_alt_vertical')
+            self.motor_to_init('motor_alt_vertical')
+            self.set_direccion(CHANGEDIR[self.direccion])
+            cur_pos_2, cmd_pos = self.move_in_valid_range(cur_pos_2, step)
+        else:
+            #mover motores:
+            self.setup('motor_ground_layer')
+            self.motor_to_init('motor_ground_layer')
+            self.set_direccion(CHANGEDIR[self.direccion])
+            cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
+
+        for iteration in range(0, num):
+            self.setup('led_lgs1')
+            # led 1 on
+            self.set_led_on()
+            time.sleep(self.exposicion*MILI2SEC)
+
+            #take img with darc
+            self.take_img_from_darc(iteration, self.image_prefix)
+
+            #led off
+            self.set_led_off()
+
+            # led 2 on
+            self.setup('led_lgs2')
+            self.set_led_on()
+            time.sleep(self.exposicion*MILI2SEC)
+
+            #take img with darc
+            self.take_img_from_darc(iteration, self.image_prefix)
+
+            #led off
+            self.set_led_off()
+
+            # led 3 on
+            self.setup('led_lgs3')
+            self.set_led_on()
+            time.sleep(self.exposicion*MILI2SEC)
+
+            #take img with darc
+            self.take_img_from_darc(iteration, self.image_prefix)
+
+            #led off
+            self.set_led_off()
+
+            # sci led on
+            self.setup('led_sci')
+            self.set_led_on()
+            time.sleep(self.exposicion*MILI2SEC)
+
+            #take img with darc
+            self.take_img_from_darc(iteration, self.image_prefix)
+
+            #led off
+            self.set_led_off()
+
+            #mover motores:
+            if israndom is True:
+                self.set_pasos(random.randint(1e2, 1e3))
+                self.set_pasos(self.pasos)
+                cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
+                #####################################
+                self.set_pasos(random.randint(1e2, 1e3))
+                cur_pos_2, cmd_pos = self.move_in_valid_range(cur_pos_2, step)
+            else:
+                #mover motores:
+                cur_pos_1, cmd_pos = self.move_in_valid_range(cur_pos_1, step)
+
+########### funcion auxiliar ########################################
+def find_usb_tty(vendor_id = None, product_id = None):
+    '''
+    find_usb_tty: used to get the correct /dev/ttyUSB*
+    Not included in BoardControlled class
+    '''
+    tty_devs    = []
+
+    for dn in glob.glob('/sys/bus/usb/devices/*') :
+        try     :
+            vid = int(open(os.path.join(dn, "idVendor" )).read().strip(), 16)
+            pid = int(open(os.path.join(dn, "idProduct")).read().strip(), 16)
+            if  ((vendor_id is None) or (vid == vendor_id)) and ((product_id is None) or (pid == product_id)) :
+                dns = glob.glob(os.path.join(dn, os.path.basename(dn) + "*"))
+                for sdn in dns :
+                    for fn in glob.glob(os.path.join(sdn, "*")) :
+                        if  re.search(r"\/ttyUSB[0-9]+$", fn) :
+                            #tty_devs.append("/dev" + os.path.basename(fn))
+                            tty_devs.append(os.path.join("/dev", os.path.basename(fn)))
+                        pass
+                    pass
+                pass
+            pass
+        except ( ValueError, TypeError, AttributeError, OSError, IOError ) :
+            pass
+        pass
+    return tty_devs
+
+#####################################################################
+############################# MAIN ##################################
+#####################################################################
+
+if __name__ == '__main__':
+    usage = '''
+        Controller <options>
+        Check /home/dani/nsaez/board/configurations.cfg default configurations
+            Type -h, --help for help.
+                '''
+    parser = OptionParser(usage)
+    parser.add_option("-r", "--r0", dest="r0", metavar="r0", default=False, action="store_true", help = "Start loop to obtain r0 (infinite loop)")
+    parser.add_option("-t", "--table", dest="table", metavar="table", default=False, action="store_true", help = "Movement needed for table")
+    parser.add_option("-a", "--aleatory", dest="aleatory", metavar="aleatory", default=False, action="store_true", help = "Movement needed for table, aleatory motor_alt_vertical, motor_alt_horizontal")
+    parser.add_option("-n", "--num", dest="num", metavar="num", type="int", default=2, help = "Number of iterations for --table method")
+    parser.add_option("-c", "--calibration", dest="calibration", metavar="calibration", default=False, action="store_true", help = "Calibration method for MOTORS")
+    parser.add_option("-1", "--led_lgs1", dest="led_lgs1", metavar="led_lgs1", default=False, action="store_true", help = "Test, turning on/off led_lgs1")
+    parser.add_option("-2", "--led_lgs2", dest="led_lgs2", metavar="led_lgs2", default=False, action="store_true", help = "Test, turning on/off led_lgs2")
+    parser.add_option("-3", "--led_lgs3", dest="led_lgs3", metavar="led_lgs3", default=False, action="store_true", help = "Test, turning on/off led_lgs3")
+    parser.add_option("-s", "--led_sci", dest="led_sci", metavar="led_sci", default=False, action="store_true", help = "Test, turning on/off led_sci")
+    parser.add_option("-v", "--motor_alt_vertical", dest="motor_alt_vertical", metavar="motor_alt_vertical", default=False, action="store_true", help = "Test, turning on/off motor_alt_vertical")
+    parser.add_option("-o", "--motor_alt_horizontal", dest="motor_alt_horizontal", metavar="motor_alt_horizontal", default=False, action="store_true", help = "Test, turning on/off motor_alt_horizontal")
+    parser.add_option("-g", "--motor_ground_layer", dest="motor_ground_layer", metavar="motor_ground_layer", default=False, action="store_true", help = "Test, turning on/off motor_ground_layer")
+    parser.add_option("-d", "--debug", dest="debug", metavar="debug", default=False, action="store_true", help = "debug mode, prints all messages")
+    (options , args) = parser.parse_args()
+    if options.debug is False:
+        logging.getLogger().setLevel(logging.INFO)
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
+    else:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s')
+
+    if options.r0 is False and \
+    options.table is False and \
+    options.led_lgs1 is False and \
+    options.led_lgs2 is False and \
+    options.led_lgs3 is False and \
+    options.led_sci is False and \
+    options.calibration is False and \
+    options.motor_alt_vertical is False and \
+    options.motor_alt_horizontal is False and \
+    options.aleatory is False and \
+    options.motor_ground_layer is False:
+        print usage
+        print "It is mandatory use --r0 , --table, --calibration or --ledtest as parameter"
+        sys.exit(-1)
+
+    BDC = Controller()
+    if options.r0 is True:
+        BDC.loop_for_r0(options.num)
+
+    if options.table is True:
+        BDC.table(options.num)
+
+    if options.aleatory is True:
+        BDC.table(options.num, israndom=True)
+
+    if options.calibration is True:
+        BDC.calibration()
+
+    if options.motor_ground_layer is True:
+        BDC.motor_ground_layer()
+
+    if options.motor_alt_vertical is True:
+        BDC.motor_alt_vertical()
+
+    if options.motor_alt_horizontal is True:
+        BDC.motor_alt_horizontal()
+
+    if options.led_lgs1 is True:
+        BDC.led_lgs1()
+
+    if options.led_lgs2 is True:
+        BDC.led_lgs2()
+
+    if options.led_lgs3 is True:
+        BDC.led_lgs3()
+
+    if options.led_sci is True:
+        BDC.led_sci()
+
