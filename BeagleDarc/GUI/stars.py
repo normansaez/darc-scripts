@@ -11,7 +11,8 @@ import gtk
 class Main:
     def __init__(self):
         self.win = gtk.Window()
-        self.win.set_size_request(1148, 566)
+#        self.win.set_size_request(1148, 566)
+        self.win.set_size_request(800, 800)
         self.win.set_title('Stars')
         self.win.set_resizable(False)
         self.win.set_events(self.win.get_events() | gtk.gdk.BUTTON_PRESS_MASK)
@@ -26,7 +27,8 @@ class Main:
 
         self.win.show_all()
         img = gtk.Image()
-        img.set_from_file('./stars.jpg')
+#        img.set_from_file('./stars.jpg')
+        img.set_from_file('./img/star800.png')
         img.show()
         self.fix.put(img, 0, 0)
         button = gtk.ToggleButton("1")
@@ -34,11 +36,17 @@ class Main:
         #vbox = gtk.VBox(True, 2)
         #vbox.pack_start(button, True, True, 2)
         button.show()
-        self.fix.put(button, 565 , 279)
+        self.fix.put(button, 395 , 390)
+        #B2
+        #button = gtk.ToggleButton("2")
+        #button.connect("toggled", self.callback, "2")
+        #button.show()
+        #self.fix.put(button, 384 , 424)
 
     def callback(self, widget, data=None):
         print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
-         
+        print widget.get_active()
+
     def show_flower(self, widget, event):
         count = 0
         if event.type == gtk.gdk.BUTTON_PRESS:

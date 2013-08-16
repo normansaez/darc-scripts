@@ -266,6 +266,28 @@ class BBBTest(unittest.TestCase):
         out_val = m.get_vr_end()
         self.assertEqual(in_val, out_val)
 
+    def test_move_motor_with_sensor(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+        cur_pos = 0 
+        cur_pos = m.move_motor_with_sensor(cur_pos)
+        cmd_pos = 1000 
+        cur_pos = m.move_motor_with_sensor(cmd_pos)
+        self.assertEqual(cur_pos, cmd_pos)
+
+    def test_move_motor_skip_sensor(self):
+        '''
+        '''
+        from BeagleDarc.Peripherals import Motor
+        m = Motor('ground_layer')
+        cur_pos = 0 
+        cur_pos = m.move_motor_skip_sensor(cur_pos)
+        cmd_pos = 1000 
+        cur_pos = m.move_motor_skip_sensor(cmd_pos)
+        self.assertEqual(cur_pos, cmd_pos)
+
 
 
 if __name__ == '__main__':

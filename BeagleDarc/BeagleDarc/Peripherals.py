@@ -148,15 +148,17 @@ class Motor(Device):
         return self.vr_end
 
 ####################################################################
-    def set_on(self):
+    def move_motor_with_sensor(self, cmd_pos):
         '''
         ''' 
         self.send_and_wait('turn on')
+        return cmd_pos
 
-    def set_off(self):
+    def move_motor_skip_sensor(self, cmd_pos):
         '''
         '''
         self.send_and_wait('turn on')
+        return cmd_pos
 ############################################################################################################################################
 class Led(Device):
     '''
