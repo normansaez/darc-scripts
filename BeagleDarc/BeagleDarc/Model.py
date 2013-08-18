@@ -1,0 +1,234 @@
+#!/usr/bin/python 
+'''
+Model
+Handle file configurations between GUI/Controller
+'''
+import sys
+
+import time
+import glob
+import logging
+import ConfigParser
+
+
+class Model:
+    '''
+    Model:
+    Handle file configurations between GUI/Controller
+    '''
+    def __init__(self):
+        '''
+        Sets parameters taken from configurations.cfg file.
+        The current path for configuration file is:
+        /home/dani/nsaez/board/configurations.cfg
+        '''
+        self.config = ConfigParser.ConfigParser()
+        logging.basicConfig()
+        self.log = logging.getLogger("Model")
+        try:
+            self.configfile = "./configurations.cfg"
+            self.config.read(self.configfile)
+        except Exception, ex:
+            _ , _ , exc_tb = sys.exc_info()
+            self.log.error(ex)
+            self.log.error("Check line number: %d" % (exc_tb.tb_lineno))
+            self.log.error("configurations.cfg : File doesn't exits")
+            sys.exit(-1)
+
+    def __del__(self):
+        pass 
+
+    def get_directory(self, image_path):
+        '''
+        Set image directory name to take images
+        return a string with these image directory
+        '''
+        current =  str(time.strftime("%Y_%m_%d", time.gmtime()))
+        current_dir = glob.glob(image_path+'*')
+        current_dir = sorted(current_dir)
+        last = current_dir[-1]
+        if last.split('/')[-1].split('.')[0] == current:
+            adquisition_number = int(last.split('/')[-1].split('.')[1]) + 1
+            dir_name = current+'.'+ str(adquisition_number)
+        else:
+            dir_name = current+'.0'
+        self.log.info('Directory name: %s'% dir_name)
+        return dir_name
+
+    #darc
+    def get_darc_camera_name(self, config_name='darc'):
+        '''
+        Get camera name
+        '''
+        self.log.debug('Get camera_name from :%s ' % config_name)
+        camera_name = self.config.get(config_name, 'camera')
+        self.log.debug('Return :%s ' % camera_name)
+        return camera_name
+
+    def get_darc_pxlx(self, config_name='darc'):
+        '''
+        Get pixel X for camera
+        '''
+        self.log.debug('Get pxlx from :%s ' % config_name)
+        pxlx  = self.config.getint(config_name,  'pxlx')
+        self.log.debug('Return :%s ' % pxlx)
+        return pxlx
+
+    def get_darc_pxly(self, config_name='darc'):
+        '''
+        Get pixel Y for camera
+        '''
+        self.log.debug('Get pxly from :%s ' % config_name)
+        pxly  = self.config.getint(config_name, 'pxly')
+        self.log.debug('Return :%s ' % pxly)
+        return pxly
+
+    def get_darc_image_path(self, config_name='darc'):
+        '''
+        Get image path
+        '''
+        self.log.debug('Get image_path from :%s ' % config_name)
+        image_path  = self.config.get(config_name, 'image_path')
+        self.log.debug('Return :%s ' % image_path)
+        return image_path
+
+    #star
+    def get_star_pin(self, config_name='led_1'):
+        '''
+        Get star pin
+        '''
+        self.log.debug('Get pin from :%s ' % config_name)
+        pin        = self.config.get(config_name, 'pin')
+        self.log.debug('Return :%s ' % pin)
+        return pin
+
+    def get_star_name(self, config_name='led_1'):
+        '''
+        Get star name
+        '''
+        self.log.debug('Get name from :%s ' % config_name)
+        name       = self.config.get(config_name, 'name')
+        self.log.debug('Return :%s ' % name)
+        return name
+
+    def get_star_simulated(self, config_name='led_1'):
+        '''
+        Get if star is simulated
+        '''
+        self.log.debug('Get simulated from :%s ' % config_name)
+        simulated  = self.config.getboolean(config_name, 'simulated')
+        self.log.debug('Return :%s ' % simulated)
+        return simulated
+
+    def get_star_exp_time(self, config_name='led_1'):
+        '''
+        Get star expouse time
+        '''
+        self.log.debug('Get exp_time from :%s ' % config_name)
+        exp_time   = self.config.getint(config_name, 'exp_time')
+        self.log.debug('Return :%s ' % exp_time)
+        return exp_time
+
+    def get_star_brightness(self, config_name='led_1'):
+        '''
+        Get star brightness
+        '''
+        self.log.debug('Get brightness from :%s ' % config_name)
+        brightness = self.config.getint(config_name, 'brightness')
+        self.log.debug('Return :%s ' % brightness)
+        return brightness
+
+    def get_star_image_prefix(self, config_name='led_1'):
+        '''
+        Get star image prefix
+        '''
+        self.log.debug('Get image_prefix from :%s ' % config_name)
+        image_prefix  = self.config.get(config_name, 'image_prefix')
+        self.log.debug('Return :%s ' % image_prefix)
+        return image_prefix
+
+    #Motor
+    def get_motor_pin(self, config_name='ground_layer'):
+        '''
+        Get motor pin
+        '''
+        self.log.debug('Get pin from :%s ' % config_name)
+        pin  = self.config.get(config_name, 'pin')
+        self.log.debug('Return :%s ' % pin)
+        return pin
+
+    def get_motor_name(self, config_name='ground_layer'):
+        '''
+        Get motor name
+        '''
+        self.log.debug('Get name from :%s ' % config_name)
+        name = self.config.get(config_name, 'name')
+        self.log.debug('Return :%s ' % name)
+        return name
+
+    def get_motor_simulated(self, config_name='ground_layer'):
+        '''
+        Get if motor is simulated
+        '''
+        self.log.debug('Get simulated from :%s ' % config_name)
+        simulated = self.config.getboolean(config_name, 'simulated')
+        self.log.debug('Return :%s ' % simulated)
+        return simulated
+
+    def get_motor_direction(self, config_name='ground_layer'):
+        '''
+        Get motor direction
+        '''
+        self.log.debug('Get direction from :%s ' % config_name)
+        direction = self.config.get(config_name, 'direction')
+        self.log.debug('Return :%s ' % direction)
+        return direction
+
+    def get_motor_velocity(self, config_name='ground_layer'):
+        '''
+        Get motor velocity
+        '''
+        self.log.debug('Get velocity from :%s ' % config_name)
+        velocity = self.config.getint(config_name, 'velocity')
+        self.log.debug('Return :%s ' % velocity)
+        return velocity
+
+    def get_motor_steps(self, config_name='ground_layer'):
+        '''
+        Get motor steps
+        '''
+        self.log.debug('Get steps from :%s ' % config_name)
+        steps = self.config.getint(config_name, 'steps')
+        self.log.debug('Return :%s ' % steps)
+        return steps
+
+    def get_motor_vr_init(self, config_name='ground_layer'):
+        '''
+        Get motor valid range init
+        '''
+        self.log.debug('Get vr_init from :%s ' % config_name)
+        vr_init = self.config.getint(config_name, 'vr_init')
+        self.log.debug('Return :%s ' % vr_init)
+        return vr_init
+
+    def get_motor_vr_end(self, config_name='ground_layer'):
+        '''
+        Get motor valid range end
+        '''
+        self.log.debug('Get vr_end from :%s ' % config_name)
+        vr_end = self.config.getint(config_name, 'vr_end')
+        self.log.debug('Return :%s ' % vr_end)
+        return vr_end
+
+    def get_motor_image_prefix(self, config_name='ground_layer'):
+        '''
+        Get motor image prefix
+        '''
+        self.log.debug('Get image_prefix from :%s ' % config_name)
+        image_prefix  = self.config.get(config_name, 'image_prefix')
+        self.log.debug('Return :%s ' % image_prefix)
+        return image_prefix
+
+
+if __name__ == '__main__':
+    pass
