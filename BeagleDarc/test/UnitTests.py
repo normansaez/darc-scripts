@@ -288,7 +288,22 @@ class BBBTest(unittest.TestCase):
         cur_pos = m.move_motor_skip_sensor(cmd_pos)
         self.assertEqual(cur_pos, cmd_pos)
 
+    def test_get_pin(self):
+        from BeagleDarc.Model import Model
+        m = Model()
+        p = m.get_star_pin()
+        self.assertEqual("P8_8", p)
 
+    def test_set_pin(self):
+        from BeagleDarc.Model import Model
+        m = Model()
+        p = m.get_star_pin()
+        p2 = "P8_4"
+        m.set_star_pin(value=p2)
+        self.assertNotEqual(p, p2)
+        m.set_star_pin(value=p)
+        p2 = m.get_star_pin()
+        self.assertEqual(p, p2)
 
 if __name__ == '__main__':
     bbbt = unittest.TestLoader().loadTestsFromTestCase(BBBTest)

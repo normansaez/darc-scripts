@@ -16,7 +16,7 @@ class Model:
     Model:
     Handle file configurations between GUI/Controller
     '''
-    def __init__(self):
+    def __init__(self, configfile='/Users/nsaez/darc-scripts/BeagleDarc/BeagleDarc/configurations.cfg'):
         '''
         Sets parameters taken from configurations.cfg file.
         The current path for configuration file is:
@@ -26,7 +26,7 @@ class Model:
         logging.basicConfig()
         self.log = logging.getLogger("Model")
         try:
-            self.configfile = "./configurations.cfg"
+            self.configfile = configfile
             self.config.read(self.configfile)
         except Exception, ex:
             _ , _ , exc_tb = sys.exc_info()
@@ -229,6 +229,199 @@ class Model:
         self.log.debug('Return :%s ' % image_prefix)
         return image_prefix
 
+#SET
+    #darc
+    def set_darc_camera_name(self, config_name='darc', value=None):
+        '''
+        Set camera name
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set camera_name to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'camera', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_darc_pxlx(self, config_name='darc', value=None):
+        '''
+        Set pixel X for camera
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set pxlx to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name,  'pxlx', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_darc_pxly(self, config_name='darc', value=None):
+        '''
+        Set pixel Y for camera
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set pxly to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'pxly', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_darc_image_path(self, config_name='darc', value=None):
+        '''
+        Set image path
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set image_path to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'image_path', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    #star
+    def set_star_pin(self, config_name='led_1', value=None):
+        '''
+        Set star pin
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set pin to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'pin', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_star_name(self, config_name='led_1', value=None):
+        '''
+        Set star name
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set name to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'name', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_star_simulated(self, config_name='led_1', value=None):
+        '''
+        Set if star is simulated
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set simulated to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'simulated', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_star_exp_time(self, config_name='led_1', value=None):
+        '''
+        Set star expouse time
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set exp_time to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'exp_time', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+        
+    def set_star_brightness(self, config_name='led_1', value=None):
+        '''
+        Set star brightness
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set brightness to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'brightness', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_star_image_prefix(self, config_name='led_1', value=None):
+        '''
+        Set star image prefix
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set image_prefix to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'image_prefix', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    #Motor
+    def set_motor_pin(self, config_name='ground_layer', value=None):
+        '''
+        Set motor pin
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set pin to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'pin', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_motor_name(self, config_name='ground_layer', value=None):
+        '''
+        Set motor name
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set name to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'name', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_motor_simulated(self, config_name='ground_layer', value=None):
+        '''
+        Set if motor is simulated
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set simulated to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'simulated', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+        
+    def set_motor_direction(self, config_name='ground_layer', value=None):
+        '''
+        Set motor direction
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set direction to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'direction', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_motor_velocity(self, config_name='ground_layer', value=None):
+        '''
+        Set motor velocity
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set velocity to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'velocity', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_motor_steps(self, config_name='ground_layer', value=None):
+        '''
+        Set motor steps
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set steps to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'steps', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_motor_vr_init(self, config_name='ground_layer', value=None):
+        '''
+        Set motor valid range init
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set vr_init to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'vr_init', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_motor_vr_end(self, config_name='ground_layer', value=None):
+        '''
+        Set motor valid range end
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set vr_end to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'vr_end', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_motor_image_prefix(self, config_name='ground_layer', value=None):
+        '''
+        Set motor image prefix
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set image_prefix to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'image_prefix', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
 
 if __name__ == '__main__':
     pass
