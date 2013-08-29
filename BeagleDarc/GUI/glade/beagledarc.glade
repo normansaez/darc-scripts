@@ -4,7 +4,6 @@
   <!-- interface-naming-policy project-wide -->
   <object class="GtkWindow" id="window1">
     <property name="resizable">False</property>
-    <property name="icon">dog.gif</property>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -22,19 +21,21 @@
                   <object class="GtkMenu" id="menu1">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem1">
+                      <object class="GtkImageMenuItem" id="phasescreen_menuitem">
                         <property name="label" translatable="yes">Phase Screen</property>
                         <property name="visible">True</property>
                         <property name="image">image1</property>
                         <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_phasescreen_menuitem_activate" after="yes"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem2">
+                      <object class="GtkImageMenuItem" id="stars_menuitem">
                         <property name="label" translatable="yes">Stars</property>
                         <property name="visible">True</property>
                         <property name="image">image2</property>
                         <property name="use_stock">False</property>
+                        <signal name="activate" handler="on_stars_menuitem_activate" after="yes"/>
                       </object>
                     </child>
                     <child>
@@ -43,11 +44,12 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem5">
+                      <object class="GtkImageMenuItem" id="quit_menuitem">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="gtk_widget_destroy" after="yes"/>
                       </object>
                     </child>
                   </object>
@@ -64,10 +66,11 @@
                     <property name="visible">True</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem10">
-                        <property name="label">gtk-about</property>
+                        <property name="label">About BeagleDarc</property>
                         <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="tooltip_text" translatable="yes">normansen</property>
+                        <property name="image">image3</property>
+                        <property name="use_stock">False</property>
                       </object>
                     </child>
                   </object>
@@ -83,8 +86,7 @@
         <child>
           <object class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
-            <property name="spacing">1</property>
-            <property name="layout_style">spread</property>
+            <property name="layout_style">start</property>
             <child>
               <placeholder/>
             </child>
@@ -158,15 +160,21 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">port</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">7</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button1">
-                <property name="label">gtk-connect</property>
+              <object class="GtkEntry" id="entry4">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="invisible_char">&#x25CF;</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -174,9 +182,28 @@
                 <property name="position">8</property>
               </packing>
             </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <object class="GtkButton" id="connect_button">
+                <property name="label">gtk-connect</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="released" handler="connect_button_released_cb" after="yes"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">10</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="padding">2</property>
+            <property name="fill">False</property>
+            <property name="padding">1</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -196,5 +223,9 @@
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="stock">gtk-preferences</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-about</property>
   </object>
 </interface>

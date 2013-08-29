@@ -19,7 +19,7 @@ class Main:
         self.win.set_title('Stars')
         self.win.set_resizable(False)
         self.win.set_events(self.win.get_events() | gtk.gdk.BUTTON_PRESS_MASK)
-        self.win.connect('destroy', gtk.main_quit)
+#        self.win.connect('destroy', gtk.main_quit)
         #self.win.connect('button_press_event', self.show_flower)
        
 

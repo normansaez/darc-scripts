@@ -64,6 +64,24 @@ class Model:
         self.log.debug('Return :%s ' % host)
         return host
 
+    def get_beagledarc_server_user(self, config_name='beagledarc_server'):
+        '''
+        Get beagledarc_server user
+        '''
+        self.log.debug('Get beagledarc_server user from :%s ' % config_name)
+        user = self.config.get(config_name, 'user')
+        self.log.debug('Return :%s ' % user)
+        return user
+
+    def get_beagledarc_server_password(self, config_name='beagledarc_server'):
+        '''
+        Get beagledarc_server password
+        '''
+        self.log.debug('Get beagledarc_server password from :%s ' % config_name)
+        password = self.config.get(config_name, 'password')
+        self.log.debug('Return :%s ' % password)
+        return password
+
     def get_beagledarc_server_port(self, config_name='beagledarc_server'):
         '''
         Get beagledarc_server port
@@ -82,6 +100,25 @@ class Model:
         host = self.config.get(config_name, 'host')
         self.log.debug('Return :%s ' % host)
         return host
+
+    def get_beagledarc_client_user(self, config_name='beagledarc_client'):
+        '''
+        Get beagledarc_client user
+        '''
+        self.log.debug('Get beagledarc_client user from :%s ' % config_name)
+        user = self.config.get(config_name, 'user')
+        self.log.debug('Return :%s ' % user)
+        return user
+
+    def get_beagledarc_client_password(self, config_name='beagledarc_client'):
+        '''
+        Get beagledarc_client password
+        '''
+        self.log.debug('Get beagledarc_client password from :%s ' % config_name)
+        password = self.config.get(config_name, 'password')
+        self.log.debug('Return :%s ' % password)
+        return password
+
 
     def get_beagledarc_client_port(self, config_name='beagledarc_client'):
         '''
@@ -471,6 +508,26 @@ class Model:
         self.config.write(cfgfile)
         cfgfile.close()
 
+    def set_beagledarc_server_user(self, config_name='beagledarc_server', value=None):
+        '''
+        Set beagledarc_server user
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set beagledarc_server user to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'user', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_beagledarc_server_password(self, config_name='beagledarc_server', value=None):
+        '''
+        Set beagledarc_server password
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set beagledarc_server password to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'password', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
     def set_beagledarc_server_port(self, config_name='beagledarc_server', value=None):
         '''
         Set beagledarc_server port
@@ -491,6 +548,27 @@ class Model:
         self.config.set(config_name, 'host', str(value))
         self.config.write(cfgfile)
         cfgfile.close()
+
+    def set_beagledarc_client_user(self, config_name='beagledarc_client', value=None):
+        '''
+        Set beagledarc_client user
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set beagledarc_client user to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'user', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
+    def set_beagledarc_client_password(self, config_name='beagledarc_client', value=None):
+        '''
+        Set beagledarc_client password
+        '''
+        cfgfile = open(self.configfile,'w')
+        self.log.debug('Set beagledarc_client password to %s , value %s ' % (config_name, str(value)))
+        self.config.set(config_name, 'password', str(value))
+        self.config.write(cfgfile)
+        cfgfile.close()
+
 
     def set_beagledarc_client_port(self, config_name='beagledarc_client', value=None):
         '''
