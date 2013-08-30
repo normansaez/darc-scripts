@@ -11,10 +11,10 @@ class BeagleDarcGui:
 
     def __init__( self ):
         self.model = Model()
-        serverhost = self.model.get_beagledarc_server_host()
-        serveruser = self.model.get_beagledarc_server_user()
-        serverpasswd = self.model.get_beagledarc_server_password()
-        serverport = self.model.get_beagledarc_server_port()
+        self.serverhost = self.model.get_beagledarc_server_host()
+        self.serveruser = self.model.get_beagledarc_server_user()
+        self.serverpasswd = self.model.get_beagledarc_server_password()
+        self.serverport = self.model.get_beagledarc_server_port()
 
         self.builder = gtk.Builder()
         self.builder.add_from_file("glade/beagledarc.glade")
@@ -29,10 +29,10 @@ class BeagleDarcGui:
         self.entry3 = self.builder.get_object ("entry3")
         self.entry4 = self.builder.get_object ("entry4")
 
-        self.entry1.set_text(serverhost) 
-        self.entry2.set_text(serveruser) 
-        self.entry3.set_text(serverpasswd) 
-        self.entry4.set_text(serverport) 
+        self.entry1.set_text(self.serverhost) 
+        self.entry2.set_text(self.serveruser) 
+        self.entry3.set_text(self.serverpasswd) 
+        self.entry4.set_text(self.serverport) 
 
         dic = { 
             "on_buttonQuit_clicked" : self.quit,
@@ -40,7 +40,7 @@ class BeagleDarcGui:
             "gtk_widget_destroy" : self.quit,
             "on_phasescreen_menuitem_activate" : self.phasescreen,
             "on_stars_menuitem_activate" : self.stars,
-            "connect_button_released_cb": self.connect
+            "on_connect_togglebutton_toggled": self.connect
         }
         
         self.builder.connect_signals( dic )
@@ -50,6 +50,11 @@ class BeagleDarcGui:
 
     def connect(self, widget):
         print "connected :)"
+        self.disconnect(widget)
+
+    def disconnect(self, widget):
+        cmd = "ssh %s@%s \"ps aux |grep server.py|awk \'{print \\$2}\'|xargs kill -9\"" % (self.serveruser, self.serverhost)
+        print cmd
 
     def phasescreen(self, widget):
         print "phasescreen"

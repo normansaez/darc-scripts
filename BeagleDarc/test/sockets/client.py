@@ -3,8 +3,8 @@
 import socket               
 
 s = socket.socket()         
-host = socket.gethostname() 
-#host = '192.168.2.3'
+#host = socket.gethostname() 
+host = '192.168.0.20'
 port = 12345                
 s.connect((host, port))
 s.send("sended from client")
