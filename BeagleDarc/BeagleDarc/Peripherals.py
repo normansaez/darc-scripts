@@ -1,5 +1,5 @@
 import socket
-
+from BeagleDarc.Model  import Model
 '''
 Peripherals
 '''
@@ -12,13 +12,15 @@ class Device:
         self.name = None
         self.s = None
         self.simulated = False
+        self.model = Model()
 
     def connect(self):
         '''
         '''
         self.s = socket.socket()         
-        host = socket.gethostname() 
-        port = 12345         
+        #host = socket.gethostname() 
+        host = self.model.get_beagledarc_server_host()
+        port = int(self.model.get_beagledarc_server_port())
         self.s.connect((host, port))
 
     def disconnect(self):
@@ -164,17 +166,19 @@ class Led(Device):
     '''
     Led
     '''
-    def __init__(self, pin):
+    def __init__(self, star):
         '''
         Instanciate by number
         '''
         Device.__init__(self)
         n_min = 0
         n_max = 55
-        if pin > n_min and pin <= n_max:
-            self.pin = pin
-            self.exp_time = None
-            self.brightness = None
+        self.model = Model()
+        if star > n_min and star <= n_max:
+            config_name = "led_%d" % star
+            self.pin = self.model.get_star_pin(config_name)
+            self.exp_time = self.model.get_star_exp_time(config_name)
+            self.brightness = self.model.get_star_brightness(config_name)
         else:
             msg = "Valid names are: %d to %d, change: %s by a valid name" % (n_min+1, n_max, number)
             raise NameError(msg)
@@ -208,11 +212,15 @@ class Led(Device):
     def set_on(self):
         '''
         ''' 
-        self.send_and_wait('turn on')
+        cmd = "%s:ON" % (self.pin)
+        print cmd
+        self.send_and_wait(cmd)
 
     def set_off(self):
         '''
         '''
-        self.send_and_wait('turn on')
+        cmd = "%s:OFF" % (self.pin)
+        print cmd
+        self.send_and_wait(cmd)
 
 

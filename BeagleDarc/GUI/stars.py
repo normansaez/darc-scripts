@@ -8,6 +8,7 @@ pygtk.require('2.0')
 import gtk
 
 from star_coord import star_coord
+from BeagleDarc.Controller import Controller
 
 class Main:
     '''
@@ -54,6 +55,9 @@ class Main:
             button.show()
             self.fix.put(button, star_coord[i][0], star_coord[i][1])
 
+        #Creating controller
+        self.controller = Controller()
+
     def callback(self, widget, data=None):
         '''
         callback
@@ -63,8 +67,10 @@ class Main:
         img = gtk.Image()
         if widget.get_active() is True:
             img.set_from_file('./img/shineStar.png')
+            self.controller.turn_on(star)
         else:
             img.set_from_file('./img/darkStar.png')
+            self.controller.turn_off(star)
         img.show()
         self.fix2.put(img, star_coord[star][0], star_coord[star][1])
         

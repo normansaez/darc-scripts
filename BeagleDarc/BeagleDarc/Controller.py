@@ -17,9 +17,11 @@ class Controller:
 
     def turn_on(self, star):
         l = self.Led(star)
-        config_name = "led_%d" % star
-        self.model.get_star_name(config_name)
         l.set_on()
+
+    def turn_off(self, star):
+        l = self.Led(star)
+        l.set_off()
 
 if __name__ == '__main__':
     c = Controller()
