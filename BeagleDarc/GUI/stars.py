@@ -67,10 +67,16 @@ class Main:
         img = gtk.Image()
         if widget.get_active() is True:
             img.set_from_file('./img/shineStar.png')
-            self.controller.turn_on(star)
+            try:
+                self.controller.turn_on(star)
+            except Exception, e:
+                print e
         else:
             img.set_from_file('./img/darkStar.png')
-            self.controller.turn_off(star)
+            try:
+                self.controller.turn_off(star)
+            except Exception, e:
+                print e
         img.show()
         self.fix2.put(img, star_coord[star][0], star_coord[star][1])
         
