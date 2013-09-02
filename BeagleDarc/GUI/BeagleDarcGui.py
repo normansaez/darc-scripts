@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 import os
 import sys
 import pygtk  
@@ -75,7 +75,8 @@ class BeagleDarcGui:
 
 
     def phasescreen(self, widget):
-        print "phasescreen"
+        from GUI import Layers
+        Layers.Layers()
 
     def stars(self, widget):
         from GUI import Stars
