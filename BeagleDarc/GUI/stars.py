@@ -3,6 +3,7 @@
 Stars
 '''
 
+import os
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -15,20 +16,20 @@ class Main:
     Main
     '''
     def __init__(self):
+        self.path, fil = os.path.split(os.path.abspath(__file__))
         self.win = gtk.Window()
         self.win.set_size_request(800, 800)
         self.win.set_title('Stars')
         self.win.set_resizable(False)
         self.win.set_events(self.win.get_events() | gtk.gdk.BUTTON_PRESS_MASK)
 #        self.win.connect('destroy', gtk.main_quit)
-        #self.win.connect('button_press_event', self.show_flower)
        
 
         self.fix = gtk.Fixed()
         self.win.add(self.fix)
         self.win.show_all()
         img = gtk.Image()
-        img.set_from_file('./img/star800.png')
+        img.set_from_file(self.path+'/img/star800.png')
         img.show()
         self.fix.put(img, 0, 0)
         ########################
@@ -38,13 +39,12 @@ class Main:
         self.win2.set_resizable(False)
         self.win2.set_events(self.win.get_events() | gtk.gdk.BUTTON_PRESS_MASK)
         #self.win2.connect('destroy', gtk.main_quit)
-        #self.win2.connect('button_press_event', self.show_flower)
        
         self.fix2 = gtk.Fixed()
         self.win2.add(self.fix2)
         self.win2.show_all()
         img2 = gtk.Image()
-        img2.set_from_file('./img/deepsky.png')
+        img2.set_from_file(self.path+'/img/deepsky.png')
         img2.show()
         self.fix2.put(img2, 0, 0)
 
@@ -66,41 +66,19 @@ class Main:
         star = int(data)
         img = gtk.Image()
         if widget.get_active() is True:
-            img.set_from_file('./img/shineStar.png')
+            img.set_from_file(self.path+'/img/shineStar.png')
             try:
                 self.controller.turn_on(star)
             except Exception, e:
                 print e
         else:
-            img.set_from_file('./img/darkStar.png')
+            img.set_from_file(self.path+'/img/darkStar.png')
             try:
                 self.controller.turn_off(star)
             except Exception, e:
                 print e
         img.show()
         self.fix2.put(img, star_coord[star][0], star_coord[star][1])
-        
-#    def show_flower(self, widget, event):
-#        count = 0
-#        if event.type == gtk.gdk.BUTTON_PRESS:
-#            count = 1
-#        elif event.type == gtk.gdk._2BUTTON_PRESS:
-#            count = 2
-#        elif event.type == gtk.gdk._3BUTTON_PRESS:
-#            count = 3
-#
-#        for i in range(count):
-#            img = gtk.Image()
-#            #img.set_from_file('./face-kiss.png')
-#            #img.show()
-#            x = int(event.x) + (i*self.img_size)
-#            y = int(event.y) 
-#            coord = """(%d , %d)""" % (x,y)
-#            self.label = gtk.Label('X')
-#            self.label.modify_fg(gtk.STATE_NORMAL, \
-#            gtk.gdk.color_parse('#FFFFFF'))
-#            self.label.show()
-#            self.fix.put(self.label, x, y)
 
 if __name__ == '__main__':
     app = Main()
