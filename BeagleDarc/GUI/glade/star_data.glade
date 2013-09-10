@@ -26,7 +26,6 @@
           <object class="GtkComboBoxEntry" id="combobox_star">
             <property name="visible">True</property>
             <property name="has_tooltip">True</property>
-            <signal name="changed" handler="combobox_star_changed_cb" after="yes"/>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -86,7 +85,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="checkbutton1">
+          <object class="GtkCheckButton" id="checkbutton_sim">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -183,12 +182,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="default_button">
+          <object class="GtkButton" id="button_default">
             <property name="label">gtk-revert-to-saved</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_stock">True</property>
+            <signal name="clicked" handler="on_button_default_clicked" after="yes"/>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -198,12 +198,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="button2">
+          <object class="GtkButton" id="button_save">
             <property name="label">gtk-save</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_stock">True</property>
+            <signal name="clicked" handler="on_button_save_clicked" after="yes"/>
           </object>
           <packing>
             <property name="left_attach">3</property>
