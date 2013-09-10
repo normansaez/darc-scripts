@@ -89,6 +89,11 @@ class Layers:
         self.altitude_scale_Y.set_size_request(30, 550)
         self.altitude_scale_Y.show()
         self.fix.put(self.altitude_scale_Y, 700, 30)
+        # Apply button:
+        self.button_ok = gtk.Button("Apply")
+        self.button_ok.show()
+        self.fix.put(self.button_ok, 700, 750)
+
         ##Creating controller
         self.controller = Controller()
 
