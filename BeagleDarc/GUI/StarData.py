@@ -51,8 +51,8 @@ class StarData:
         
         #EXP_T
         store_exp = gtk.ListStore(gobject.TYPE_STRING)
-        secs = [x * 0.1 for x in range(0, 600)]
-        for i in secs:
+        #mili seconds (0 to 1 min)
+        for i in range(0,60000,1000):
             store_exp.append([str(i)])
         self.combobox_exp_time = self.builder.get_object("combobox_exp_time")
         #self.combobox_exp_time.child.connect('changed', self.changed_cb)
@@ -109,9 +109,37 @@ class StarData:
         sys.exit(0)
 
     def save(self, widget):
+        star = self.combobox_star.get_active_text() 
+        #try:
+        config_name = 'led_%s' % star
+        pin = self.entry_pin.get_text()
+        name = self.entry_name.get_text()
+        sim = self.checkbutton_sim.get_active()
+        exp_time = self.combobox_exp_time.get_active_text()
+        bright = self.combobox_brightness.get_active_text()
+        img_prefix = self.entry_image_prefix.get_text()
+        #set
+        self.model.set_star_pin(config_name, value=pin)
+        self.model.set_star_name(config_name, value=name)
+        self.model.set_star_simulated(config_name, value=sim)
+        self.model.set_star_exp_time(config_name, value=exp_time)
+        self.model.set_star_brightness(config_name, value=bright)
+        self.model.set_star_image_prefix(config_name, value=img_prefix)
+        print pin
+        print name 
+        print sim
+        print exp_time
+        print bright
+        print img_prefix
+        print "------------"
         print "saved"
+        #except Exception, e:
+        #    print e
 
     def default(self, widget):
+        star = self.combobox_star.get_active_text() 
+        print "getting info from star: %s" % star
+        self.fill_info(star)
         print "restored"
 
 
