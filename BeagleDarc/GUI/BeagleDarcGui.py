@@ -80,7 +80,9 @@ class BeagleDarcGui:
 
     def stars(self, widget):
         from GUI import Stars
+        from GUI import StarData
         Stars.Main()
+        StarData.StarData()
 
 BeagleDarcGui = BeagleDarcGui()
 BeagleDarcGui.window.show()

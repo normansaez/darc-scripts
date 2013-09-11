@@ -21,9 +21,10 @@ class StarData:
         self.builder.add_from_file(path+"/glade/star_data.glade")
         self.window = self.builder.get_object ("window1")
         self.window.set_events(self.window.get_events() | gtk.gdk.BUTTON_PRESS_MASK)
+        self.window.show()
 
-        if self.window:
-            self.window.connect("destroy", gtk.main_quit)
+        #if self.window:
+        #    self.window.connect("destroy", gtk.main_quit)
 
         ## star combo
         store = gtk.ListStore(gobject.TYPE_STRING)
@@ -31,15 +32,13 @@ class StarData:
             store.append([str(i)])
 
         self.combobox_star = self.builder.get_object("combobox_star")
-        self.combobox_star.child.connect('changed', self.changed_cb)
+        self.combobox_star.connect('changed', self.changed_cb)
         self.combobox_star.set_model(store)
-        self.combobox_star.set_text_column(0)
-        #self.combobox_star.set_active(0)
 
-        #this could be added , but it seems to be unnecesary
-        #cell = gtk.CellRendererText()
-        #self.combobox_star.pack_start(cell, True)
-        #self.combobox_star.add_attribute(cell, 'text', 0)
+        #Necesary for combobox but no for comboboxentry
+        cell = gtk.CellRendererText()
+        self.combobox_star.pack_start(cell, True)
+        self.combobox_star.add_attribute(cell, 'text', 0)
     
         #PIN
         self.entry_pin = self.builder.get_object("entry_pin")
@@ -55,7 +54,6 @@ class StarData:
         for i in range(0,60000,1000):
             store_exp.append([str(i)])
         self.combobox_exp_time = self.builder.get_object("combobox_exp_time")
-        #self.combobox_exp_time.child.connect('changed', self.changed_cb)
         self.combobox_exp_time.set_model(store_exp)
         self.combobox_exp_time.set_text_column(0)
         
@@ -64,9 +62,10 @@ class StarData:
         for i in range(0,100):
             store_bright.append([str(i)])
         self.combobox_brightness = self.builder.get_object("combobox_brightness")
-        #self.combobox_brightness.child.connect('changed', self.changed_cb)
         self.combobox_brightness.set_model(store_bright)
-        self.combobox_brightness.set_text_column(0)
+        cell = gtk.CellRendererText()
+        self.combobox_brightness.pack_start(cell, True)
+        self.combobox_brightness.add_attribute(cell, 'text', 0)
         
         #IMG_PRE
         self.entry_image_prefix = self.builder.get_object("entry_image_prefix")
@@ -100,7 +99,7 @@ class StarData:
             #print "no section configured"
 
     def changed_cb(self, entry):
-        star = entry.get_text()
+        star = entry.get_active_text()
         print 'Getting star: ', star
         self.fill_info(star)
         return
@@ -145,5 +144,4 @@ class StarData:
 
 if __name__ == '__main__':
     StarData = StarData()
-    StarData.window.show()
     gtk.main()

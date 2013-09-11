@@ -23,18 +23,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxEntry" id="combobox_star">
-            <property name="visible">True</property>
-            <property name="has_tooltip">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
-            <property name="top_attach">1</property>
-            <property name="bottom_attach">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="label" translatable="yes">pin</property>
@@ -111,17 +99,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxEntry" id="combobox_exp_time">
-            <property name="visible">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
-            <property name="top_attach">9</property>
-            <property name="bottom_attach">10</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="label" translatable="yes">brightness (0 - 100)</property>
@@ -129,17 +106,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">11</property>
-            <property name="bottom_attach">12</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxEntry" id="combobox_brightness">
-            <property name="visible">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
             <property name="top_attach">11</property>
             <property name="bottom_attach">12</property>
           </packing>
@@ -214,6 +180,28 @@
           </packing>
         </child>
         <child>
+          <object class="GtkComboBoxEntry" id="combobox_exp_time">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">9</property>
+            <property name="bottom_attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="combobox_star">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+          </packing>
+        </child>
+        <child>
           <placeholder/>
         </child>
         <child>
@@ -434,6 +422,17 @@
         </child>
         <child>
           <placeholder/>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="combobox_brightness">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">11</property>
+            <property name="bottom_attach">12</property>
+          </packing>
         </child>
       </object>
     </child>
