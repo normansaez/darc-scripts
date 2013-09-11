@@ -9,7 +9,7 @@ import gobject
 from subprocess import Popen, PIPE
 from BeagleDarc.Model import Model
 
-class StarData:
+class LayerData:
 
     wTree = gtk.Builder()
 
@@ -23,8 +23,8 @@ class StarData:
         self.window.set_events(self.window.get_events() | gtk.gdk.BUTTON_PRESS_MASK)
         self.window.show()
 
-        if self.window:
-            self.window.connect("destroy", gtk.main_quit)
+        #if self.window:
+        #    self.window.connect("destroy", gtk.main_quit)
 
         ## star combo
         store = gtk.ListStore(gobject.TYPE_STRING)
@@ -166,5 +166,5 @@ class StarData:
         print "bla"
 
 if __name__ == '__main__':
-    StarData = StarData()
+    LayerData = LayerData()
     gtk.main()

@@ -76,7 +76,9 @@ class BeagleDarcGui:
 
     def phasescreen(self, widget):
         from GUI import Layers
+        from GUI import LayerData
         Layers.Layers()
+        LayerData.LayerData()
 
     def stars(self, widget):
         from GUI import Stars
