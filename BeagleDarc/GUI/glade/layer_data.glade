@@ -6,7 +6,7 @@
     <child>
       <object class="GtkTable" id="table1">
         <property name="visible">True</property>
-        <property name="n_rows">24</property>
+        <property name="n_rows">26</property>
         <property name="n_columns">5</property>
         <property name="column_spacing">6</property>
         <property name="row_spacing">6</property>
@@ -25,7 +25,7 @@
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">pin</property>
+            <property name="label" translatable="yes">pin enable motor</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -37,13 +37,13 @@
         <child>
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">name</property>
+            <property name="label" translatable="yes">pin direction</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">5</property>
-            <property name="bottom_attach">6</property>
+            <property name="top_attach">7</property>
+            <property name="bottom_attach">8</property>
           </packing>
         </child>
         <child>
@@ -54,32 +54,20 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">7</property>
-            <property name="bottom_attach">8</property>
+            <property name="top_attach">11</property>
+            <property name="bottom_attach">12</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">direction</property>
+            <property name="label" translatable="yes">initial direction</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">9</property>
-            <property name="bottom_attach">10</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label6">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">velocity</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-            <property name="top_attach">11</property>
-            <property name="bottom_attach">12</property>
+            <property name="top_attach">13</property>
+            <property name="bottom_attach">14</property>
           </packing>
         </child>
         <child>
@@ -90,8 +78,8 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">13</property>
-            <property name="bottom_attach">14</property>
+            <property name="top_attach">15</property>
+            <property name="bottom_attach">16</property>
           </packing>
         </child>
         <child>
@@ -102,8 +90,8 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">15</property>
-            <property name="bottom_attach">16</property>
+            <property name="top_attach">17</property>
+            <property name="bottom_attach">18</property>
           </packing>
         </child>
         <child>
@@ -114,8 +102,8 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">17</property>
-            <property name="bottom_attach">18</property>
+            <property name="top_attach">19</property>
+            <property name="bottom_attach">20</property>
           </packing>
         </child>
         <child>
@@ -130,8 +118,8 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
-            <property name="top_attach">22</property>
-            <property name="bottom_attach">23</property>
+            <property name="top_attach">24</property>
+            <property name="bottom_attach">25</property>
           </packing>
         </child>
         <child>
@@ -146,8 +134,8 @@
           <packing>
             <property name="left_attach">3</property>
             <property name="right_attach">4</property>
-            <property name="top_attach">22</property>
-            <property name="bottom_attach">23</property>
+            <property name="top_attach">24</property>
+            <property name="bottom_attach">25</property>
           </packing>
         </child>
         <child>
@@ -172,8 +160,8 @@
           <packing>
             <property name="left_attach">3</property>
             <property name="right_attach">4</property>
-            <property name="top_attach">5</property>
-            <property name="bottom_attach">6</property>
+            <property name="top_attach">9</property>
+            <property name="bottom_attach">10</property>
           </packing>
         </child>
         <child>
@@ -183,8 +171,8 @@
           <packing>
             <property name="left_attach">3</property>
             <property name="right_attach">4</property>
-            <property name="top_attach">9</property>
-            <property name="bottom_attach">10</property>
+            <property name="top_attach">13</property>
+            <property name="bottom_attach">14</property>
           </packing>
         </child>
         <child>
@@ -199,32 +187,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHScale" id="hscale_vel">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
-            <property name="top_attach">11</property>
-            <property name="bottom_attach">12</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkEntry" id="entry_steps">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">&#x25CF;</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
-            <property name="top_attach">13</property>
-            <property name="bottom_attach">14</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entry_vr_init">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">&#x25CF;</property>
@@ -237,7 +200,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="entry_vr_end">
+          <object class="GtkEntry" id="entry_vr_init">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">&#x25CF;</property>
@@ -250,11 +213,99 @@
           </packing>
         </child>
         <child>
+          <object class="GtkEntry" id="entry_vr_end">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">&#x25CF;</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">19</property>
+            <property name="bottom_attach">20</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkCheckButton" id="checkbutton_sim">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">11</property>
+            <property name="bottom_attach">12</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label10">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">image prefix</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">21</property>
+            <property name="bottom_attach">22</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry_image_prefix">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">&#x25CF;</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">21</property>
+            <property name="bottom_attach">22</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">pin steps</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry1">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">&#x25CF;</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+            <property name="top_attach">5</property>
+            <property name="bottom_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label11">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">name</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">9</property>
+            <property name="bottom_attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry2">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">&#x25CF;</property>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -558,29 +609,28 @@
           <placeholder/>
         </child>
         <child>
-          <object class="GtkLabel" id="label10">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">image prefix</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-            <property name="top_attach">19</property>
-            <property name="bottom_attach">20</property>
-          </packing>
+          <placeholder/>
         </child>
         <child>
-          <object class="GtkEntry" id="entry_image_prefix">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">&#x25CF;</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
-            <property name="top_attach">19</property>
-            <property name="bottom_attach">20</property>
-          </packing>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>

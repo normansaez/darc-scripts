@@ -23,8 +23,8 @@ class LayerData:
         self.window.set_events(self.window.get_events() | gtk.gdk.BUTTON_PRESS_MASK)
         self.window.show()
 
-        #if self.window:
-        #    self.window.connect("destroy", gtk.main_quit)
+        if self.window:
+            self.window.connect("destroy", gtk.main_quit)
 
         ## star combo
         store = gtk.ListStore(gobject.TYPE_STRING)
@@ -58,16 +58,16 @@ class LayerData:
         self.combobox_direction.pack_start(cell_exp, True)
         self.combobox_direction.add_attribute(cell_exp, 'text', 0)
 
-        #VELOCITY
-        self.hscale_vel = self.builder.get_object("hscale_vel")
-        adjustment = gtk.Adjustment(value=0.0, lower=0.0, upper=101.0, step_incr=0.1, page_incr=1.0, page_size=1.0)
-        self.hscale_vel.set_adjustment(adjustment)
-        self.hscale_vel.set_digits(0)
-        #self.hscale_vel.set_update_policy(gtk.UPDATE_CONTINUOUS)
-        self.hscale_vel.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
-        #self.hscale_vel.set_update_policy(gtk.UPDATE_DELAYED)
-        self.hscale_vel.connect("value-changed", self.velocity)
-
+#        #VELOCITY
+#        self.hscale_vel = self.builder.get_object("hscale_vel")
+#        adjustment = gtk.Adjustment(value=0.0, lower=0.0, upper=101.0, step_incr=0.1, page_incr=1.0, page_size=1.0)
+#        self.hscale_vel.set_adjustment(adjustment)
+#        self.hscale_vel.set_digits(0)
+#        #self.hscale_vel.set_update_policy(gtk.UPDATE_CONTINUOUS)
+#        self.hscale_vel.set_update_policy(gtk.UPDATE_DISCONTINUOUS)
+#        #self.hscale_vel.set_update_policy(gtk.UPDATE_DELAYED)
+#        self.hscale_vel.connect("value-changed", self.velocity)
+#
         #STEPS
         self.entry_steps = self.builder.get_object("entry_steps")
         
@@ -100,7 +100,7 @@ class LayerData:
                 self.checkbutton_sim.set_active(True)
             self.combobox_direction.insert_text(0, str(self.model.get_motor_direction(config_name))) 
             self.combobox_direction.set_active(0)
-            self.hscale_vel.set_value(int(self.model.get_motor_velocity(config_name)))
+            #self.hscale_vel.set_value(int(self.model.get_motor_velocity(config_name)))
             self.entry_steps.set_text(str(self.model.get_motor_steps(config_name)))
             self.entry_vr_init.set_text(str(self.model.get_motor_vr_init(config_name)))
             self.entry_vr_end.set_text(str(self.model.get_motor_vr_end(config_name)))
@@ -116,7 +116,8 @@ class LayerData:
         return
 
     def velocity(self, event):
-        print self.hscale_vel.get_value()
+        #print self.hscale_vel.get_value()
+        pass
 
     def save(self, widget):
         print "### SAVE ###"
@@ -126,7 +127,7 @@ class LayerData:
         name = self.entry_name.get_text()
         sim = self.checkbutton_sim.get_active()
         direction = self.combobox_direction.get_active_text()
-        velocity = int(self.hscale_vel.get_value())
+        #velocity = int(self.hscale_vel.get_value())
         steps = self.entry_steps.get_text()
         vr_init = self.entry_vr_init.get_text()
         vr_end = self.entry_vr_end.get_text()
@@ -136,7 +137,7 @@ class LayerData:
         self.model.set_motor_name(config_name, value=name)
         self.model.set_motor_simulated(config_name, value=sim)
         self.model.set_motor_direction(config_name, value=direction)
-        self.model.set_motor_velocity(config_name, value=velocity)
+        #self.model.set_motor_velocity(config_name, value=velocity)
         self.model.set_motor_steps(config_name, value=steps)
         self.model.set_motor_vr_init(config_name, value=vr_init)
         self.model.set_motor_vr_end(config_name, value=vr_end)

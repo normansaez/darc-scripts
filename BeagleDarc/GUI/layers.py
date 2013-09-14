@@ -54,6 +54,25 @@ class Layers:
         self.label3.show()
         self.fix.put(self.label3, 670, 5)
 
+        self.label4 = gtk.Label()
+        self.label4.set_text("Y: INIT POSITION")
+        self.label4.show()
+        self.fix.put(self.label4, 570, 470)
+        
+        self.label5 = gtk.Label()
+        self.label5.set_text("Y: END POSITION")
+        self.label5.show()
+        self.fix.put(self.label5, 570, 100)
+
+        self.label6 = gtk.Label()
+        self.label6.set_text("X: INIT POSITION")
+        self.label6.show()
+        self.fix.put(self.label6, 5, 480)
+
+        self.label7 = gtk.Label()
+        self.label7.set_text("X: END POSITION")
+        self.label7.show()
+        self.fix.put(self.label7, 570, 480)
         ########################
         # ground_scale
         #
