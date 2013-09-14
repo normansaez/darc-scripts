@@ -10,497 +10,383 @@ import glob
 import logging
 import ConfigParser
 
-
-class Model:
-    '''
-    Model:
-    Handle file configurations between GUI/Controller
-    '''
-    def __init__(self, configfile='/Users/nsaez/darc-scripts/BeagleDarc/BeagleDarc/configurations.cfg'):
-        '''
-        Sets parameters taken from configurations.cfg file.
-        The current path for configuration file is:
-        /home/dani/nsaez/board/configurations.cfg
-        '''
+class BD:
+    def __init__(self):
+        self.configfile='/Users/nsaez/darc-scripts/BeagleDarc/BeagleDarc/configurations.cfg'
+        self.config = None
         self.config = ConfigParser.ConfigParser()
-        logging.basicConfig()
-        self.log = logging.getLogger("Model")
-        try:
-            self.configfile = configfile
-            self.config.read(self.configfile)
-        except Exception, ex:
-            _ , _ , exc_tb = sys.exc_info()
-            self.log.error(ex)
-            self.log.error("Check line number: %d" % (exc_tb.tb_lineno))
-            self.log.error("configurations.cfg : File doesn't exits")
-            sys.exit(-1)
+        self.config.read(self.configfile)
 
-    def __del__(self):
-        pass 
-
-    def get_directory(self, image_path):
-        '''
-        Set image directory name to take images
-        return a string with these image directory
-        '''
-        current =  str(time.strftime("%Y_%m_%d", time.gmtime()))
-        current_dir = glob.glob(image_path+'*')
-        current_dir = sorted(current_dir)
-        last = current_dir[-1]
-        if last.split('/')[-1].split('.')[0] == current:
-            adquisition_number = int(last.split('/')[-1].split('.')[1]) + 1
-            dir_name = current+'.'+ str(adquisition_number)
-        else:
-            dir_name = current+'.0'
-        self.log.info('Directory name: %s'% dir_name)
-        return dir_name
-    #beagledarc_server
-    def get_beagledarc_server_host(self, config_name='beagledarc_server'):
-        '''
-        Get beagledarc_server host
-        '''
-        self.log.debug('Get beagledarc_server host from :%s ' % config_name)
-        host = self.config.get(config_name, 'host')
-        self.log.debug('Return :%s ' % host)
-        return host
-
-    def get_beagledarc_server_user(self, config_name='beagledarc_server'):
-        '''
-        Get beagledarc_server user
-        '''
-        self.log.debug('Get beagledarc_server user from :%s ' % config_name)
-        user = self.config.get(config_name, 'user')
-        self.log.debug('Return :%s ' % user)
-        return user
-
-    def get_beagledarc_server_password(self, config_name='beagledarc_server'):
-        '''
-        Get beagledarc_server password
-        '''
-        self.log.debug('Get beagledarc_server password from :%s ' % config_name)
-        password = self.config.get(config_name, 'password')
-        self.log.debug('Return :%s ' % password)
-        return password
-
-    def get_beagledarc_server_port(self, config_name='beagledarc_server'):
-        '''
-        Get beagledarc_server port
-        '''
-        self.log.debug('Get beagledarc_server port from :%s ' % config_name)
-        port = self.config.get(config_name, 'port')
-        self.log.debug('Return :%s ' % port)
-        return port
-
-
-    #darc
-    def get_darc_camera_name(self, config_name='darc'):
-        '''
-        Get camera name
-        '''
-        self.log.debug('Get camera_name from :%s ' % config_name)
-        camera_name = self.config.get(config_name, 'camera')
-        self.log.debug('Return :%s ' % camera_name)
-        return camera_name
-
-    def get_darc_pxlx(self, config_name='darc'):
-        '''
-        Get pixel X for camera
-        '''
-        self.log.debug('Get pxlx from :%s ' % config_name)
-        pxlx  = self.config.getint(config_name,  'pxlx')
-        self.log.debug('Return :%s ' % pxlx)
-        return pxlx
-
-    def get_darc_pxly(self, config_name='darc'):
-        '''
-        Get pixel Y for camera
-        '''
-        self.log.debug('Get pxly from :%s ' % config_name)
-        pxly  = self.config.getint(config_name, 'pxly')
-        self.log.debug('Return :%s ' % pxly)
-        return pxly
-
-    def get_darc_image_path(self, config_name='darc'):
-        '''
-        Get image path
-        '''
-        self.log.debug('Get image_path from :%s ' % config_name)
-        image_path  = self.config.get(config_name, 'image_path')
-        self.log.debug('Return :%s ' % image_path)
-        return image_path
-
-    #star
-    def get_star_pin(self, config_name='led_1'):
-        '''
-        Get star pin
-        '''
-        self.log.debug('Get pin from :%s ' % config_name)
-        pin        = self.config.get(config_name, 'pin')
-        self.log.debug('Return :%s ' % pin)
-        return pin
-
-    def get_star_name(self, config_name='led_1'):
-        '''
-        Get star name
-        '''
-        self.log.debug('Get name from :%s ' % config_name)
-        name       = self.config.get(config_name, 'name')
-        self.log.debug('Return :%s ' % name)
-        return name
-
-    def get_star_simulated(self, config_name='led_1'):
-        '''
-        Get if star is simulated
-        '''
-        self.log.debug('Get simulated from :%s ' % config_name)
-        simulated  = self.config.getboolean(config_name, 'simulated')
-        self.log.debug('Return :%s ' % simulated)
-        return simulated
-
-    def get_star_exp_time(self, config_name='led_1'):
-        '''
-        Get star expouse time
-        '''
-        self.log.debug('Get exp_time from :%s ' % config_name)
-        exp_time   = self.config.getint(config_name, 'exp_time')
-        self.log.debug('Return :%s ' % exp_time)
-        return exp_time
-
-    def get_star_brightness(self, config_name='led_1'):
-        '''
-        Get star brightness
-        '''
-        self.log.debug('Get brightness from :%s ' % config_name)
-        brightness = self.config.getint(config_name, 'brightness')
-        self.log.debug('Return :%s ' % brightness)
-        return brightness
-
-    def get_star_image_prefix(self, config_name='led_1'):
-        '''
-        Get star image prefix
-        '''
-        self.log.debug('Get image_prefix from :%s ' % config_name)
-        image_prefix  = self.config.get(config_name, 'image_prefix')
-        self.log.debug('Return :%s ' % image_prefix)
-        return image_prefix
-
-    #Motor
-    def get_motor_pin(self, config_name='ground_layer'):
-        '''
-        Get motor pin
-        '''
-        self.log.debug('Get pin from :%s ' % config_name)
-        pin  = self.config.get(config_name, 'pin')
-        self.log.debug('Return :%s ' % pin)
-        return pin
-
-    def get_motor_name(self, config_name='ground_layer'):
-        '''
-        Get motor name
-        '''
-        self.log.debug('Get name from :%s ' % config_name)
-        name = self.config.get(config_name, 'name')
-        self.log.debug('Return :%s ' % name)
-        return name
-
-    def get_motor_simulated(self, config_name='ground_layer'):
-        '''
-        Get if motor is simulated
-        '''
-        self.log.debug('Get simulated from :%s ' % config_name)
-        simulated = self.config.getboolean(config_name, 'simulated')
-        self.log.debug('Return :%s ' % simulated)
-        return simulated
-
-    def get_motor_direction(self, config_name='ground_layer'):
-        '''
-        Get motor direction
-        '''
-        self.log.debug('Get direction from :%s ' % config_name)
-        direction = self.config.get(config_name, 'direction')
-        self.log.debug('Return :%s ' % direction)
-        return direction
-
-    def get_motor_velocity(self, config_name='ground_layer'):
-        '''
-        Get motor velocity
-        '''
-        self.log.debug('Get velocity from :%s ' % config_name)
-        velocity = self.config.getint(config_name, 'velocity')
-        self.log.debug('Return :%s ' % velocity)
-        return velocity
-
-    def get_motor_steps(self, config_name='ground_layer'):
-        '''
-        Get motor steps
-        '''
-        self.log.debug('Get steps from :%s ' % config_name)
-        steps = self.config.getint(config_name, 'steps')
-        self.log.debug('Return :%s ' % steps)
-        return steps
-
-    def get_motor_vr_init(self, config_name='ground_layer'):
-        '''
-        Get motor valid range init
-        '''
-        self.log.debug('Get vr_init from :%s ' % config_name)
-        vr_init = self.config.getint(config_name, 'vr_init')
-        self.log.debug('Return :%s ' % vr_init)
-        return vr_init
-
-    def get_motor_vr_end(self, config_name='ground_layer'):
-        '''
-        Get motor valid range end
-        '''
-        self.log.debug('Get vr_end from :%s ' % config_name)
-        vr_end = self.config.getint(config_name, 'vr_end')
-        self.log.debug('Return :%s ' % vr_end)
-        return vr_end
-
-    def get_motor_image_prefix(self, config_name='ground_layer'):
-        '''
-        Get motor image prefix
-        '''
-        self.log.debug('Get image_prefix from :%s ' % config_name)
-        image_prefix  = self.config.get(config_name, 'image_prefix')
-        self.log.debug('Return :%s ' % image_prefix)
-        return image_prefix
-
-#SET
-    #darc
-    def set_darc_camera_name(self, config_name='darc', value=None):
-        '''
-        Set camera name
-        '''
+    def write(self, config_name, property_name, value):
         cfgfile = open(self.configfile,'w')
-        self.log.debug('Set camera_name to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'camera', str(value))
+        self.config.set(config_name, str(property_name), str(value))
         self.config.write(cfgfile)
         cfgfile.close()
 
-    def set_darc_pxlx(self, config_name='darc', value=None):
-        '''
-        Set pixel X for camera
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set pxlx to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name,  'pxlx', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
-
-    def set_darc_pxly(self, config_name='darc', value=None):
-        '''
-        Set pixel Y for camera
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set pxly to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'pxly', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
-
-    def set_darc_image_path(self, config_name='darc', value=None):
-        '''
-        Set image path
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set image_path to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'image_path', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
-
-    #star
-    def set_star_pin(self, config_name='led_1', value=None):
-        '''
-        Set star pin
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set pin to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'pin', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
-
-    def set_star_name(self, config_name='led_1', value=None):
-        '''
-        Set star name
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set name to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'name', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
-
-    def set_star_simulated(self, config_name='led_1', value=None):
-        '''
-        Set if star is simulated
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set simulated to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'simulated', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
-
-    def set_star_exp_time(self, config_name='led_1', value=None):
-        '''
-        Set star expouse time
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set exp_time to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'exp_time', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+class Layer(object):
+    def __init__(self, config_name):
+        self.bd = BD()
+        self._config_name = config_name
+        self._pin_enable = None
+        self._pin_direction = None
+        self._pin_steps = None
+        self._name = None
+        self._simulated = None
+        self._direction = None
+        self._velocity = None
+        self._steps = None
+        self._vr_init = None
+        self._vr_end = None
+        self._image_prefix = None
         
-    def set_star_brightness(self, config_name='led_1', value=None):
-        '''
-        Set star brightness
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set brightness to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'brightness', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @property
+    def pin_enable(self):
+        self._pin_enable = self.bd.config.get(self._config_name, 'pin_enable')
+        return self._pin_enable
 
-    def set_star_image_prefix(self, config_name='led_1', value=None):
-        '''
-        Set star image prefix
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set image_prefix to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'image_prefix', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @pin_enable.setter
+    def pin_enable(self, value):
+        self.bd.write(self._config_name, 'pin_enable', value)
+        self._pin_enable = value
 
-    #Motor
-    def set_motor_pin(self, config_name='ground_layer', value=None):
-        '''
-        Set motor pin
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set pin to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'pin', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @property
+    def pin_direction(self):
+        self._pin_direction = self.bd.config.get(self._config_name, 'pin_direction')
+        return self._pin_direction
 
-    def set_motor_name(self, config_name='ground_layer', value=None):
-        '''
-        Set motor name
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set name to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'name', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @pin_direction.setter
+    def pin_direction(self, value):
+        self.bd.write(self._config_name, 'pin_direction', value)
+        self._pin_direction = value
 
-    def set_motor_simulated(self, config_name='ground_layer', value=None):
-        '''
-        Set if motor is simulated
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set simulated to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'simulated', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @property
+    def pin_steps(self):
+        self._pin_steps = self.bd.config.get(self._config_name, 'pin_steps')
+        return self._pin_steps
+
+    @pin_steps.setter
+    def pin_steps(self, value):
+        self.bd.write(self._config_name, 'pin_steps', value)
+        self._pin_steps = value
+
+    @property
+    def name(self):
+        self._name = self.bd.config.get(self._config_name, 'name')
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self.bd.write(self._config_name, 'name', value)
+        self._name = value
+
+    @property
+    def simulated(self):
+        self._simulated = self.bd.config.getboolean(self._config_name, 'simulated')
+        return self._simulated
+
+    @simulated.setter
+    def simulated(self, value):
+        self.bd.write(self._config_name, 'simulated', value)
+        self._simulated = value
+
+    @property
+    def direction(self):
+        self._direction = self.bd.config.get(self._config_name, 'direction')
+        return self._direction
+
+    @direction.setter
+    def direction(self, value):
+        self.bd.write(self._config_name, 'direction', value)
+        self._direction = value
+
+    @property
+    def velocity(self):
+        self._velocity = self.bd.config.getint(self._config_name, 'velocity')
+        return self._velocity
+
+    @velocity.setter
+    def velocity(self, value):
+        self.bd.write(self._config_name, 'velocity', value)
+        self._velocity = value
+
+    @property
+    def steps(self):
+        self._steps = self.bd.config.getint(self._config_name, 'steps')
+        return self._steps
+
+    @steps.setter
+    def steps(self, value):
+        self.bd.write(self._config_name, 'steps', value)
+        self._steps = value
+
+    @property
+    def vr_init(self):
+        self._vr_init = self.bd.config.getint(self._config_name, 'vr_init')
+        return self._vr_init
+
+    @vr_init.setter
+    def vr_init(self, value):
+        self.bd.write(self._config_name, 'vr_init', value)
+        self._vr_init = value
+
+    @property
+    def vr_end(self):
+        self._vr_end = self.bd.config.getint(self._config_name, 'vr_end')
+        return self._vr_end
+
+    @vr_end.setter
+    def vr_end(self, value):
+        self.bd.write(self._config_name, 'vr_end', value)
+        self._vr_end = value
+
+    @property
+    def image_prefix(self):
+        self._image_prefix = self.bd.config.get(self._config_name, 'image_prefix')
+        return self._image_prefix
+
+    @image_prefix.setter
+    def image_prefix(self, value):
+        self.bd.write(self._config_name, 'image_prefix', value)
+        self._image_prefix = value
+
+class Star(object):
+    def __init__(self, star):
+        self.bd = BD()
+        self._config_name = "led_%d" % star
+        self._pin_led = None
+        self._pin_group = None
+        self._pin_enable = None
+        self._name = None
+        self._simulated = None
+        self._exp_time = None
+        self._brightness = None
+        self._image_prefix = None
+
+    @property
+    def pin_led(self):
+        self._pin_led = self.bd.config.get(self._config_name, 'pin_led')
+        return self._pin_led
+
+    @pin_led.setter
+    def pin_led(self, value):
+        self.bd.write(self._config_name, 'pin_led', value)
+        self._pin_led = value
         
-    def set_motor_direction(self, config_name='ground_layer', value=None):
-        '''
-        Set motor direction
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set direction to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'direction', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @property
+    def pin_group(self):
+        self._pin_group = self.bd.config.get(self._config_name, 'pin_group')
+        return self._pin_group
 
-    def set_motor_velocity(self, config_name='ground_layer', value=None):
-        '''
-        Set motor velocity
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set velocity to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'velocity', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @pin_group.setter
+    def pin_group(self, value):
+        self.bd.write(self._config_name, 'pin_group', value)
+        self._pin_group = value
+        
+    @property
+    def pin_enable(self):
+        self._pin_enable = self.bd.config.get(self._config_name, 'pin_enable')
+        return self._pin_enable
 
-    def set_motor_steps(self, config_name='ground_layer', value=None):
-        '''
-        Set motor steps
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set steps to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'steps', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @pin_enable.setter
+    def pin_enable(self, value):
+        self.bd.write(self._config_name, 'pin_enable', value)
+        self._pin_enable = value
+        
+    @property
+    def name(self):
+        self._name = self.bd.config.get(self._config_name, 'name')
+        return self._name
 
-    def set_motor_vr_init(self, config_name='ground_layer', value=None):
-        '''
-        Set motor valid range init
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set vr_init to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'vr_init', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @name.setter
+    def name(self, value):
+        self.bd.write(self._config_name, 'name', value)
+        self._name = value
+        
+    @property
+    def simulated(self):
+        self._simulated = self.bd.config.getboolean(self._config_name, 'simulated')
+        return self._simulated
 
-    def set_motor_vr_end(self, config_name='ground_layer', value=None):
-        '''
-        Set motor valid range end
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set vr_end to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'vr_end', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @simulated.setter
+    def simulated(self, value):
+        self.bd.write(self._config_name, 'simulated', value)
+        self._simulated = value
+        
+    @property
+    def exp_time(self):
+        self._exp_time = self.bd.config.getfloat(self._config_name, 'exp_time')
+        return self._exp_time
 
-    def set_motor_image_prefix(self, config_name='ground_layer', value=None):
-        '''
-        Set motor image prefix
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set image_prefix to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'image_prefix', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @exp_time.setter
+    def exp_time(self, value):
+        self.bd.write(self._config_name, 'exp_time', value)
+        self._exp_time = value
 
-    #beagledarc_server
-    def set_beagledarc_server_host(self, config_name='beagledarc_server', value=None):
-        '''
-        Set beagledarc_server host
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set beagledarc_server host to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'host', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @property
+    def brightness(self):
+        self._brightness = self.bd.config.getint(self._config_name, 'brightness')
+        return self._brightness
 
-    def set_beagledarc_server_user(self, config_name='beagledarc_server', value=None):
-        '''
-        Set beagledarc_server user
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set beagledarc_server user to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'user', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @brightness.setter
+    def brightness(self, value):
+        self.bd.write(self._config_name, 'brightness', value)
+        self._brightness = value
+        
+    @property
+    def image_prefix(self):
+        self._image_prefix = self.bd.config.get(self._config_name, 'image_prefix')
+        return self._image_prefix
 
-    def set_beagledarc_server_password(self, config_name='beagledarc_server', value=None):
-        '''
-        Set beagledarc_server password
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set beagledarc_server password to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'password', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @image_prefix.setter
+    def image_prefix(self, value):
+        self.bd.write(self._config_name, 'image_prefix', value)
+        self._image_prefix = value
+        
+class BeagleDarcServer(object):
+    def __init__(self, config_name):
+        self.bd = BD()
+        self._config_name = config_name
+        self._host = None
+        self._user = None
+        self._password = None
+        self._port = None
 
-    def set_beagledarc_server_port(self, config_name='beagledarc_server', value=None):
-        '''
-        Set beagledarc_server port
-        '''
-        cfgfile = open(self.configfile,'w')
-        self.log.debug('Set beagledarc_server port to %s , value %s ' % (config_name, str(value)))
-        self.config.set(config_name, 'port', str(value))
-        self.config.write(cfgfile)
-        cfgfile.close()
+    @property
+    def host(self):
+        self._host = self.bd.config.get(self._config_name, 'host')
+        return self._host
+
+    @host.setter
+    def host(self, value):
+        self.bd.write(self._config_name, 'host', value)
+        self._host = value
+
+    @property
+    def user(self):
+        self._user = self.bd.config.get(self._config_name, 'user')
+        return self._user
+
+    @user.setter
+    def user(self, value):
+        self.bd.write(self._config_name, 'user', value)
+        self._user = value
+
+    @property
+    def password(self):
+        self._password = self.bd.config.get(self._config_name, 'password')
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        self.bd.write(self._config_name, 'password', value)
+        self._password = value
+
+    @property
+    def port(self):
+        self._port = self.bd.config.get(self._config_name, 'port')
+        return self._port
+
+    @port.setter
+    def port(self, value):
+        self.bd.write(self._config_name, 'port', value)
+        self._port = value
+
+class DarcInstance(object):
+    def __init__(self, config_name):
+        self.bd = BD()
+        self._config_name = config_name
+        self._camera = None
+        self._pxlx = None 
+        self._pxly = None 
+        self._image_path = None
+
+    @property
+    def camera(self):
+        self._camera = self.bd.config.get(self._config_name, 'camera')
+        return self._camera
+
+    @camera.setter
+    def camera(self, value):
+        self.bd.write(self._config_name, 'camera', value)
+        self._camera = value
+
+    @property
+    def pxlx(self):
+        self._pxlx = self.bd.config.get(self._config_name, 'pxlx')
+        return self._pxlx
+
+    @pxlx.setter
+    def pxlx(self, value):
+        self.bd.write(self._config_name, 'pxlx', value)
+        self._pxlx = value
+    @property
+    def pxly(self):
+        self._pxly = self.bd.config.get(self._config_name, 'pxly')
+        return self._pxly
+
+    @pxly.setter
+    def pxly(self, value):
+        self.bd.write(self._config_name, 'pxly', value)
+        self._pxly = value
+    @property
+    def image_path(self):
+        self._image_path = self.bd.config.get(self._config_name, 'image_path')
+        return self._image_path
+
+    @image_path.setter
+    def image_path(self, value):
+        self.bd.write(self._config_name, 'image_path', value)
+        self._image_path = value
+
+
+
+
+#class Model:
+#    '''
+#    Model:
+#    Handle file configurations between GUI/Controller
+#    '''
+#    def __init__(self, configfile='/Users/nsaez/darc-scripts/BeagleDarc/BeagleDarc/configurations.cfg'):
+#        '''
+#        Sets parameters taken from configurations.cfg file.
+#        The current path for configuration file is:
+#        /home/dani/nsaez/board/configurations.cfg
+#        '''
+#        self.config = ConfigParser.ConfigParser()
+#        logging.basicConfig()
+#        self.log = logging.getLogger("Model")
+#        try:
+#            self.configfile = configfile
+#            self.config.read(self.configfile)
+#        except Exception, ex:
+#            _ , _ , exc_tb = sys.exc_info()
+#            self.log.error(ex)
+#            self.log.error("Check line number: %d" % (exc_tb.tb_lineno))
+#            self.log.error("configurations.cfg : File doesn't exits")
+#            sys.exit(-1)
+#
+#    def __del__(self):
+#        pass 
+#
+#    def get_directory(self, image_path):
+#        '''
+#        Set image directory name to take images
+#        return a string with these image directory
+#        '''
+#        current =  str(time.strftime("%Y_%m_%d", time.gmtime()))
+#        current_dir = glob.glob(image_path+'*')
+#        current_dir = sorted(current_dir)
+#        last = current_dir[-1]
+#        if last.split('/')[-1].split('.')[0] == current:
+#            adquisition_number = int(last.split('/')[-1].split('.')[1]) + 1
+#            dir_name = current+'.'+ str(adquisition_number)
+#        else:
+#            dir_name = current+'.0'
+#        self.log.info('Directory name: %s'% dir_name)
+#        return dir_name
+#
 
 
 if __name__ == '__main__':
     pass
+    
