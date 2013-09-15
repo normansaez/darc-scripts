@@ -3,8 +3,8 @@
 Controller
 '''
 
-from BeagleDarc.Peripherals  import Led
-from BeagleDarc.Model import Model
+from BeagleDarc.Model import Star
+
 class Controller:
     '''
     Controller:
@@ -12,15 +12,14 @@ class Controller:
     def __init__(self):
         '''
         '''
-        self.Led = Led
-        self.model = Model()
+        pass
 
     def turn_on(self, star):
-        l = self.Led(star)
+        l = Star(star)
         l.set_on()
 
     def turn_off(self, star):
-        l = self.Led(star)
+        l = Star(star)
         l.set_off()
 
 if __name__ == '__main__':
