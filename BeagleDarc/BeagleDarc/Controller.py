@@ -3,7 +3,9 @@
 Controller
 '''
 
+from BeagleDarc.BeagleDarcClient import BeagleDarcClient
 from BeagleDarc.Model import Star
+from BeagleDarc.Model import Layer
 
 class Controller:
     '''
@@ -13,15 +15,19 @@ class Controller:
         '''
         '''
         pass
+    #star methods
+    def star_on(self, star):
+        pass
+    def star_off(self, star):
+        pass
 
-    def turn_on(self, star):
-        l = Star(star)
-        l.set_on()
+    #layer methods
+    def layer_move(self, layer):
+        pass
 
-    def turn_off(self, star):
-        l = Star(star)
-        l.set_off()
+    def layer_move_skip_sensor(self, layer):
+        pass
 
 if __name__ == '__main__':
     c = Controller()
-    c.turn_on(1)
+

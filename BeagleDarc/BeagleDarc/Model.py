@@ -4,7 +4,7 @@ Model
 Handle file configurations between GUI/Controller
 '''
 import sys
-
+import os
 import time
 import glob
 import logging
@@ -12,7 +12,8 @@ import ConfigParser
 
 class BD:
     def __init__(self):
-        self.configfile='/Users/nsaez/darc-scripts/BeagleDarc/BeagleDarc/configurations.cfg'
+        path, fil = os.path.split(os.path.abspath(__file__))
+        self.configfile=path+'/configurations.cfg'
         self.config = None
         self.config = ConfigParser.ConfigParser()
         self.config.read(self.configfile)
@@ -241,7 +242,7 @@ class Star(object):
     def image_prefix(self, value):
         self.bd.write(self._config_name, 'image_prefix', value)
         self._image_prefix = value
-        
+
 class BeagleDarcServer(object):
     def __init__(self, config_name):
         self.bd = BD()
@@ -291,7 +292,7 @@ class BeagleDarcServer(object):
         self.bd.write(self._config_name, 'port', value)
         self._port = value
 
-class DarcInstance(object):
+class Darc(object):
     def __init__(self, config_name):
         self.bd = BD()
         self._config_name = config_name
@@ -299,6 +300,7 @@ class DarcInstance(object):
         self._pxlx = None 
         self._pxly = None 
         self._image_path = None
+        self._image_path_dir = None
 
     @property
     def camera(self):
@@ -319,6 +321,7 @@ class DarcInstance(object):
     def pxlx(self, value):
         self.bd.write(self._config_name, 'pxlx', value)
         self._pxlx = value
+
     @property
     def pxly(self):
         self._pxly = self.bd.config.get(self._config_name, 'pxly')
@@ -328,6 +331,7 @@ class DarcInstance(object):
     def pxly(self, value):
         self.bd.write(self._config_name, 'pxly', value)
         self._pxly = value
+
     @property
     def image_path(self):
         self._image_path = self.bd.config.get(self._config_name, 'image_path')
@@ -338,55 +342,25 @@ class DarcInstance(object):
         self.bd.write(self._config_name, 'image_path', value)
         self._image_path = value
 
+    @property
+    def image_path_dir(self):
+        return self._image_path_dir
 
-
-
-#class Model:
-#    '''
-#    Model:
-#    Handle file configurations between GUI/Controller
-#    '''
-#    def __init__(self, configfile='/Users/nsaez/darc-scripts/BeagleDarc/BeagleDarc/configurations.cfg'):
-#        '''
-#        Sets parameters taken from configurations.cfg file.
-#        The current path for configuration file is:
-#        /home/dani/nsaez/board/configurations.cfg
-#        '''
-#        self.config = ConfigParser.ConfigParser()
-#        logging.basicConfig()
-#        self.log = logging.getLogger("Model")
-#        try:
-#            self.configfile = configfile
-#            self.config.read(self.configfile)
-#        except Exception, ex:
-#            _ , _ , exc_tb = sys.exc_info()
-#            self.log.error(ex)
-#            self.log.error("Check line number: %d" % (exc_tb.tb_lineno))
-#            self.log.error("configurations.cfg : File doesn't exits")
-#            sys.exit(-1)
-#
-#    def __del__(self):
-#        pass 
-#
-#    def get_directory(self, image_path):
-#        '''
-#        Set image directory name to take images
-#        return a string with these image directory
-#        '''
-#        current =  str(time.strftime("%Y_%m_%d", time.gmtime()))
-#        current_dir = glob.glob(image_path+'*')
-#        current_dir = sorted(current_dir)
-#        last = current_dir[-1]
-#        if last.split('/')[-1].split('.')[0] == current:
-#            adquisition_number = int(last.split('/')[-1].split('.')[1]) + 1
-#            dir_name = current+'.'+ str(adquisition_number)
-#        else:
-#            dir_name = current+'.0'
-#        self.log.info('Directory name: %s'% dir_name)
-#        return dir_name
-#
+    @image_path_dir.setter
+    def image_path_dir(self, value):
+        current =  str(time.strftime("%Y_%m_%d", time.gmtime()))
+        current_dir = glob.glob(self._image_path+'*')
+        current_dir = sorted(current_dir)
+        last = current_dir[-1]
+        if last.split('/')[-1].split('.')[0] == current:
+            adquisition_number = int(last.split('/')[-1].split('.')[1]) + 1
+            dir_name = current+'.'+ str(adquisition_number)
+        else:
+            dir_name = current+'.0'
+        self._image_path_dir = dir_name
 
 
 if __name__ == '__main__':
+    #m = BD()
     pass
     

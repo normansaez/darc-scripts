@@ -68,13 +68,13 @@ class Main:
         if widget.get_active() is True:
             img.set_from_file(self.path+'/img/shineStar.png')
             try:
-                self.controller.turn_on(star)
+                self.controller.star_on(star)
             except Exception, e:
                 print e
         else:
             img.set_from_file(self.path+'/img/darkStar.png')
             try:
-                self.controller.turn_off(star)
+                self.controller.star_off(star)
             except Exception, e:
                 print e
         img.show()

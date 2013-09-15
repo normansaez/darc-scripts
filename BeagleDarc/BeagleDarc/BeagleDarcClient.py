@@ -1,16 +1,20 @@
 #!/usr/bin/python           
 
-import socket               
+class BeagleDarcClient:
+    def __init__(self):
+        pass
 
-s = socket.socket()         
-#host = socket.gethostname() 
-host = '192.168.0.20'
-port = 12345                
-s.connect((host, port))
-s.send("sended from client")
-while 1:
-    response = s.recv(1024)
-    print response
-    if response.__contains__("ack"):
-        s.close    
-        break
+#import socket               
+#
+#s = socket.socket()         
+##host = socket.gethostname() 
+#host = '192.168.0.20'
+#port = 12345                
+#s.connect((host, port))
+#s.send("sended from client")
+#while 1:
+#    response = s.recv(1024)
+#    print response
+#    if response.__contains__("ack"):
+#        s.close    
+#        break
