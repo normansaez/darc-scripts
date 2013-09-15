@@ -7,7 +7,8 @@ import gtk
 import gobject
 
 from subprocess import Popen, PIPE
-from BeagleDarc.Model import Model
+from BeagleDarc.Model import Star
+
 
 class StarData:
 
@@ -15,7 +16,6 @@ class StarData:
 
     def __init__( self ):
         path, fil = os.path.split(os.path.abspath(__file__))
-        self.model = Model()
 
         self.builder = gtk.Builder()
         self.builder.add_from_file(path+"/glade/star_data.glade")
@@ -41,7 +41,11 @@ class StarData:
         self.combobox_star.add_attribute(cell, 'text', 0)
     
         #PIN
-        self.entry_pin = self.builder.get_object("entry_pin")
+        self.entry_pin_led = self.builder.get_object("entry_pin_led")
+        #PIN
+        self.entry_pin_group = self.builder.get_object("entry_pin_group")
+        #PIN
+        self.entry_pin_enable = self.builder.get_object("entry_pin_enable")
         
         #NAME
         self.entry_name = self.builder.get_object("entry_name")
@@ -81,25 +85,22 @@ class StarData:
         }
         self.builder.connect_signals(dic)
 
-    def fill_info(self, star):
-        try:
-            config_name = 'led_%s' % star
-            self.entry_pin.set_text(self.model.get_star_pin(config_name))
-            self.entry_name.set_text(self.model.get_star_name(config_name))
-            simulated  = self.model.get_star_simulated(config_name)
-            if simulated is True:
-                self.checkbutton_sim.set_active(True)
-            self.combobox_exp_time.insert_text(0, str(self.model.get_star_exp_time(config_name))) 
-            self.combobox_exp_time.set_active(0)
-            self.combobox_brightness.insert_text(0, str(self.model.get_star_brightness(config_name))) 
-            self.combobox_brightness.set_active(0)
-            self.entry_image_prefix.set_text(self.model.get_star_image_prefix(config_name))
-        except Exception, e:
-            print e
-            #print "no section configured"
+    def fill_info(self, star_id):
+        star = Star(int(star_id))
+        self.entry_pin_led.set_text(star.pin_led)
+        self.entry_pin_group.set_text(star.pin_group)
+        self.entry_pin_enable.set_text(star.pin_enable)
+        self.entry_name.set_text(star.name)
+        if star.simulated is True:
+            self.checkbutton_sim.set_active(star.simulated)
+        self.combobox_exp_time.insert_text(0, str(star.exp_time)) 
+        self.combobox_exp_time.set_active(0)
+        self.combobox_brightness.insert_text(0, str(star.brightness)) 
+        self.combobox_brightness.set_active(0)
+        self.entry_image_prefix.set_text(star.image_prefix)
 
     def changed_cb(self, entry):
-        star = entry.get_active_text()
+        star = int(entry.get_active_text())
         print 'Getting star: ', star
         self.fill_info(star)
         return
@@ -108,32 +109,25 @@ class StarData:
         sys.exit(0)
 
     def save(self, widget):
-        star = self.combobox_star.get_active_text() 
-        #try:
-        config_name = 'led_%s' % star
-        pin = self.entry_pin.get_text()
-        name = self.entry_name.get_text()
-        sim = self.checkbutton_sim.get_active()
-        exp_time = self.combobox_exp_time.get_active_text()
-        bright = self.combobox_brightness.get_active_text()
-        img_prefix = self.entry_image_prefix.get_text()
-        #set
-        self.model.set_star_pin(config_name, value=pin)
-        self.model.set_star_name(config_name, value=name)
-        self.model.set_star_simulated(config_name, value=sim)
-        self.model.set_star_exp_time(config_name, value=exp_time)
-        self.model.set_star_brightness(config_name, value=bright)
-        self.model.set_star_image_prefix(config_name, value=img_prefix)
-        print pin
-        print name 
-        print sim
-        print exp_time
-        print bright
-        print img_prefix
+        star = Star(int(self.combobox_star.get_active_text()))
+        star.pin_led = self.entry_pin_led.get_text()
+        star.pin_group = self.entry_pin_group.get_text()
+        star.pin_enable = self.entry_pin_enable.get_text()
+        star.name = self.entry_name.get_text()
+        star.sim = self.checkbutton_sim.get_active()
+        star.exp_time = self.combobox_exp_time.get_active_text()
+        star.bright = self.combobox_brightness.get_active_text()
+        star.img_prefix = self.entry_image_prefix.get_text()
+        print star.pin_led
+        print star.pin_group
+        print star.pin_enable
+        print star.name 
+        print star.sim
+        print star.exp_time
+        print star.bright
+        print star.img_prefix
         print "------------"
         print "saved"
-        #except Exception, e:
-        #    print e
 
     def default(self, widget):
         star = self.combobox_star.get_active_text() 

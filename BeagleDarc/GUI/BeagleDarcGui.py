@@ -7,7 +7,7 @@ import gtk
 
 from subprocess import Popen, PIPE
 
-from BeagleDarc.Model import Model
+from BeagleDarc.Model import BeagleDarcServer 
 
 class BeagleDarcGui:
 
@@ -15,11 +15,7 @@ class BeagleDarcGui:
 
     def __init__( self ):
         path, fil = os.path.split(os.path.abspath(__file__))
-        self.model = Model()
-        self.serverhost = self.model.get_beagledarc_server_host()
-        self.serveruser = self.model.get_beagledarc_server_user()
-        self.serverpasswd = self.model.get_beagledarc_server_password()
-        self.serverport = self.model.get_beagledarc_server_port()
+        bds = BeagleDarcServer('beagledarc_server')
 
         self.builder = gtk.Builder()
         self.builder.add_from_file(path+"/glade/beagledarc.glade")
@@ -34,15 +30,15 @@ class BeagleDarcGui:
         self.connect_togglebutton.connect("toggled", self.callback, "Connection")
 
         #default entries
-        self.entry1 = self.builder.get_object ("entry1")
-        self.entry2 = self.builder.get_object ("entry2")
-        self.entry3 = self.builder.get_object ("entry3")
-        self.entry4 = self.builder.get_object ("entry4")
+        self.entry1 = self.builder.get_object("entry1")
+        self.entry2 = self.builder.get_object("entry2")
+        self.entry3 = self.builder.get_object("entry3")
+        self.entry4 = self.builder.get_object("entry4")
 
-        self.entry1.set_text(self.serverhost) 
-        self.entry2.set_text(self.serveruser) 
-        self.entry3.set_text(self.serverpasswd) 
-        self.entry4.set_text(self.serverport) 
+        self.entry1.set_text(bds.host ) 
+        self.entry2.set_text(bds.user ) 
+        self.entry3.set_text(bds.password) 
+        self.entry4.set_text(bds.port ) 
 
         dic = { 
             "on_buttonQuit_clicked" : self.quit,
@@ -58,11 +54,12 @@ class BeagleDarcGui:
         '''
         callback
         '''
+        bds = BeagleDarcServer('beagledarc_server')
         print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
         if widget.get_active() is True:
-            cmd = "ssh %s@%s \"python /home/root/server.py &\"" % (self.serveruser, self.serverhost)
+            cmd = "ssh %s@%s \"python /home/root/server.py &\"" % (bds.user, bds.host)
         if widget.get_active() is False:
-            cmd = "ssh %s@%s \"ps aux |grep server.py|awk \'{print \\$2}\'|xargs kill -9\"" % (self.serveruser, self.serverhost)
+            cmd = "ssh %s@%s \"ps aux |grep server.py|awk \'{print \\$2}\'|xargs kill -9\"" % (bds.user, bds.host)
         #process = Popen(cmd , stdout=PIPE , stderr=PIPE , shell=True)
         process = Popen(cmd , stdout=sys.stdout , stderr=sys.stderr , shell=True)
         sts = process.wait()

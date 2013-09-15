@@ -25,13 +25,13 @@ class BBBTest(unittest.TestCase):
         self.assertNotEqual('No module named BeagleDarc', message)
         ##########################################################
         try:
-            from BeagleDarc.Peripherals import Motor
+            from BeagleDarc.Model import Layer
         except Exception, e:
             message = e.message
         self.assertNotEqual('cannot import name motor', message)
         ##########################################################
         try:
-            from BeagleDarc.Peripherals import Led
+            from BeagleDarc.Model import Star
         except Exception, e:
             message = e.message
         self.assertNotEqual('cannot import name led', message)
@@ -39,38 +39,37 @@ class BBBTest(unittest.TestCase):
     def test_intanciate_motor(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        self.assertRaises(NameError,Motor,'dummy_name')
-        m = Motor('ground_layer')
-        self.assertEqual (m.__class__.__name__,'Motor')
-        m = Motor('horizontal_altitude_layer')
-        self.assertEqual (m.__class__.__name__,'Motor')
-        m = Motor('vertical_altitude_layer')
-        self.assertEqual (m.__class__.__name__,'Motor')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
+        self.assertEqual (m.__class__.__name__,'Layer')
+        m = Layer('horizontal_layer')
+        self.assertEqual (m.__class__.__name__,'Layer')
+        m = Layer('vertical_altitude_layer')
+        self.assertEqual (m.__class__.__name__,'Layer')
         ####################
 
     def test_intanciate_led(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
+        from BeagleDarc.Model import Star
         n_min = 0
         n_max = 55
 
         for led in range(0,66):
             if led <= n_min:
-                self.assertRaises(NameError, Led, led)
+                self.assertRaises(NameError, Star, led)
             elif led > n_max: 
-                self.assertRaises(NameError, Led, led)
+                self.assertRaises(NameError, Star, led)
             else:
-                l = Led(led)
-                self.assertEqual (l.__class__.__name__,'Led')
+                l = Star(led)
+                self.assertEqual (l.__class__.__name__,'Star')
         ####################
 
     def test_led_simulated(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
+        from BeagleDarc.Model import Star
+        l = Star(1)
 
         in_val = True
         out_val = False
@@ -81,8 +80,8 @@ class BBBTest(unittest.TestCase):
     def test_led_pin(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
+        from BeagleDarc.Model import Star
+        l = Star(1)
 
         in_val = 1
         out_val = 0
@@ -93,8 +92,8 @@ class BBBTest(unittest.TestCase):
     def test_led_name(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
+        from BeagleDarc.Model import Star
+        l = Star(1)
 
         in_val = 'name'
         out_val = ''
@@ -105,8 +104,8 @@ class BBBTest(unittest.TestCase):
     def test_led_exp_time(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
+        from BeagleDarc.Model import Star
+        l = Star(1)
 
         in_val = 10
         out_val = 0
@@ -117,8 +116,8 @@ class BBBTest(unittest.TestCase):
     def test_led_brightness(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
+        from BeagleDarc.Model import Star
+        l = Star(1)
 
         in_val = 10
         out_val = 0
@@ -129,8 +128,8 @@ class BBBTest(unittest.TestCase):
     def test_led_brightness(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
+        from BeagleDarc.Model import Star
+        l = Star(1)
 
         in_val = 10
         out_val = 0
@@ -141,26 +140,24 @@ class BBBTest(unittest.TestCase):
     def test_led_on(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
-        self.assertEqual (l.__class__.__name__,'Led')
-        l.set_on()
+        from BeagleDarc.Model import Star
+        l = Star(1)
+        self.assertEqual (l.__class__.__name__,'Star')
         ####################
 
     def test_led_off(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Led
-        l = Led(1)
-        self.assertEqual (l.__class__.__name__,'Led')
-        l.set_off()
+        from BeagleDarc.Model import Star
+        l = Star(1)
+        self.assertEqual (l.__class__.__name__,'Star')
         ####################
 #-----------------------------------------------------------------------
     def test_motor_simulated(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = True
         out_val = False
@@ -171,8 +168,8 @@ class BBBTest(unittest.TestCase):
     def test_motor_name(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 'name'
         out_val = ''
@@ -183,8 +180,8 @@ class BBBTest(unittest.TestCase):
     def test_motor_pin(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 1
         out_val = 0
@@ -195,8 +192,8 @@ class BBBTest(unittest.TestCase):
     def test_cur_pos(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 1
         out_val = 0
@@ -207,8 +204,8 @@ class BBBTest(unittest.TestCase):
     def test_steps(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 1
         out_val = 0
@@ -220,8 +217,8 @@ class BBBTest(unittest.TestCase):
     def test_direction(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 1
         out_val = 0
@@ -233,8 +230,8 @@ class BBBTest(unittest.TestCase):
     def test_velocity(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 1
         out_val = 0
@@ -245,8 +242,8 @@ class BBBTest(unittest.TestCase):
     def test_vr_init(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 1
         out_val = 0
@@ -257,8 +254,8 @@ class BBBTest(unittest.TestCase):
     def test_vr_end(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
 
         in_val = 1
         out_val = 0
@@ -269,8 +266,8 @@ class BBBTest(unittest.TestCase):
     def test_move_motor_with_sensor(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
         cur_pos = 0 
         cur_pos = m.move_motor_with_sensor(cur_pos)
         cmd_pos = 1000 
@@ -280,8 +277,8 @@ class BBBTest(unittest.TestCase):
     def test_move_motor_skip_sensor(self):
         '''
         '''
-        from BeagleDarc.Peripherals import Motor
-        m = Motor('ground_layer')
+        from BeagleDarc.Model import Layer
+        m = Layer('ground_layer')
         cur_pos = 0 
         cur_pos = m.move_motor_skip_sensor(cur_pos)
         cmd_pos = 1000 

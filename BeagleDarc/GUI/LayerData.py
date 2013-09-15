@@ -7,7 +7,7 @@ import gtk
 import gobject
 
 from subprocess import Popen, PIPE
-from BeagleDarc.Model import Model
+from BeagleDarc.Model import Layer
 
 class LayerData:
 
@@ -15,8 +15,6 @@ class LayerData:
 
     def __init__( self ):
         path, fil = os.path.split(os.path.abspath(__file__))
-        self.model = Model()
-
         self.builder = gtk.Builder()
         self.builder.add_from_file(path+"/glade/layer_data.glade")
         self.window = self.builder.get_object ("window1")
@@ -41,7 +39,11 @@ class LayerData:
         self.combobox_layer.add_attribute(cell, 'text', 0)
     
         #PIN
-        self.entry_pin = self.builder.get_object("entry_pin")
+        self.entry_pin_enable = self.builder.get_object("entry_pin_enable")
+        #PIN
+        self.entry_pin_steps = self.builder.get_object("entry_pin_steps")
+        #PIN
+        self.entry_pin_direction = self.builder.get_object("entry_pin_direction")
         
         #NAME
         self.entry_name = self.builder.get_object("entry_name")
@@ -92,22 +94,20 @@ class LayerData:
         self.builder.connect_signals(dic)
 
     def fill_info(self, config_name):
-        try:
-            self.entry_pin.set_text(self.model.get_motor_pin(config_name))
-            self.entry_name.set_text(self.model.get_motor_name(config_name))
-            simulated  = self.model.get_motor_simulated(config_name)
-            if simulated is True:
-                self.checkbutton_sim.set_active(True)
-            self.combobox_direction.insert_text(0, str(self.model.get_motor_direction(config_name))) 
-            self.combobox_direction.set_active(0)
-            #self.hscale_vel.set_value(int(self.model.get_motor_velocity(config_name)))
-            self.entry_steps.set_text(str(self.model.get_motor_steps(config_name)))
-            self.entry_vr_init.set_text(str(self.model.get_motor_vr_init(config_name)))
-            self.entry_vr_end.set_text(str(self.model.get_motor_vr_end(config_name)))
-            self.entry_image_prefix.set_text(self.model.get_motor_image_prefix(config_name))
-        except Exception, e:
-            print e
-            #print "no section configured"
+        layer = Layer(config_name)
+        self.entry_pin_enable.set_text(layer.pin_enable)
+        self.entry_pin_steps.set_text(layer.pin_steps)
+        self.entry_pin_direction.set_text(layer.pin_direction)
+        self.entry_name.set_text(layer.name)
+        if layer.simulated is True:
+            self.checkbutton_sim.set_active(layer.simulated)
+        self.combobox_direction.insert_text(0, str(layer.direction)) 
+        self.combobox_direction.set_active(0)
+        #self.hscale_vel.set_value(int(self.model.get_motor_velocity(config_name)))
+        self.entry_steps.set_text(str(layer.steps))
+        self.entry_vr_init.set_text(str(layer.vr_init))
+        self.entry_vr_end.set_text(str(layer.vr_end))
+        self.entry_image_prefix.set_text(layer.image_prefix)
 
     def changed_cb(self, entry):
         layer = self.combobox_layer.get_active_text()
@@ -122,40 +122,31 @@ class LayerData:
     def save(self, widget):
         print "### SAVE ###"
         config_name = self.combobox_layer.get_active_text() 
-#        #try:
-        pin = self.entry_pin.get_text()
-        name = self.entry_name.get_text()
-        sim = self.checkbutton_sim.get_active()
-        direction = self.combobox_direction.get_active_text()
-        #velocity = int(self.hscale_vel.get_value())
-        steps = self.entry_steps.get_text()
-        vr_init = self.entry_vr_init.get_text()
-        vr_end = self.entry_vr_end.get_text()
-        img_prefix = self.entry_image_prefix.get_text()
-        #set
-        self.model.set_motor_pin(config_name, value=pin)
-        self.model.set_motor_name(config_name, value=name)
-        self.model.set_motor_simulated(config_name, value=sim)
-        self.model.set_motor_direction(config_name, value=direction)
-        #self.model.set_motor_velocity(config_name, value=velocity)
-        self.model.set_motor_steps(config_name, value=steps)
-        self.model.set_motor_vr_init(config_name, value=vr_init)
-        self.model.set_motor_vr_end(config_name, value=vr_end)
-        self.model.set_motor_image_prefix(config_name, value=img_prefix)
-        print pin
-        print name 
-        print sim
-        print direction
-        print velocity
-        print steps
-        print vr_init
-        print vr_end
-        print img_prefix
+        layer = Layer(config_name)
+        layer.pin_enable = self.entry_pin_enable.get_text()
+        layer.pin_steps = self.entry_pin_steps.get_text()
+        layer.pin_direction = self.entry_pin_direction.get_text()
+        layer.name = self.entry_name.get_text()
+        layer.sim = self.checkbutton_sim.get_active()
+        layer.direction = self.combobox_direction.get_active_text()
+        #layer.velocity = int(self.hscale_vel.get_value())
+        layer.steps = self.entry_steps.get_text()
+        layer.vr_init = self.entry_vr_init.get_text()
+        layer.vr_end = self.entry_vr_end.get_text()
+        layer.image_prefix = self.entry_image_prefix.get_text()
+        print layer.pin_enable
+        print layer.pin_steps
+        print layer.pin_direction
+        print layer.name 
+        print layer.sim
+        print layer.direction
+        print layer.velocity
+        print layer.steps
+        print layer.vr_init
+        print layer.vr_end
+        print layer.image_prefix
         print "### SAVE ###"
-#        print "saved"
-#        #except Exception, e:
-#        #    print e
-#
+
     def default(self, widget):
         print "default"
         layer = self.combobox_layer.get_active_text() 

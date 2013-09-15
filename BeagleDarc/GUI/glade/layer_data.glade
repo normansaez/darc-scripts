@@ -25,7 +25,7 @@
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">pin enable motor</property>
+            <property name="label" translatable="yes">pin enable</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -139,7 +139,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="entry_pin">
+          <object class="GtkEntry" id="entry_pin_enable">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">&#x25CF;</property>
@@ -277,7 +277,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="entry1">
+          <object class="GtkEntry" id="entry_pin_steps">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">&#x25CF;</property>
@@ -302,7 +302,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="entry2">
+          <object class="GtkEntry" id="entry_pin_direction">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">&#x25CF;</property>
