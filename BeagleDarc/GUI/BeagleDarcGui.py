@@ -57,12 +57,16 @@ class BeagleDarcGui:
         bds = BeagleDarcServer('beagledarc_server')
         print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
         if widget.get_active() is True:
-            cmd = "ssh %s@%s \"python /home/root/server.py &\"" % (bds.user, bds.host)
+            widget.set_label(gtk.STOCK_DISCONNECT)
+            widget.set_use_stock(True)
+#            cmd = "ssh %s@%s \"python /home/root/server.py &\"" % (bds.user, bds.host)
         if widget.get_active() is False:
-            cmd = "ssh %s@%s \"ps aux |grep server.py|awk \'{print \\$2}\'|xargs kill -9\"" % (bds.user, bds.host)
+            widget.set_label(gtk.STOCK_CONNECT)
+            widget.set_use_stock(True)
+#            cmd = "ssh %s@%s \"ps aux |grep server.py|awk \'{print \\$2}\'|xargs kill -9\"" % (bds.user, bds.host)
         #process = Popen(cmd , stdout=PIPE , stderr=PIPE , shell=True)
-        process = Popen(cmd , stdout=sys.stdout , stderr=sys.stderr , shell=True)
-        sts = process.wait()
+#        process = Popen(cmd , stdout=sys.stdout , stderr=sys.stderr , shell=True)
+#        sts = process.wait()
         #out = process.stdout.read().strip()
         #err = process.stderr.read().strip()
         #print cmd
