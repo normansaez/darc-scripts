@@ -254,7 +254,7 @@ class Star(object):
         self.bd.write(self._config_name, 'image_prefix', value)
         self._image_prefix = value
 
-class BeagleDarcServer(object):
+class BeagleDarcServerM(object):
     def __init__(self, config_name):
         self.bd = BD()
         self._config_name = config_name

@@ -1,20 +1,23 @@
 #!/usr/bin/python           
 
+import socket               
+from BeagleDarc.Model import BeagleDarcServerM
+
 class BeagleDarcClient:
     def __init__(self):
-        pass
+        self.bdsm = BeagleDarcServerM('beagledarc_server')
 
-#import socket               
-#
-#s = socket.socket()         
-##host = socket.gethostname() 
-#host = '192.168.0.20'
-#port = 12345                
-#s.connect((host, port))
-#s.send("sended from client")
-#while 1:
-#    response = s.recv(1024)
-#    print response
-#    if response.__contains__("ack"):
-#        s.close    
-#        break
+    def connect(self):
+        s = socket.socket()         
+        s.connect((self.bdsm.host, int(self.bdsm.port))) 
+        s.send("M1:90:END")
+        while True:
+            response = s.recv(1024)
+            print response
+            if response.__contains__("ack"):
+                s.close    
+                break
+
+if __name__ == '__main__':
+    bdc = BeagleDarcClient()
+    bdc.connect()
