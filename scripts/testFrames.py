@@ -1,8 +1,8 @@
 import numpy
 import darc
 d=darc.Control('main')
-d.Set('dani',39.5)
-bg=d.Get('bgImage')
+#d.Set('dani',39.5)
+#bg=d.Get('bgImage')
 stream=d.GetStream('mainrtcPxlBuf')#a single frame
 #print stream
 data=d.GetStreamBlock('mainrtcPxlBuf',100)#100 frames - as a list

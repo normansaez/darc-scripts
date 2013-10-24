@@ -18,14 +18,14 @@ def _execute_cmd(cmd):
 ###################################################################
 if __name__ == "__main__":
     parser = OptionParser()
-    parser.add_option('-p','--prefix',dest = 'camera',type='str',help ='',default="ShackHartmann")
+    parser.add_option('-p','--prefix',dest = 'camera',type='str',help ='',default="main")
     (options,argv) = parser.parse_args()
     cmd = "darcmagic labels --print=1 --prefix=%s" % options.camera
     sts,out,err = _execute_cmd(cmd)
     params = eval(out)
     for param in params:
         print param
-        if param == 'E' or param == 'gainE':
+        if param == 'E' or param == 'gainE' or param == 'calthr' or param == 'gainReconmxT' or param == 'rmx':
             pass
         else:
             cmd = "darcmagic get %s --prefix=%s" % (param, options.camera)
