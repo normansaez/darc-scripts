@@ -7,7 +7,7 @@ import gtk
 
 from subprocess import Popen, PIPE
 
-from BeagleDarc.Model import BeagleDarcServer 
+from BeagleDarc.Model import BeagleDarcServerM 
 
 class BeagleDarcGui:
 
@@ -15,7 +15,7 @@ class BeagleDarcGui:
 
     def __init__( self ):
         path, fil = os.path.split(os.path.abspath(__file__))
-        bds = BeagleDarcServer('beagledarc_server')
+        bds = BeagleDarcServerM('beagledarc_server')
 
         self.builder = gtk.Builder()
         self.builder.add_from_file(path+"/glade/beagledarc.glade")
@@ -54,7 +54,7 @@ class BeagleDarcGui:
         '''
         callback
         '''
-        bds = BeagleDarcServer('beagledarc_server')
+        bds = BeagleDarcServerM('beagledarc_server')
         print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
         if widget.get_active() is True:
             widget.set_label(gtk.STOCK_DISCONNECT)
@@ -76,15 +76,15 @@ class BeagleDarcGui:
 
 
     def phasescreen(self, widget):
-        from GUI import Layers
+        from GUI import LayersGui
         from GUI import LayerData
-        Layers.Layers()
+        LayersGui.Layers()
         LayerData.LayerData()
 
     def stars(self, widget):
-        from GUI import Stars
+        from GUI import StarsGui
         from GUI import StarData
-        Stars.Main()
+        StarsGui.Main()
         StarData.StarData()
 
 BeagleDarcGui = BeagleDarcGui()

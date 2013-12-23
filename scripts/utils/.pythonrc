@@ -1,0 +1,138 @@
+# PYTHONINSPECT --> python -i
+
+# Add auto-completion and a stored history file of commands to your Python
+# interactive interpreter. Requires Python 2.0+, readline. Autocomplete is
+# bound to the Esc key by default (you can change it - see readline docs).
+#
+# Store the file in ~/.pystartup, and set an environment variable to point
+# to it:  "export PYTHONSTARTUP=/max/home/itamar/.pystartup" in bash.
+# save history on exit
+import atexit
+import os
+import readline
+import rlcompleter
+historyPath = os.path.expanduser("~/.pyhistory")
+
+def save_history(historyPath=historyPath):
+    import readline
+    readline.write_history_file(historyPath)
+
+if os.path.exists(historyPath):
+    readline.read_history_file(historyPath)
+
+atexit.register(save_history)
+del os, atexit, readline, rlcompleter, save_history, historyPath
+
+import readline
+import __builtin__
+import __main__
+
+__all__ = ["Ccompleter"]
+
+class Ccompleter:
+
+    def complete(self, text, state):
+        """Return the next possible completion for 'text'.
+
+        This is called successively with state == 0, 1, 2, ... until it
+        returns None.  The completion should begin with 'text'.
+
+        """
+        #print " text *%s* state %s" % (text,state)
+        if state == 0:
+            if "." in text:
+                self.matches = self.attr_matches(text)
+            else:
+                self.matches = self.global_matches(text)
+        try:
+            return self.matches[state]
+        except IndexError:
+            return None
+
+    def global_matches(self, text):
+        """Compute matches when text is a simple name.
+
+        Return a list of all keywords, built-in functions and names
+        currently defines in __main__ that match.
+
+        """
+        import keyword
+        matches = []
+        n = len(text)
+        if n == 0:
+                return "	"
+        for list in [keyword.kwlist,
+                     __builtin__.__dict__.keys(),
+                     __main__.__dict__.keys()]:
+            for word in list:
+                if word[:n] == text and word != "__builtins__":
+                    matches.append(word)
+        return matches
+
+    def attr_matches(self, text):
+        """Compute matches when text contains a dot.
+
+        Assuming the text is of the form NAME.NAME....[NAME], and is
+        evaluatable in the globals of __main__, it will be evaluated
+        and its attributes (as revealed by dir()) are used as possible
+        completions.  (For class instances, class members are are also
+        considered.)
+
+        WARNING: this can still invoke arbitrary C code, if an object
+        with a __getattr__ hook is evaluated.
+
+        """
+        import re
+        m = re.match(r"(\w+(\.\w+)*)\.(\w*)", text)
+        if not m:
+            return
+        expr, attr = m.group(1, 3)
+        object = eval(expr, __main__.__dict__)
+        words = dir(object)
+        if hasattr(object,'__class__'):
+            words.append('__class__')
+            words = words + get_class_members(object.__class__)
+        matches = []
+        n = len(attr)
+        for word in words:
+            if word[:n] == attr and word != "__builtins__":
+                matches.append("%s.%s" % (expr, word))
+        return matches
+
+def get_class_members(klass):
+    ret = dir(klass)
+    if hasattr(klass,'__bases__'):
+        for base in klass.__bases__:
+            ret = ret + get_class_members(base)
+    return ret
+
+# hack to avoid typing () - from unix.py
+def alias(f):
+    """
+    Wraps a function so that if it's entered *by itself*
+    in the interpreter without ()'s, it gets called anyway
+    """
+    class W:
+        def __init__(self, f):
+            self.f = f
+        def __repr__(self):
+            x =apply(self.f)
+            if x:
+                return repr(x)
+            else:
+                return ''
+    return W(f)
+
+def history():
+   for i in range(0,readline.get_current_history_length()):
+      print readline.get_history_item(i)
+
+h=alias(history)
+
+readline.set_completer(Ccompleter().complete)
+readline.parse_and_bind("tab: complete")
+
+# example: dirz(gtk,'window')
+def dirz(a,b):
+   for x in [z for z in dir(a) if z.find(b)!=-1]:
+      print x
