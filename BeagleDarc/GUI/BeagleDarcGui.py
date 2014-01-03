@@ -59,17 +59,28 @@ class BeagleDarcGui:
         if widget.get_active() is True:
             widget.set_label(gtk.STOCK_DISCONNECT)
             widget.set_use_stock(True)
-#            cmd = "ssh %s@%s \"python /home/root/server.py &\"" % (bds.user, bds.host)
+            ### XXX DIRTY HACK
+            cmd = "ssh %s@%s \"python /home/ubuntu/bbb-darc/BBBServer/server.py &\"" % (bds.user, bds.host)
+            process = Popen(cmd , stdout=sys.stdout , stderr=sys.stderr , shell=True)
+            ###
+            cmd = "ssh %s@%s \"cat /tmp/IOR.txt &\"" % (bds.user, bds.host)
+            process = Popen(cmd , stdout=PIPE , stderr=PIPE , shell=True)
+            sts = process.wait()
+            out = process.stdout.read().strip()
+            err = process.stderr.read().strip()
+            print out
+            bds.ior = out
+
         if widget.get_active() is False:
             widget.set_label(gtk.STOCK_CONNECT)
             widget.set_use_stock(True)
-#            cmd = "ssh %s@%s \"ps aux |grep server.py|awk \'{print \\$2}\'|xargs kill -9\"" % (bds.user, bds.host)
-        #process = Popen(cmd , stdout=PIPE , stderr=PIPE , shell=True)
-#        process = Popen(cmd , stdout=sys.stdout , stderr=sys.stderr , shell=True)
-#        sts = process.wait()
-        #out = process.stdout.read().strip()
-        #err = process.stderr.read().strip()
-        #print cmd
+            cmd = "ssh %s@%s \"ps aux |grep server.py|awk \'{print \\$2}\'|xargs kill -9 && rm -fr /tmp/IOR.txt \"" % (bds.user, bds.host)
+            process = Popen(cmd , stdout=PIPE , stderr=PIPE , shell=True)
+            #process = Popen(cmd , stdout=sys.stdout , stderr=sys.stderr , shell=True)
+            sts = process.wait()
+            out = process.stdout.read().strip()
+            err = process.stderr.read().strip()
+            print cmd
 
     def quit(self, widget):
         sys.exit(0)

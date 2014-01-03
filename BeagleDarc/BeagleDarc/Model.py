@@ -303,6 +303,16 @@ class BeagleDarcServerM(object):
         self.bd.write(self._config_name, 'port', value)
         self._port = value
 
+    @property
+    def ior(self):
+        self._ior = self.bd.config.get(self._config_name, 'ior')
+        return self._ior
+
+    @ior.setter
+    def ior(self, value):
+        self.bd.write(self._config_name, 'ior', value)
+        self._ior = value
+
 class Darc(object):
     def __init__(self, config_name):
         self.bd = BD()
