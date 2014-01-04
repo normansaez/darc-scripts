@@ -26,7 +26,7 @@ class Controller:
     def star_on(self, star_id):
         star = Star(star_id)
         #self.cli_obj.led_on(star.name, star.pin_led, star.pin_pwm, star.pin_enable)
-        self.cli_obj.led_on(star.name, star.pin_led, star.pin_group, star.pin_enable)
+        self.cli_obj.led_on(star.name, star.pin_led, star.pin_pwm, star.pin_enable)
 
 
     def star_off(self, star_id):

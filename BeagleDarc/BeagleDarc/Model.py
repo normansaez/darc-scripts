@@ -166,7 +166,7 @@ class Star(object):
         self.bd = BD()
         self._config_name = "led_%d" % star
         self._pin_led = None
-        self._pin_group = None
+        self._pin_pwm = None
         self._pin_enable = None
         self._name = None
         self._simulated = None
@@ -185,14 +185,14 @@ class Star(object):
         self._pin_led = value
         
     @property
-    def pin_group(self):
-        self._pin_group = self.bd.config.get(self._config_name, 'pin_group')
-        return self._pin_group
+    def pin_pwm(self):
+        self._pin_pwm = self.bd.config.get(self._config_name, 'pin_pwm')
+        return self._pin_pwm
 
-    @pin_group.setter
-    def pin_group(self, value):
-        self.bd.write(self._config_name, 'pin_group', value)
-        self._pin_group = value
+    @pin_pwm.setter
+    def pin_pwm(self, value):
+        self.bd.write(self._config_name, 'pin_pwm', value)
+        self._pin_pwm = value
         
     @property
     def pin_enable(self):
