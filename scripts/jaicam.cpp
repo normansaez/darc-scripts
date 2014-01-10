@@ -1224,34 +1224,35 @@ Camera_JAI(CamStreamStruct *camstrstr, unsigned int cam, int imgSizeX, int imgSi
      if(setEnumVal("GainAutoBalance","EnumEntry_GainAutoBalance_Off",camstr))
        return 1;
    }
-   /*     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Once",&camstr->hNode))!=J_ST_SUCCESS){
-       printf("Failed to get EnumEntry_GainAutoBalance_Once node: %d\n",retval);
-       return 1;
-     }
-   }else{
-     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Off",&camstr->hNode))!=J_ST_SUCCESS){
-       printf("Failed to get EnumEntry_GainAutoBalance_Off node: %d\n",retval);
-       return 1;
-     }
-   }
-   //and now turn on/off the auto gain balancing
-   if((retval=J_Node_GetEnumEntryValue(camstr->hNode, &int64Val))!=J_ST_SUCCESS){
-     printf("Failed to get EnumEntry_GainAutoBalance_Off/Once node value: %d\n",retval);
-     return 1;
-   }
-   if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"GainAutoBalance",&camstr->hNode))!=J_ST_SUCCESS){
-     printf("Failed to get GainAutoBalance node: %d\n", retval);
-     return 1;
-   }
-   if((retval=J_Node_SetValueInt64(camstr->hNode, 0, int64Val))!=J_ST_SUCCESS){
-     printf("Failed to set GainAutoBalance: %i\n", retval);
-   }
-   */
-   //Now set up the internal/external triggering.
+//   /*     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Once",&camstr->hNode))!=J_ST_SUCCESS){
+//       printf("Failed to get EnumEntry_GainAutoBalance_Once node: %d\n",retval);
+//       return 1;
+//     }
+//   }else{
+//     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Off",&camstr->hNode))!=J_ST_SUCCESS){
+//       printf("Failed to get EnumEntry_GainAutoBalance_Off node: %d\n",retval);
+//       return 1;
+//     }
+//   }
+//   //and now turn on/off the auto gain balancing
+//   if((retval=J_Node_GetEnumEntryValue(camstr->hNode, &int64Val))!=J_ST_SUCCESS){
+//     printf("Failed to get EnumEntry_GainAutoBalance_Off/Once node value: %d\n",retval);
+//     return 1;
+//   }
+//   if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"GainAutoBalance",&camstr->hNode))!=J_ST_SUCCESS){
+//     printf("Failed to get GainAutoBalance node: %d\n", retval);
+//     return 1;
+//   }
+//   if((retval=J_Node_SetValueInt64(camstr->hNode, 0, int64Val))!=J_ST_SUCCESS){
+//     printf("Failed to set GainAutoBalance: %i\n", retval);
+//   }
+//   */
+//   //Now set up the internal/external triggering.
    if(setInt64Val("TimerDelayRaw",&camstr->timerDelayRaw,camstr)!=0){
      printf("setInt64Val failed for TimerDelayRaw\n");
      return 1;
    }
+   retval = J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"TimerFrequency", &camstr->hNode);
    if(setInt64Val("TimerDurationRaw",&camstr->timerDurationRaw,camstr)!=0){
      printf("setInt64Val failed for TimerDurationRaw\n");
      return 1;
