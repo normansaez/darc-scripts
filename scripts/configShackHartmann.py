@@ -17,7 +17,7 @@
 
 #A configuration file for use with the uEye USB camera.
 '''
-Use with --prefix=ShackHartmann
+Use with --prefix=SH
 '''
 #import FITS
 #import tel

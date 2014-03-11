@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import pylab
 
 def makeIdent(npxlx=None,npxly=None,sl=None):
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     npxly = numpy.zeros((ncam,), numpy.int32)#An array of length ncam, specifying the number of pixels in a vertical direction with an entry for each frame grabber.
     npxly[:] = 1080#An array of length ncam, specifying the number of pixels in a vertical direction with an entry for each frame grabber.
     npxlx = npxly.copy()#An array of length ncam, specifying the number of pixels in a horizontal direction with an entry for each frame grabber.
@@ -31,7 +31,7 @@ def makeIdent(npxlx=None,npxly=None,sl=None):
     return ident
 def getSlopes(img,pad=0,retcorr=0):
     """Computes slopes if img is used as a correlation image"""
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     cm=d.Get("centroidMode")
     if type(cm)==numpy.ndarray and numpy.any(cm[-49:]):#in correlation mode.
         cur=getCurrentImg()
@@ -57,7 +57,7 @@ def getSlopes(img,pad=0,retcorr=0):
 if __name__ == '__main__':
     nfr = 100
     pad = 8
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     img=d.SumData("rtcCalPxlBuf",nfr)[0]/nfr
     #print img.size - 1920*1080
     #data = img.reshape(1080,1920)

@@ -30,7 +30,7 @@ set in darc, and set corr.
 
 
 def getImg(nfr):
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     img=d.SumData("rtcCalPxlBuf",nfr)[0]/nfr
     return img
 
@@ -44,15 +44,15 @@ def plotImg(img):
 def setCorr(val=1):
     cm=numpy.zeros((49*5),"i")
     cm[-49:]=val
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     d.Set("centroidMode",cm)
 
 def makefft(img,pad=0):
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     return correlation.transformPSF(img,3,[256,256,128],[128]*3,[98,98,49],d.Get("subapLocation"),d.Get("subapFlag"),pad)
 
 def makeIdent(npxlx=None,npxly=None,sl=None):
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     nsub=[98,98,49]
     sf=d.Get("subapFlag")
     if npxlx==None:
@@ -65,7 +65,7 @@ def makeIdent(npxlx=None,npxly=None,sl=None):
     return ident
 
 def getCurrentImg():
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     fft=d.Get("corrFFTPattern")
     if fft==None:
         img=correlation.generateIdentityCorr(d.Get("npxlx"),d.Get("npxly"),d.Get("nsub"),d.Get("subapFlag"),d.Get("subapLocation"))
@@ -97,7 +97,7 @@ def getCurrentImg():
 
 def getSlopes(img,pad=0,retcorr=0):
     """Computes slopes if img is used as a correlation image"""
-    d=darc.Control("ShackHartmann")
+    d=darc.Control("SH")
     cm=d.Get("centroidMode")
     if type(cm)==numpy.ndarray and numpy.any(cm[-49:]):#in correlation mode.
         cur=getCurrentImg()
@@ -120,7 +120,7 @@ def getSlopes(img,pad=0,retcorr=0):
 
 class Correl:
     def __init__(self,w=None):
-        self.prefix="ShackHartmann"
+        self.prefix="SH"
         if w==None:
             self.win=gtk.Window()
             self.win.set_title("LGS correlation tool for AO-LAB on %s"%socket.gethostname())
@@ -449,7 +449,7 @@ doesn't occur in the RTD image"""),False)
         except:
             npxly=d.Get("npxly")
         off=(npxlx*npxly)[:-1].sum()
-        os.system("""darcplot --prefix=ShackHartmann rtcCorrBuf 25 "-mdata=data[%d:];data.shape=%d,%d" &"""%(off,npxly[-1],npxlx[-1])) 
+        os.system("""darcplot --prefix=SH rtcCorrBuf 25 "-mdata=data[%d:];data.shape=%d,%d" &"""%(off,npxly[-1],npxlx[-1])) 
         
 
 if __name__=="__main__":
