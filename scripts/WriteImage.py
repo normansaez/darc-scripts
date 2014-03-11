@@ -4,7 +4,7 @@ import time
 import numpy
 
 ########## congiguration####
-cameraName = "ShackHartmann"
+cameraName = "SH"
 pxlx = 1920
 pxly = 1080
 #############################

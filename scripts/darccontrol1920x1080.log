@@ -1,12 +1,12 @@
 unlink failed: No such file or directory
 Setting buf to zero 0x7f6a05f98000 size 67108864
 Set to zero
-Opened /ShackHartmannrtcParam1
+Opened /SHrtcParam1
 unlink failed: No such file or directory
 Setting buf to zero 0x7f6a01f98000 size 67108864
 Set to zero
-Opened /ShackHartmannrtcParam2
-Waiting for valid buffer contents in /ShackHartmannrtcParam1 shared memory (globalStruct 2400)
+Opened /SHrtcParam2
+Waiting for valid buffer contents in /SHrtcParam1 shared memory (globalStruct 2400)
 WaitBufferValid curbuf=0
 Reading buffer...
 gotncam: 0, gotncamthreads 0
@@ -18,7 +18,7 @@ gotncam: 1, gotncamthreads 1
 err=0
 Got valid buffer contents, ncam=1 curBuf=1
 Creating rtcErrorBuf
-openCircBuf /ShackHartmannrtcErrorBuf 1 128 b 100
+openCircBuf /SHrtcErrorBuf 1 128 b 100
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f6a0ae97000 now calling memset(buf,0,16160)
@@ -28,61 +28,61 @@ Starting thread 0 0
 Main thread waiting for RTC to finish
 figure thread starting
 Thread starting prepareActuators loop...
-openCircBuf /ShackHartmannrtcPxlBuf 1 2073600 H 100
+openCircBuf /SHrtcPxlBuf 1 2073600 H 100
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f69e2c93000 now calling memset(buf,0,414723360)
 done memset of mmap buffer
 circReshape: Got nstore 100 (datasize 4147200)
-openCircBuf /ShackHartmannrtcCalPxlBuf 1 2073600 f 100
+openCircBuf /SHrtcCalPxlBuf 1 2073600 f 100
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f69b158e000 now calling memset(buf,0,829443360)
 done memset of mmap buffer
 circReshape: Got nstore 100 (datasize 8294400)
-openCircBuf /ShackHartmannrtcCentBuf 1 2 f 100
+openCircBuf /SHrtcCentBuf 1 2 f 100
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f6a0ae95000 now calling memset(buf,0,4160)
 done memset of mmap buffer
 circReshape: Got nstore 100 (datasize 8)
-openCircBuf /ShackHartmannrtcMirrorBuf 1 140 f 1000
+openCircBuf /SHrtcMirrorBuf 1 140 f 1000
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f6a0adf1000 now calling memset(buf,0,592160)
 done memset of mmap buffer
 circReshape: Got nstore 1000 (datasize 560)
-openCircBuf /ShackHartmannrtcActuatorBuf 1 140 f 1000
+openCircBuf /SHrtcActuatorBuf 1 140 f 1000
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f6a0ad60000 now calling memset(buf,0,592160)
 done memset of mmap buffer
 circReshape: Got nstore 1000 (datasize 560)
-openCircBuf /ShackHartmannrtcStatusBuf 1 320 b 1000
+openCircBuf /SHrtcStatusBuf 1 320 b 1000
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f6a0ad0a000 now calling memset(buf,0,352160)
 done memset of mmap buffer
 circReshape: Got nstore 1000 (datasize 320)
-openCircBuf /ShackHartmannrtcTimeBuf 1 1 d 10000
+openCircBuf /SHrtcTimeBuf 1 1 d 10000
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f6a0aca8000 now calling memset(buf,0,400160)
 done memset of mmap buffer
 circReshape: Got nstore 10000 (datasize 8)
-openCircBuf /ShackHartmannrtcSubLocBuf 1 6 i 100
+openCircBuf /SHrtcSubLocBuf 1 6 i 100
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f6a0aca6000 now calling memset(buf,0,5760)
 done memset of mmap buffer
 circReshape: Got nstore 100 (datasize 24)
-openCircBuf /ShackHartmannrtcGenericBuf 1 2073600 f 4
+openCircBuf /SHrtcGenericBuf 1 2073600 f 4
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f69af5e9000 now calling memset(buf,0,33177888)
 done memset of mmap buffer
 circReshape: Got nstore 4 (datasize 8294400)
-openCircBuf /ShackHartmannrtcFluxBuf 1 1 f 100
+openCircBuf /SHrtcFluxBuf 1 1 f 100
 unlink failed: No such file or directory
 Doing mmap
 mmap done buf=0x7f69af5e7000 now calling memset(buf,0,4160)
@@ -347,14 +347,14 @@ figureThread ending
 Done core for -1 iters, time 98.7198s, -98.7198s per iter, -0.0101297Hz
 removing mutexes
 Removed mutexes
-Unable to unlink /dev/shm/ShackHartmannrtcParam1
-Unable to unlink /dev/shm/ShackHartmannrtcParam2
+Unable to unlink /dev/shm/SHrtcParam1
+Unable to unlink /dev/shm/SHrtcParam2
 Unable to load CustomCheck module - continuing
 None None None None
 RtcControl context already exists
 Control binding already existed -- rebound
-Using config file /home/dani/git/condor/configShackHartmann.py
-prefix ShackHartmann
+Using config file /home/dani/git/condor/configSH.py
+prefix SH
 Starting RTC
 Waiting for RTC buffers
 Opening buffer of size 67108864 bytes
@@ -367,8 +367,8 @@ RTCSTarted 1 1
 Inactive buffer 1
 [] 0
 Loading rtc config
-Initialising buffer 1 (config file=/home/dani/git/condor/configShackHartmann.py)
-Executing config file /home/dani/git/condor/configShackHartmann.py...
+Initialising buffer 1 (config file=/home/dani/git/condor/configSH.py)
+Executing config file /home/dani/git/condor/configSH.py...
 Making default value for subapLocType equal to 0
 Making default value for corrThreshType equal to 0
 Making default value for corrThresh equal to 0
@@ -401,37 +401,37 @@ Making default value for bleedGroups equal to None
 Unchecked parameter actSource
 Unchecked parameter adapResetCount
 Switch completed - copying buffer
-Got stream: ShackHartmannrtcFluxBuf
-Got stream: ShackHartmannrtcGenericBuf
-Got stream: ShackHartmannrtcSubLocBuf
-Got stream: ShackHartmannrtcTimeBuf
-Got stream: ShackHartmannrtcStatusBuf
-Got stream: ShackHartmannrtcActuatorBuf
-Got stream: ShackHartmannrtcMirrorBuf
-Got stream: ShackHartmannrtcCentBuf
-Got stream: ShackHartmannrtcCalPxlBuf
-Got stream: ShackHartmannrtcPxlBuf
-Got stream: ShackHartmannrtcErrorBuf
+Got stream: SHrtcFluxBuf
+Got stream: SHrtcGenericBuf
+Got stream: SHrtcSubLocBuf
+Got stream: SHrtcTimeBuf
+Got stream: SHrtcStatusBuf
+Got stream: SHrtcActuatorBuf
+Got stream: SHrtcMirrorBuf
+Got stream: SHrtcCentBuf
+Got stream: SHrtcCalPxlBuf
+Got stream: SHrtcPxlBuf
+Got stream: SHrtcErrorBuf
 Bound to port 4242 on dani-RTC
-Got circular buffer ShackHartmannrtcErrorBuf
-Got decimation 1 for ShackHartmannrtcErrorBuf
+Got circular buffer SHrtcErrorBuf
+Got decimation 1 for SHrtcErrorBuf
 Appending Error calling camOpen error list []
 Appending Error opening camera error list ['Error calling camOpen']
 Appending Error opening libraries error list ['Error calling camOpen', 'Error opening camera']
 Halting...
 Removing SHM
 Waiting for darcmain to finish...
-Removed ShackHartmannrtcPxlBuf
-Removed ShackHartmannrtcCalPxlBuf
-Removed ShackHartmannrtcCentBuf
-Removed ShackHartmannrtcMirrorBuf
-Removed ShackHartmannrtcActuatorBuf
-Removed ShackHartmannrtcStatusBuf
-Removed ShackHartmannrtcTimeBuf
-Removed ShackHartmannrtcErrorBuf
-Removed ShackHartmannrtcSubLocBuf
-Removed ShackHartmannrtcGenericBuf
-Removed ShackHartmannrtcFluxBuf
+Removed SHrtcPxlBuf
+Removed SHrtcCalPxlBuf
+Removed SHrtcCentBuf
+Removed SHrtcMirrorBuf
+Removed SHrtcActuatorBuf
+Removed SHrtcStatusBuf
+Removed SHrtcTimeBuf
+Removed SHrtcErrorBuf
+Removed SHrtcSubLocBuf
+Removed SHrtcGenericBuf
+Removed SHrtcFluxBuf
 {}
 Connection reset by peer.
 Closing socket
