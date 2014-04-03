@@ -97,6 +97,13 @@ for k in range(ncam):
         pxlCnt[indx]=n
 
 control={
+    "fwExposure":50, #  min: 50 max 205. current value is: 125
+    "fwBrightness":0, # min: 0 max 255. current value is: 16
+#    "fwFrameRate",#
+    "fwGain":0,#min: 0 max 630. current value is: 0
+#    "fwPacketSize",
+#    "fwPrint",
+    "fwShutter":2000,#min: 1 max 4095. current value is: 2000
     "switchRequested":0,#this is the only item in a currently active buffer that can be changed...
     "pause":0,
     "go":1,
