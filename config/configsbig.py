@@ -18,7 +18,7 @@
 import FITS
 import tel
 import numpy
-nacts=4#97#54#+256
+nacts=140#97#54#+256
 ncam=1
 ncamThreads=numpy.ones((ncam,),numpy.int32)*1
 npxly=numpy.zeros((ncam,),numpy.int32)
@@ -32,15 +32,15 @@ nsubx=nsuby.copy()
 nsub=nsubx*nsuby
 nsubaps=(nsuby*nsubx).sum()
 #subapFlag=numpy.ones((nsubaps,),"i")#tel.Pupil(7*16,7*8,8,7).subflag.astype("i").ravel()#numpy.ones((nsubaps,),"i")
-subapFlag=numpy.ones((nsubaps,),"i")
+subapFlag=tel.Pupil(16,16/2.,1,16).subflag.astype("i").ravel()#numpy.ones((nsubaps,),"i")
 #subapFlag=tel.Pupil(16,16/2.,1,16).subflag.astype("i").ravel()#numpy.ones((nsubaps,),"i")
 print "subapFlag.shape"
 print subapFlag.shape
 #adding center as valid
-#subapFlag.reshape(16,16)[8][8] = 1
-#subapFlag.reshape(16,16)[7][8] = 1
-#subapFlag.reshape(16,16)[7][7] = 1
-#subapFlag.reshape(16,16)[8][7] = 1
+subapFlag.reshape(16,16)[8][8] = 1
+subapFlag.reshape(16,16)[7][8] = 1
+subapFlag.reshape(16,16)[7][7] = 1
+subapFlag.reshape(16,16)[8][7] = 1
 
 
 #ncents=nsubaps*2
@@ -59,7 +59,6 @@ flatField=None#FITS.Read("shimgb1stripped_ff.fits")[1].astype("f")
 #correlationPSF=numpy.zeros((npxls,),numpy.float32)
 
 subapLocation=numpy.zeros((nsubaps,6),"i")
-subapLocation=FITS.Read("/home/dani/BeagleAcquisition/SBIG/subapLocation/sbig_subapLocation_led_1.fits")[1].astype("f")
 nsubaps=nsuby*nsubx#cumulative subap
 nsubapsCum=numpy.zeros((ncam+1,),numpy.int32)
 ncentsCum=numpy.zeros((ncam+1,),numpy.int32)
@@ -67,8 +66,8 @@ for i in range(ncam):
     nsubapsCum[i+1]=nsubapsCum[i]+nsubaps[i]
     ncentsCum[i+1]=ncentsCum[i]+subapFlag[nsubapsCum[i]:nsubapsCum[i+1]].sum()*2
 for i in range(nsubaps):
-    subapLocation[i]=((i//2)*npxly[0]//2,(i//2+1)*npxly[0]//2,1,(i%2)*npxlx[0]//2,(i%2+1)*npxlx[0]//2,1)
 #    subapLocation[i]=((i//16)*npxly[0]//2,(i//16+1)*npxly[0]//2,1,(i%16)*npxlx[0]//2,(i%16+1)*npxlx[0]//2,1)
+    subapLocation[i]=((i//16)*37+20,(i//16+1)*37+20,1,(i%16)*37+100,(i%16+1)*37+100,1)
 #    subapLocation[i]=((i//16)*37+20,(i//16+1)*37+20,1,(i%16)*37+100,(i%16+1)*37+100,1)
 print "subapLocation"
 print subapLocation.shape
@@ -82,9 +81,11 @@ cameraParams=numpy.array([xpos,ypos,width,height,turbomode,binning]).astype(nump
 rmx=numpy.zeros((nacts,ncents),"f")
 
 #devname="/dev/ttyUSB4\0"
-mirrorParams=numpy.zeros((1,),"i")
+mirrorParams=numpy.zeros((3,),"i")
 #mirrorParams.view("c")[:len(devname)]=devname
-mirrorParams[0]=4
+mirrorParams[0]=1
+mirrorParams[1]=1
+mirrorParams[2]=-1
 pxlCnt=numpy.zeros((nsubaps,),numpy.int32)
 
 for k in range(ncam):
@@ -145,7 +146,7 @@ control={
     "camerasOpen":1,
     "cameraName":"libcamsbig.so",#"libsl240Int32cam.so",#"camfile",
     "cameraParams":cameraParams,
-    "mirrorName":"libmirrorLLS.so",
+    "mirrorName":"libmirrorBMMMulti.so",
     "mirrorParams":mirrorParams,
     "mirrorOpen":0,
     "frameno":0,
@@ -154,7 +155,7 @@ control={
     "nsubapsTogether":1,
     "nsteps":0,
     "addActuators":0,
-    "actuators":None,#(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
+    "actuators":numpy.ones((nacts,),numpy.float32)*32768,#None,#(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
     "actSequence":None,#numpy.ones((3,),"i")*1000,
     "recordCents":0,
     "pxlWeight":None,
@@ -167,12 +168,13 @@ control={
     "figureOpen":0,
     "figureName":"libfigureSL240.so",
     "figureParams":None,
-    "reconName":"libreconmvmNOTHERE.so",
+    "reconName":"libreconmvm.so",
     "fluxThreshold":0,
     "printUnused":1,
     "useBrightest":0,
     "figureGain":1,
     "decayFactor":None,#used in libreconmvm.so
+    "slopeOpen":1,
     "reconlibOpen":0,
     "maxAdapOffset":0,
     "mirrorStep":0,
