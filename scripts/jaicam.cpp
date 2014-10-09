@@ -166,9 +166,8 @@ typedef struct{
 void *
 StreamProcessDispatch(void *context)
 {
-//   CStreamThread::CStreamThread * pC =
-//       dynamic_cast <CStreamThread::CStreamThread *> ((CStreamThread::CStreamThread *) context);
-   CStreamThread * pC = dynamic_cast <CStreamThread *> ((CStreamThread *) context);
+   CStreamThread::CStreamThread * pC =
+       dynamic_cast <CStreamThread::CStreamThread *> ((CStreamThread::CStreamThread *) context);
 
    pC->StreamProcess(context);
    return NULL;
@@ -581,7 +580,6 @@ CStreamThread::StreamProcess(void *context)
 	   // Exits from streaming loop.
 	   break;
 	 } else if (iWaitResult == J_COND_WAIT_TIMEOUT) {
-           break;
 	   if(timeouttime.tm_year==0){
 	     ttime=time(NULL);
 	     localtime_r(&ttime,&timeouttime);
@@ -636,66 +634,6 @@ CStreamThread::StreamProcess(void *context)
 }
 
 //===========================================================================
-void PrintErrorcode(J_STATUS_TYPE error_code)
-{
-  switch(error_code)
-  {
-    case J_ST_SUCCESS:
-      printf("Error code: OK\n");
-    break;
-
-    case J_ST_INVALID_BUFFER_SIZE:
-      printf("Error code: Invalid buffer size\n");
-    break;
-
-    case J_ST_INVALID_HANDLE:
-      printf("Error code: Invalid handle\n");
-    break;
-
-    case J_ST_INVALID_ID:
-      printf("Error code: Invalid ID\n");
-    break;
-
-    case J_ST_ACCESS_DENIED:
-      printf("Error code: Access denied\n");
-    break;
-
-    case J_ST_NO_DATA:
-      printf("Error code: No data\n");
-    break;
-
-    case J_ST_ERROR:
-      printf("Error code: Error\n");
-    break;
-
-    case J_ST_INVALID_PARAMETER:
-      printf("Error code: Invalid parameter\n");
-    break;
-
-    case J_ST_TIMEOUT:
-      printf("Error code: Timeout\n");
-    break;
-
-    case J_ST_INVALID_FILENAME:
-      printf("Error code: Invalid filename\n");
-    break;
-
-    case J_ST_INVALID_ADDRESS:
-      printf("Error code: Invalid address\n");
-    break;
-
-    case J_ST_FILE_IO:
-      printf("Error code: File IO\n");
-    break;
-
-    case J_ST_GC_ERROR:
-      printf("Error code: GenICam Error\n");
-    break;
-
-    default:
-      printf("Unknown errorcode (%d)\n", error_code);
-  }
-}
 
 
 
@@ -933,9 +871,9 @@ Camera_JAI(CamStreamStruct *camstrstr, unsigned int cam, int imgSizeX, int imgSi
    }
    // Get camera ID (of cam^th camera...)
    if (cam >= iNumDev) {
-	   printf("Error - trying to set camera %d out of %d\n", 
-			   cam, iNumDev);
-	   return 1;
+     printf("Error - trying to set camera %d out of %d\n", 
+	     cam, iNumDev);
+      return 1;
    }
    printf("Setting camera %d out of %d\n",cam,iNumDev);
    iSize = (uint32_t) sizeof(camstr->m_sCameraId);
@@ -1224,35 +1162,34 @@ Camera_JAI(CamStreamStruct *camstrstr, unsigned int cam, int imgSizeX, int imgSi
      if(setEnumVal("GainAutoBalance","EnumEntry_GainAutoBalance_Off",camstr))
        return 1;
    }
-//   /*     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Once",&camstr->hNode))!=J_ST_SUCCESS){
-//       printf("Failed to get EnumEntry_GainAutoBalance_Once node: %d\n",retval);
-//       return 1;
-//     }
-//   }else{
-//     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Off",&camstr->hNode))!=J_ST_SUCCESS){
-//       printf("Failed to get EnumEntry_GainAutoBalance_Off node: %d\n",retval);
-//       return 1;
-//     }
-//   }
-//   //and now turn on/off the auto gain balancing
-//   if((retval=J_Node_GetEnumEntryValue(camstr->hNode, &int64Val))!=J_ST_SUCCESS){
-//     printf("Failed to get EnumEntry_GainAutoBalance_Off/Once node value: %d\n",retval);
-//     return 1;
-//   }
-//   if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"GainAutoBalance",&camstr->hNode))!=J_ST_SUCCESS){
-//     printf("Failed to get GainAutoBalance node: %d\n", retval);
-//     return 1;
-//   }
-//   if((retval=J_Node_SetValueInt64(camstr->hNode, 0, int64Val))!=J_ST_SUCCESS){
-//     printf("Failed to set GainAutoBalance: %i\n", retval);
-//   }
-//   */
-//   //Now set up the internal/external triggering.
+   /*     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Once",&camstr->hNode))!=J_ST_SUCCESS){
+       printf("Failed to get EnumEntry_GainAutoBalance_Once node: %d\n",retval);
+       return 1;
+     }
+   }else{
+     if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"EnumEntry_GainAutoBalance_Off",&camstr->hNode))!=J_ST_SUCCESS){
+       printf("Failed to get EnumEntry_GainAutoBalance_Off node: %d\n",retval);
+       return 1;
+     }
+   }
+   //and now turn on/off the auto gain balancing
+   if((retval=J_Node_GetEnumEntryValue(camstr->hNode, &int64Val))!=J_ST_SUCCESS){
+     printf("Failed to get EnumEntry_GainAutoBalance_Off/Once node value: %d\n",retval);
+     return 1;
+   }
+   if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"GainAutoBalance",&camstr->hNode))!=J_ST_SUCCESS){
+     printf("Failed to get GainAutoBalance node: %d\n", retval);
+     return 1;
+   }
+   if((retval=J_Node_SetValueInt64(camstr->hNode, 0, int64Val))!=J_ST_SUCCESS){
+     printf("Failed to set GainAutoBalance: %i\n", retval);
+   }
+   */
+   //Now set up the internal/external triggering.
    if(setInt64Val("TimerDelayRaw",&camstr->timerDelayRaw,camstr)!=0){
      printf("setInt64Val failed for TimerDelayRaw\n");
      return 1;
    }
-   retval = J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"TimerFrequency", &camstr->hNode);
    if(setInt64Val("TimerDurationRaw",&camstr->timerDurationRaw,camstr)!=0){
      printf("setInt64Val failed for TimerDurationRaw\n");
      return 1;
@@ -1264,26 +1201,24 @@ Camera_JAI(CamStreamStruct *camstrstr, unsigned int cam, int imgSizeX, int imgSi
    //now read back the info to get computed framerate...
    if((retval=J_Camera_GetNodeByName(camstr->m_hCam,(int8_t *)"TimerFrequency", &camstr->hNode))!=J_ST_SUCCESS){
      printf("J_Camera_GetNodeByName failed for TimerFrequency: %d\n",retval);
-     PrintErrorcode(retval);
-//     return 1;
+     return 1;
    }
    if((retval=J_Node_GetValueDouble(camstr->hNode,0,&doubleVal))!=J_ST_SUCCESS){
      printf("J_Node_GetValueDouble failed for TimerFrequency: %d\n",retval);
-     PrintErrorcode(retval);
-//     return 1;
+     return 1;
    }
    printf("Frequency %gHz, delayRaw %d, durationRaw %d, granularity %d\n",doubleVal,camstr->timerDelayRaw,camstr->timerDurationRaw,camstr->timerGranularityFactor);
    //Now set up the trigger sources...
    if(setEnumVal("TimerTriggerSource","EnumEntry_TimerTriggerSource_Continuous",camstr)!=0){
      printf("setEnumVal failed TriggerSource\n");
-//     return 1;
+     return 1;
    }
 
    //set signalRoutingBlock PCL_I0 to External_Trigger_In_Pin6.  Note, can do this regardless of whether internal or external triggering.
    printf("todo... check signalRoutingBlock JAI pulnix camera\n");
    if(setEnumVal("PLC_I0","EnumEntry_PLC_I0_External_Trigger_In_Pin6",camstr)!=0){
      printf("setEnumVal failed for PLC_I0 to ExternalTrigger\n");
-//     return 1;
+     return 1;
    }
 
    
@@ -1303,14 +1238,10 @@ Camera_JAI(CamStreamStruct *camstrstr, unsigned int cam, int imgSizeX, int imgSi
 
 
    //This is the same as pulseWidthControl on newer firmware cameras...
-//   if(setEnumVal("ExposureMode","EnumEntry_ExposureMode_AsyncShutter_Preset9",camstr)!=0){
-   if(setEnumVal("ExposureMode","EnumEntry_ExposureMode_ManualProgrammable",camstr)!=0){
+   if(setEnumVal("ExposureMode","EnumEntry_ExposureMode_AsyncShutter_Preset9",camstr)!=0){
      printf("setEnumVal failed ExposureMode\n");
      return 1;
    }
-
-   setEnumVal("GainAutoBalance","EnumEntry_GainAutoBalance_Once",camstr);
-     
 
    // Get & Set Width from the camera
    retval = J_Camera_GetNodeByName(camstr->m_hCam,
@@ -1758,7 +1689,6 @@ int camOpen(char *name,int n,int *args,paramBuf *pbuf,circBuf *rtcErrorBuf,char 
    camstr->open = 1;
    for (i = 0; err == 0 && i < (unsigned int)ncam; i++) {
      err = Camera_JAI(camstrstr, i, pxlx[i], pxly[i],camstr->offsetX,camstr->offsetY,camstr->exptime,camstr->scanmode);
-     printf("###---->%d\n", err);
      if (err) {
        printf("Failed to open pulnix camera %d\n", i);
      }else
