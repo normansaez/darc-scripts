@@ -66,8 +66,11 @@ for i in range(ncam):
     nsubapsCum[i+1]=nsubapsCum[i]+nsubaps[i]
     ncentsCum[i+1]=ncentsCum[i]+subapFlag[nsubapsCum[i]:nsubapsCum[i+1]].sum()*2
 for i in range(nsubaps):
+    print "DEBUG"
+    print i
 #    subapLocation[i]=((i//16)*npxly[0]//2,(i//16+1)*npxly[0]//2,1,(i%16)*npxlx[0]//2,(i%16+1)*npxlx[0]//2,1)
-    subapLocation[i]=((i//16)*37+20,(i//16+1)*37+20,1,(i%16)*37+100,(i%16+1)*37+100,1)
+    subapLocation[i]=((i//16)*37+1,(i//16+1)*37+1,1,(i%16)*37+1,(i%16+1)*37+1,1)
+    print subapLocation
 #    subapLocation[i]=((i//16)*37+20,(i//16+1)*37+20,1,(i%16)*37+100,(i%16+1)*37+100,1)
 print "subapLocation"
 print subapLocation.shape
